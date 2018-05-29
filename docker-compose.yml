@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+  amida-api:
+    build:
+      context: .
+    volumes:
+      # Mounts the project directory on the host to /app inside the container,
+      # allowing you to modify the code without having to rebuild the image.
+      - .:/app
+      # Just specify a path and let the Engine create a volume.
+      # Data present in the base image at the specified mount point will be copied
+      # over to the new volume upon volume initialization.
+      # node_modules from this new volume will be used and not from your local dev env.
+
+    # Expose ports [HOST:CONTAINER}
+    ports:
+      - "4001:4001"
+
+    # Set environment variables from this file
+    env_file:
+      - .env
+
+    # Overwrite any env var defined in .env file (if required)
+    environment:
+      - PG_DB=api
+      - PG_PORT=5432
+      - PG_HOST=postgres
+      - PG_USER=api
+      - PG_PASSWD=boilerplate
+      - DEBUG=amida-api-boilerplate:*
+      - PORT=4001
+
+    # Link to containers in another service.
+    # Links also express dependency between services in the same way as depends_on,
+    # so they determine the order of service startup.
+    links:
+      - postgres
+
+  postgres:
+    image: "postgres:9.4.11"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=api
+      - POSTGRES_PASSWORD=boilerplate

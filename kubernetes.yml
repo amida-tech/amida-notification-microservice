@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: amida-messages-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: amida-messages
+    spec:
+      imagePullSecrets:
+      - name: regsecret
+      containers:
+      - name: amida-messages
+        image: amidatech/messaging-service
+        env:
+        - name: PG_DB
+          value: amida_messages
+        - name: PG_PORT
+          value: '5432'
+        - name: PG_HOST
+          value: amida-messages.a_database_url.us-west-2.rds.amazonaws.com
+        - name: PG_USER
+          value: amida_messages
+        - name: PG_PASSWD
+          value: amida-messages
+        - name: JWT_SECRET
+          value: 0a6b944d-d2fb-46fc-a85e-0295c986cd9f
+        - name: NODE_ENV
+          value: development
+        - name: DEBUG
+          value: amida-api-boilerplate:*
+        ports:
+        - name: nodejs-port
+          containerPort: 4001

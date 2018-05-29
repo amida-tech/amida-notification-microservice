@@ -1,0 +1,47 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.10.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:minimatch:20160620':
+    - gulp > vinyl-fs > glob-stream > minimatch:
+        patched: '2017-08-23T13:51:48.807Z'
+    - gulp > vinyl-fs > glob-stream > glob > minimatch:
+        patched: '2017-08-23T13:51:48.807Z'
+    - gulp > vinyl-fs > glob-watcher > gaze > globule > minimatch:
+        patched: '2017-08-23T13:51:48.807Z'
+    - gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
+        patched: '2017-08-23T13:51:48.807Z'
+  'npm:debug:20170905':
+    - helmet > connect > debug:
+        patched: '2017-09-27T04:47:07.288Z'
+    - helmet > connect > finalhandler > debug:
+        patched: '2017-09-27T04:47:07.288Z'
+    - compression > debug:
+        patched: '2017-09-27T04:47:07.288Z'
+    - method-override > debug:
+        patched: '2017-09-27T04:47:07.288Z'
+    - express-actuator > express > debug:
+        patched: '2018-01-29T14:28:00.987Z'
+    - express-actuator > express > send > debug:
+        patched: '2018-01-29T14:28:00.987Z'
+    - express-actuator > express > serve-static > send > debug:
+        patched: '2018-01-29T14:28:00.987Z'
+    - express-actuator > express > finalhandler > debug:
+        patched: '2018-01-29T14:28:00.987Z'
+  'npm:moment:20170905':
+    - express-actuator > moment:
+        patched: '2018-01-29T14:28:00.987Z'
+  'npm:ms:20170412':
+    - express-actuator > express > serve-static > send > ms:
+        patched: '2018-01-29T14:28:00.987Z'
+    - express-actuator > express > finalhandler > debug > ms:
+        patched: '2018-01-29T14:28:00.987Z'
+    - express-actuator > express > send > ms:
+        patched: '2018-01-29T14:28:00.987Z'
+    - express-actuator > express > send > debug > ms:
+        patched: '2018-01-29T14:28:00.987Z'
+    - express-actuator > express > serve-static > send > debug > ms:
+        patched: '2018-01-29T14:28:00.987Z'
+    - express-actuator > express > debug > ms:
+        patched: '2018-01-29T14:28:00.987Z'

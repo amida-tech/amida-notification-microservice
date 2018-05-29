@@ -1,0 +1,507 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>API Documentation</title><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"><style>@import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200');.hljs-comment,.hljs-title{color:#8e908c}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#c82829}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f5871f}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#eab700}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#718c00}.css .hljs-hexcolor{color:#3e999f}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#4271ae}.hljs-keyword,.javascript .hljs-function{color:#8959a8}.hljs{display:block;background:white;color:#4d4d4c;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}.right .hljs-comment{color:#969896}.right .css .hljs-class,.right .css .hljs-id,.right .css .hljs-pseudo,.right .hljs-attribute,.right .hljs-regexp,.right .hljs-tag,.right .hljs-variable,.right .html .hljs-doctype,.right .ruby .hljs-constant,.right .xml .hljs-doctype,.right .xml .hljs-pi,.right .xml .hljs-tag .hljs-title{color:#c66}.right .hljs-built_in,.right .hljs-constant,.right .hljs-literal,.right .hljs-number,.right .hljs-params,.right .hljs-pragma,.right .hljs-preprocessor{color:#de935f}.right .css .hljs-rule .hljs-attribute,.right .ruby .hljs-class .hljs-title{color:#f0c674}.right .hljs-header,.right .hljs-inheritance,.right .hljs-name,.right .hljs-string,.right .hljs-value,.right .ruby .hljs-symbol,.right .xml .hljs-cdata{color:#b5bd68}.right .css .hljs-hexcolor,.right .hljs-title{color:#8abeb7}.right .coffeescript .hljs-title,.right .hljs-function,.right .javascript .hljs-title,.right .perl .hljs-sub,.right .python .hljs-decorator,.right .python .hljs-title,.right .ruby .hljs-function .hljs-title,.right .ruby .hljs-title .hljs-keyword{color:#81a2be}.right .hljs-keyword,.right .javascript .hljs-function{color:#b294bb}.right .hljs{display:block;overflow-x:auto;background:#1d1f21;color:#c5c8c6;padding:.5em;-webkit-text-size-adjust:none}.right .coffeescript .javascript,.right .javascript .xml,.right .tex .hljs-formula,.right .xml .css,.right .xml .hljs-cdata,.right .xml .javascript,.right .xml .vbscript{opacity:.5}body{color:black;background:white;font:400 14px / 1.42 'Roboto',Helvetica,sans-serif}header{border-bottom:1px solid #ededed;margin-bottom:12px}h1,h2,h3,h4,h5{color:black;margin:12px 0}h1 .permalink,h2 .permalink,h3 .permalink,h4 .permalink,h5 .permalink{margin-left:0;opacity:0;transition:opacity .25s ease}h1:hover .permalink,h2:hover .permalink,h3:hover .permalink,h4:hover .permalink,h5:hover .permalink{opacity:1}.triple h1 .permalink,.triple h2 .permalink,.triple h3 .permalink,.triple h4 .permalink,.triple h5 .permalink{opacity:.15}.triple h1:hover .permalink,.triple h2:hover .permalink,.triple h3:hover .permalink,.triple h4:hover .permalink,.triple h5:hover .permalink{opacity:.15}h1{font:200 36px 'Raleway',Helvetica,sans-serif;font-size:36px}h2{font:200 36px 'Raleway',Helvetica,sans-serif;font-size:30px}h3{font-size:100%;text-transform:uppercase}h5{font-size:100%;font-weight:normal}p{margin:0 0 10px}p.choices{line-height:1.6}a{color:#18bc9c;text-decoration:none}li p{margin:0}hr.split{border:0;height:1px;width:100%;padding-left:6px;margin:12px auto;background-image:linear-gradient(to right, rgba(0,0,0,0) 20%, rgba(0,0,0,0.2) 51.4%, rgba(255,255,255,0.2) 51.4%, rgba(255,255,255,0) 80%)}dl dt{float:left;width:130px;clear:left;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}dl dd{margin-left:150px}blockquote{color:rgba(0,0,0,0.5);font-size:15.5px;padding:10px 20px;margin:12px 0;border-left:5px solid #e8e8e8}blockquote p:last-child{margin-bottom:0}pre{background-color:#f5f5f5;padding:12px;border:1px solid #cfcfcf;border-radius:6px;overflow:auto}pre code{color:black;background-color:transparent;padding:0;border:none}code{color:#444;background-color:#f5f5f5;font:'Inconsolata',monospace;padding:1px 4px;border:1px solid #cfcfcf;border-radius:3px}ul,ol{padding-left:2em}table{border-collapse:collapse;border-spacing:0;margin-bottom:12px}table tr:nth-child(2n){background-color:#fafafa}table th,table td{padding:6px 12px;border:1px solid #e6e6e6}.text-muted{opacity:.5}.note,.warning{padding:.3em 1em;margin:1em 0;border-radius:2px;font-size:90%}.note h1,.warning h1,.note h2,.warning h2,.note h3,.warning h3,.note h4,.warning h4,.note h5,.warning h5,.note h6,.warning h6{font-family:200 36px 'Raleway',Helvetica,sans-serif;font-size:135%;font-weight:500}.note p,.warning p{margin:.5em 0}.note{color:black;background-color:#eff7fc;border-left:4px solid #3498db}.note h1,.note h2,.note h3,.note h4,.note h5,.note h6{color:#3498db}.warning{color:black;background-color:#fcf0ef;border-left:4px solid #d62c1a}.warning h1,.warning h2,.warning h3,.warning h4,.warning h5,.warning h6{color:#d62c1a}header{margin-top:24px}nav{position:fixed;top:24px;bottom:0;overflow-y:auto}nav .resource-group{padding:0}nav .resource-group .heading{position:relative}nav .resource-group .heading .chevron{position:absolute;top:12px;right:12px;opacity:.5}nav .resource-group .heading a{display:block;color:black;opacity:.7;border-left:2px solid transparent;margin:0}nav .resource-group .heading a:hover{text-decoration:none;background-color:bad-color;border-left:2px solid black}nav ul{list-style-type:none;padding-left:0}nav ul a{display:block;font-size:13px;color:rgba(0,0,0,0.7);padding:8px 12px;border-top:1px solid #ededed;border-left:2px solid transparent;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}nav ul a:hover{text-decoration:none;background-color:bad-color;border-left:2px solid black}nav ul>li{margin:0}nav ul>li:first-child{margin-top:-12px}nav ul>li:last-child{margin-bottom:-12px}nav ul ul a{padding-left:24px}nav ul ul li{margin:0}nav ul ul li:first-child{margin-top:0}nav ul ul li:last-child{margin-bottom:0}nav>div>div>ul>li:first-child>a{border-top:none}.preload *{transition:none !important}.pull-left{float:left}.pull-right{float:right}.badge{display:inline-block;float:right;min-width:10px;min-height:14px;padding:3px 7px;font-size:12px;color:#000;background-color:#ededed;border-radius:10px;margin:-2px 0}.badge.get{color:white;background-color:#3498db}.badge.head{color:white;background-color:#3498db}.badge.options{color:white;background-color:#3498db}.badge.put{color:white;background-color:#f39c12}.badge.patch{color:white;background-color:#f39c12}.badge.post{color:white;background-color:#18bc9c}.badge.delete{color:white;background-color:#e74c3c}.collapse-button{float:right}.collapse-button .close{display:none;color:#18bc9c;cursor:pointer}.collapse-button .open{color:#18bc9c;cursor:pointer}.collapse-button.show .close{display:inline}.collapse-button.show .open{display:none}.collapse-content{max-height:0;overflow:hidden;transition:max-height .3s ease-in-out}nav{width:220px}.container{max-width:940px;margin-left:auto;margin-right:auto}.container .row .content{margin-left:244px;width:696px}.container .row:after{content:'';display:block;clear:both}.container-fluid nav{width:22%}.container-fluid .row .content{margin-left:24%}.container-fluid.triple nav{width:16.5%;padding-right:1px}.container-fluid.triple .row .content{position:relative;margin-left:16.5%;padding-left:24px}.middle:before,.middle:after{content:'';display:table}.middle:after{clear:both}.middle{box-sizing:border-box;width:51.5%;padding-right:12px}.right{box-sizing:border-box;float:right;width:48.5%;padding-left:12px}.right a{color:#18bc9c}.right h1,.right h2,.right h3,.right h4,.right h5,.right p,.right div{color:white}.right pre{background-color:#1d1f21;border:1px solid #1d1f21}.right pre code{color:#c5c8c6}.right .description{margin-top:12px}.triple .resource-heading{font-size:125%}.definition{margin-top:12px;margin-bottom:12px}.definition .method{font-weight:bold}.definition .method.get{color:#2e80b8}.definition .method.head{color:#2e80b8}.definition .method.options{color:#2e80b8}.definition .method.post{color:#2eb89d}.definition .method.put{color:#b8822e}.definition .method.patch{color:#b8822e}.definition .method.delete{color:#b83b2e}.definition .uri{word-break:break-all;word-wrap:break-word}.definition .hostname{opacity:.5}.example-names{background-color:#eee;padding:12px;border-radius:6px}.example-names .tab-button{cursor:pointer;color:black;border:1px solid #ddd;padding:6px;margin-left:12px}.example-names .tab-button.active{background-color:#d5d5d5}.right .example-names{background-color:#444}.right .example-names .tab-button{color:white;border:1px solid #666;border-radius:6px}.right .example-names .tab-button.active{background-color:#5e5e5e}#nav-background{position:fixed;left:0;top:0;bottom:0;width:16.5%;padding-right:14.4px;background-color:#fbfbfb;border-right:1px solid #f0f0f0;z-index:-1}#right-panel-background{position:absolute;right:-12px;top:-12px;bottom:-12px;width:48.6%;background-color:#333;z-index:-1}@media (max-width:1200px){nav{width:198px}.container{max-width:840px}.container .row .content{margin-left:224px;width:606px}}@media (max-width:992px){nav{width:169.4px}.container{max-width:720px}.container .row .content{margin-left:194px;width:526px}}@media (max-width:768px){nav{display:none}.container{width:95%;max-width:none}.container .row .content,.container-fluid .row .content,.container-fluid.triple .row .content{margin-left:auto;margin-right:auto;width:95%}#nav-background{display:none}#right-panel-background{width:48.6%}}.back-to-top{position:fixed;z-index:1;bottom:0;right:24px;padding:4px 8px;color:rgba(0,0,0,0.5);background-color:#ededed;text-decoration:none !important;border-top:1px solid #ededed;border-left:1px solid #ededed;border-right:1px solid #ededed;border-top-left-radius:3px;border-top-right-radius:3px}.resource-group{padding:12px;margin-bottom:12px;background-color:white;border:1px solid #ededed;border-radius:6px}.resource-group h2.group-heading,.resource-group .heading a{padding:12px;margin:-12px -12px 12px -12px;background-color:#ededed;border-bottom:1px solid #ededed;border-top-left-radius:6px;border-top-right-radius:6px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.triple .content .resource-group{padding:0;border:none}.triple .content .resource-group h2.group-heading,.triple .content .resource-group .heading a{margin:0 0 12px 0;border:1px solid #ededed}nav .resource-group .heading a{padding:12px;margin-bottom:0}nav .resource-group .collapse-content{padding:0}.action{margin-bottom:12px;padding:12px 12px 0 12px;overflow:hidden;border:1px solid transparent;border-radius:6px}.action h4.action-heading{padding:6px 12px;margin:-12px -12px 12px -12px;border-bottom:1px solid transparent;border-top-left-radius:6px;border-top-right-radius:6px;overflow:hidden}.action h4.action-heading .name{float:right;font-weight:normal;padding:6px 0}.action h4.action-heading .method{padding:6px 12px;margin-right:12px;border-radius:3px;display:inline-block}.action h4.action-heading .method.get{color:#000;background-color:white}.action h4.action-heading .method.head{color:#000;background-color:white}.action h4.action-heading .method.options{color:#000;background-color:white}.action h4.action-heading .method.put{color:#000;background-color:white}.action h4.action-heading .method.patch{color:#000;background-color:white}.action h4.action-heading .method.post{color:#000;background-color:white}.action h4.action-heading .method.delete{color:#000;background-color:white}.action h4.action-heading code{color:#444;background-color:rgba(255,255,255,0.7);border-color:transparent;font-weight:normal;word-break:break-all;display:inline-block;margin-top:2px}.action dl.inner{padding-bottom:2px}.action .title{border-bottom:1px solid white;margin:0 -12px -1px -12px;padding:12px}.action.get{border-color:#3498db}.action.get h4.action-heading{color:white;background:#3498db;border-bottom-color:#3498db}.action.head{border-color:#3498db}.action.head h4.action-heading{color:white;background:#3498db;border-bottom-color:#3498db}.action.options{border-color:#3498db}.action.options h4.action-heading{color:white;background:#3498db;border-bottom-color:#3498db}.action.post{border-color:#18bc9c}.action.post h4.action-heading{color:white;background:#18bc9c;border-bottom-color:#18bc9c}.action.put{border-color:#f39c12}.action.put h4.action-heading{color:white;background:#f39c12;border-bottom-color:#f39c12}.action.patch{border-color:#f39c12}.action.patch h4.action-heading{color:white;background:#f39c12;border-bottom-color:#f39c12}.action.delete{border-color:#e74c3c}.action.delete h4.action-heading{color:white;background:#e74c3c;border-bottom-color:#e74c3c}</style></head><body class="preload"><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><nav><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#top">Overview</a></div><div class="collapse-content"><ul><li><a href="#header-amida-messaging-microservice">Amida Messaging Microservice</a></li><li><a href="#header-response-status-codes">Response Status Codes</a></li><li><a href="#header-success">Success</a></li><li><a href="#header-error">Error</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#messages">Messages</a></div><div class="collapse-content"><ul><li><a href="#messages-send-a-message-post"><span class="badge post"><i class="fa fa-plus"></i></span>Create new Message</a></li><li><a href="#messages-retrieve-a-message-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve a message</a></li><li><a href="#messages-reply-to-a-message-post"><span class="badge post"><i class="fa fa-plus"></i></span>Reply to an existing message</a></li><li><a href="#messages-retrieve-a-collection-of-messages-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve a collection of messages</a></li><li><a href="#messages-archive-a-message-put"><span class="badge put"><i class="fa fa-pencil"></i></span>Archive an existing message</a></li><li><a href="#messages-unarchive-a-message-put"><span class="badge put"><i class="fa fa-pencil"></i></span>Unarchive an existing message</a></li><li><a href="#messages-soft-delete-a-message-delete"><span class="badge delete"><i class="fa fa-times"></i></span>Soft delete an existing message</a></li></ul></div></div><div class="resource-group"><div class="heading"><div class="chevron"><i class="open fa fa-angle-down"></i></div><a href="#message-threads">Message Threads</a></div><div class="collapse-content"><ul><li><a href="#message-threads-retrieve-a-message-thread-get"><span class="badge get"><i class="fa fa-arrow-down"></i></span>Retrieve a message thread</a></li></ul></div></div></nav><div class="content"><header><h1 id="top">API Documentation</h1></header><style>
+    /* wrap code in pre blocks courtesy https://longren.io/wrapping-text-inside-pre-tags/ */
+    pre {
+        white-space: pre-wrap;       /* CSS 3 */
+        white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+        white-space: -pre-wrap;      /* Opera 4-6 */
+        white-space: -o-pre-wrap;    /* Opera 7 */
+        word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    }
+</style>
+<h1 id="header-amida-messaging-microservice">Amida Messaging Microservice <a class="permalink" href="#header-amida-messaging-microservice" aria-hidden="true">¶</a></h1>
+<p>A restful microservice allowing messaging between multiple users.</p>
+<p>All API endpoints must be prefixed with the <code>api</code> keyword: for example,
+<code>/api/message/list</code> not just <code>/message/list</code>. Request headers should indicate a  <code>Content-Type</code> of <code>application/x-www-form-urlencoded</code> and should include an <code>Authorization</code> field with value <code>Bearer &lt;auth_token&gt;</code>.</p>
+<pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/x-www-form-urlencoded</span>
+  <span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer &lt;auth_token&gt;</span></code></pre>
+<p>Users of the messaging service must be registered on an instance of the <a href="https://github.com/amida-tech/amida-auth-microservice">Amida Auth Microservice</a>. The required <code>auth_token</code> is obtained by authenticating against the Auth Microservice and receiving a <a href="http://jwt.io">JSON Web Token</a>.</p>
+<p>The request body should be sent <code>x-www-form-urlencoded</code>.</p>
+<h3 id="header-response-status-codes">Response Status Codes <a class="permalink" href="#header-response-status-codes" aria-hidden="true">¶</a></h3>
+<h4 id="header-success">Success <a class="permalink" href="#header-success" aria-hidden="true">¶</a></h4>
+<p>All successful requests return responses with the following error codes:</p>
+<ul>
+<li>
+<p><code>GET</code>, <code>PUT</code> and <code>DELETE</code> return <code>200</code> on success</p>
+</li>
+<li>
+<p><code>POST</code> returns <code>201</code> on success</p>
+</li>
+</ul>
+<h4 id="header-error">Error <a class="permalink" href="#header-error" aria-hidden="true">¶</a></h4>
+<p>Error responses have <a href="http://www.restapitutorial.com/httpstatuscodes.html">standard HTTP error codes</a></p>
+<p>For example, when attempting access messages with an invalid <code>auth_token</code>:</p>
+<pre><code class="language-http"><span class="hljs-attribute">Status</span>: <span class="hljs-string">401 Access denied</span></code></pre>
+<section id="messages" class="resource-group"><h2 class="group-heading">Messages <a href="#messages" class="permalink">&para;</a></h2><div id="messages-send-a-message" class="resource"><h3 class="resource-heading">Send a message <a href="#messages-send-a-message" class="permalink">&nbsp;&para;</a></h3><div id="messages-send-a-message-post" class="action post"><h4 class="action-heading"><div class="name">Create new Message</div><a href="#messages-send-a-message-post" class="method post">POST</a><code class="uri">/message/send</code></h4><p>Send a message to any number of recipients.</p>
+<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname"></span>/message/send</span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>to</dt><dd><code>[string]</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>an array of strings with each string corresponding to a recipient username</p>
+</dd><dt>from</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<p>sender’s username</p>
+</dd><dt>subject</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<p>subject of the sent message</p>
+</dd><dt>message</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer ACCESS_TOKEN</span><br><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/x-www-form-urlencoded</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+    to: [<span class="hljs-string">"johnDoe"</span>, <span class="hljs-string">"janeDoe"</span>]
+    subject: <span class="hljs-string">"This API Rocks!"</span>,
+    message: <span class="hljs-string">"This message is longer than it appears..."</span>,
+}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>201</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><div class="description"><p>Errors</p>
+<ul>
+<li><code>Unauthorized</code> (401) - no access token specified or invalid access token
+<code>Authorization</code> header</li>
+</ul>
+</div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+  "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+    <span class="hljs-string">"johnDoe"</span>,
+    <span class="hljs-string">"janeDoe"</span>
+  ]</span>,
+  "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"First Message Message"</span></span>,
+  "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:30:06.451Z"</span></span>,
+  "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:30:06.451Z"</span></span>,
+  "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:30:07.108Z"</span></span>,
+  "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+  "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="messages-retrieve-a-message" class="resource"><h3 class="resource-heading">Retrieve a message <a href="#messages-retrieve-a-message" class="permalink">&nbsp;&para;</a></h3><div id="messages-retrieve-a-message-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a message</div><a href="#messages-retrieve-a-message-get" class="method get">GET</a><code class="uri">/message/get/{messageId}</code></h4><p>Retrieve a message using it’s unique ID.</p>
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname"></span>/message/get/<span class="hljs-attribute" title="messageId">messageId</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>messageId</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>unique ID of the message to be retrieved(url)</p>
+</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer ACCESS_TOKEN</span><br><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/x-www-form-urlencoded</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><div class="description"><p>Errors</p>
+<ul>
+<li><code>Unauthorized</code> (401) - no access token specified or invalid access token
+<code>Authorization</code> header</li>
+</ul>
+</div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+  "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+  "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+    <span class="hljs-string">"user1"</span>
+  ]</span>,
+  "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"First Message Message"</span></span>,
+  "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:30:06.451Z"</span></span>,
+  "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:30:06.451Z"</span></span>,
+  "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:30:07.108Z"</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="messages-reply-to-a-message" class="resource"><h3 class="resource-heading">Reply to a message <a href="#messages-reply-to-a-message" class="permalink">&nbsp;&para;</a></h3><div id="messages-reply-to-a-message-post" class="action post"><h4 class="action-heading"><div class="name">Reply to an existing message</div><a href="#messages-reply-to-a-message-post" class="method post">POST</a><code class="uri">/message/reply/messageId</code></h4><p>Reply to an existing message.</p>
+<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname"></span>/message/reply/messageId</span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>messageId</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>unique ID of the message being replied to(url)</p>
+</dd><dt>to</dt><dd><code>[string]</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>an array of strings with each string corresponding to a recipient username</p>
+</dd><dt>from</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>sender’s username</p>
+</dd><dt>subject</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>Subject of the sent message</p>
+</dd><dt>message</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer ACCESS_TOKEN</span><br><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/x-www-form-urlencoded</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+    to: [<span class="hljs-string">"johnDoe"</span>, <span class="hljs-string">"janeDoe"</span>]
+    subject: <span class="hljs-string">"This API Rocks!"</span>,
+    message: <span class="hljs-string">"This message is longer than it appears..."</span>,
+}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><div class="description"><p>Errors</p>
+<ul>
+<li><code>Unauthorized</code> (401) - no access token specified or invalid access token
+<code>Authorization</code> header</li>
+</ul>
+</div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
+  "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+    <span class="hljs-string">"user1"</span>,
+    <span class="hljs-string">"test@test.com"</span>
+  ]</span>,
+  "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"First Message Message"</span></span>,
+  "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:23.225Z"</span></span>,
+  "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:23.225Z"</span></span>,
+  "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+  "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+  "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:23.228Z"</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="messages-retrieve-a-collection-of-messages" class="resource"><h3 class="resource-heading">Retrieve a collection of messages <a href="#messages-retrieve-a-collection-of-messages" class="permalink">&nbsp;&para;</a></h3><div id="messages-retrieve-a-collection-of-messages-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a collection of messages</div><a href="#messages-retrieve-a-collection-of-messages-get" class="method get">GET</a><code class="uri">/message/list</code></h4><p>Retrieve the current user’s messages with the option of including additional query parameters.</p>
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname"></span>/message/list</span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>from</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<p>only return messages from a given sender using the sender’s <code>username</code>(url)</p>
+</dd><dt>limit</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<p>corresponds to the specific number of messages to be returned from the result of the query (url)</p>
+</dd><dt>summary</dt><dd><code>boolean</code>&nbsp;<span>(optional)</span>&nbsp;<p>indicating <code>summary=true</code> as a url request parameter will force the request to return only <code>subject</code>, <code>from</code> and <code>createdAt</code> fields(url, optional)</p>
+</dd><dt>archived</dt><dd><code>boolean</code>&nbsp;<span>(optional)</span>&nbsp;<p>indicating <code>archived=true</code> as a url request parameter will force the request to return only archived messages(url)</p>
+</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer ACCESS_TOKEN</span><br><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/x-www-form-urlencoded</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><div class="description"><p>Errors</p>
+<ul>
+<li><code>Unauthorized</code> (401) - no access token specified or invalid access token
+<code>Authorization</code> header</li>
+</ul>
+</div><h5>Body</h5><pre><code>[
+  {
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+    "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+    "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+    "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+      <span class="hljs-string">"user1"</span>,
+      <span class="hljs-string">"test@test.com"</span>
+    ]</span>,
+    "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+    "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+    "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"First Message Message"</span></span>,
+    "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:07.391Z"</span></span>,
+    "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:07.391Z"</span></span>,
+    "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:07.508Z"</span>
+  </span>},
+  {
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">7</span></span>,
+    "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+    "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+    "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+      <span class="hljs-string">"user1"</span>,
+      <span class="hljs-string">"test@test.com"</span>
+    ]</span>,
+    "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+    "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+    "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"First Message Message"</span></span>,
+    "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:07.625Z"</span></span>,
+    "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:07.625Z"</span>
+  </span>}
+]</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="messages-archive-a-message" class="resource"><h3 class="resource-heading">Archive a message <a href="#messages-archive-a-message" class="permalink">&nbsp;&para;</a></h3><div id="messages-archive-a-message-put" class="action put"><h4 class="action-heading"><div class="name">Archive an existing message</div><a href="#messages-archive-a-message-put" class="method put">PUT</a><code class="uri">/message/archive/{messageId}</code></h4><p>Archive an existing message.</p>
+<h4>Example URI</h4><div class="definition"><span class="method put">PUT</span>&nbsp;<span class="uri"><span class="hostname"></span>/message/archive/<span class="hljs-attribute" title="messageId">messageId</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>messageId</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>unique ID of the message to be archived</p>
+</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer ACCESS_TOKEN</span><br><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/x-www-form-urlencoded</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><div class="description"><p>Errors</p>
+<ul>
+<li><code>Unauthorized</code> (401) - no access token specified or invalid access token
+<code>Authorization</code> header</li>
+</ul>
+</div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">9</span></span>,
+  "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+  "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+  "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+    <span class="hljs-string">"user1"</span>,
+    <span class="hljs-string">"test@test.com"</span>
+  ]</span>,
+  "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"First Message Message"</span></span>,
+  "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:23.225Z"</span></span>,
+  "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+  "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:39:14.943Z"</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="messages-unarchive-a-message" class="resource"><h3 class="resource-heading">Unarchive a message <a href="#messages-unarchive-a-message" class="permalink">&nbsp;&para;</a></h3><div id="messages-unarchive-a-message-put" class="action put"><h4 class="action-heading"><div class="name">Unarchive an existing message</div><a href="#messages-unarchive-a-message-put" class="method put">PUT</a><code class="uri">/message/unarchive/{messageId}</code></h4><p>Unarchive an existing message.</p>
+<h4>Example URI</h4><div class="definition"><span class="method put">PUT</span>&nbsp;<span class="uri"><span class="hostname"></span>/message/unarchive/<span class="hljs-attribute" title="messageId">messageId</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>messageId</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>unique ID of the message to be unarchived</p>
+</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer ACCESS_TOKEN</span><br><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/x-www-form-urlencoded</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><div class="description"><p>Errors</p>
+<ul>
+<li><code>Unauthorized</code> (401) - no access token specified or invalid access token
+<code>Authorization</code> header</li>
+</ul>
+</div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">9</span></span>,
+  "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+  "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+  "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+    <span class="hljs-string">"user1"</span>,
+    <span class="hljs-string">"test@test.com"</span>
+  ]</span>,
+  "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"First Message Message"</span></span>,
+  "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:23.225Z"</span></span>,
+  "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:42:12.617Z"</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="messages-soft-delete-a-message" class="resource"><h3 class="resource-heading">Soft delete a message <a href="#messages-soft-delete-a-message" class="permalink">&nbsp;&para;</a></h3><div id="messages-soft-delete-a-message-delete" class="action delete"><h4 class="action-heading"><div class="name">Soft delete an existing message</div><a href="#messages-soft-delete-a-message-delete" class="method delete">DELETE</a><code class="uri">/message/delete/{messageId}</code></h4><p>Sets the <code>isDeleted</code> field of a message to <code>true</code>.</p>
+<h4>Example URI</h4><div class="definition"><span class="method delete">DELETE</span>&nbsp;<span class="uri"><span class="hostname"></span>/message/delete/<span class="hljs-attribute" title="messageId">messageId</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>messageId</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>unique ID of the message being archived</p>
+</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer ACCESS_TOKEN</span><br><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/x-www-form-urlencoded</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><div class="description"><p>Errors</p>
+<ul>
+<li><code>Unauthorized</code> (401) - no access token specified or invalid access token
+<code>Authorization</code> header</li>
+</ul>
+</div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">9</span></span>,
+  "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+  "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+  "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+    <span class="hljs-string">"user1"</span>,
+    <span class="hljs-string">"test@test.com"</span>
+  ]</span>,
+  "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+  "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"First Message Message"</span></span>,
+  "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T21:05:23.225Z"</span></span>,
+  "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+  "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-27T17:11:19.844Z"</span>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section><section id="message-threads" class="resource-group"><h2 class="group-heading">Message Threads <a href="#message-threads" class="permalink">&para;</a></h2><div id="message-threads-retrieve-a-message-thread" class="resource"><h3 class="resource-heading">Retrieve a message thread <a href="#message-threads-retrieve-a-message-thread" class="permalink">&nbsp;&para;</a></h3><div id="message-threads-retrieve-a-message-thread-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a message thread</div><a href="#message-threads-retrieve-a-message-thread-get" class="method get">GET</a><code class="uri">/message/get/{originalMessageId}</code></h4><p>Retrieve a message thread by the ID of the original message.</p>
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname"></span>/message/get/<span class="hljs-attribute" title="originalMessageId">originalMessageId</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>originalMessageId</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>the originalMessageId shared by all messages in the thread(url)</p>
+</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer ACCESS_TOKEN</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><div class="description"><p>Errors</p>
+<ul>
+<li>
+<p><code>Unauthorized</code> (401) - no access token specified or invalid access token
+<code>Authorization</code> header</p>
+</li>
+<li>
+<p><code>Not found</code> (404) - no messages with the originalMessageId found</p>
+</li>
+</ul>
+</div><h5>Body</h5><pre><code>[
+  {
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+    "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+    "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+    "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+      <span class="hljs-string">"user1"</span>
+    ]</span>,
+    "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+    "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+    "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"First Message Message"</span></span>,
+    "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:30:06.451Z"</span></span>,
+    "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:30:06.451Z"</span></span>,
+    "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:30:07.108Z"</span>
+  </span>},
+  {
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
+    "<span class="hljs-attribute">owner</span>": <span class="hljs-value"><span class="hljs-string">"test@test.com"</span></span>,
+    "<span class="hljs-attribute">originalMessageId</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+    "<span class="hljs-attribute">parentMessageId</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+    "<span class="hljs-attribute">to</span>": <span class="hljs-value">[
+      <span class="hljs-string">"test@test.com"</span>
+    ]</span>,
+    "<span class="hljs-attribute">from</span>": <span class="hljs-value"><span class="hljs-string">"user1"</span></span>,
+    "<span class="hljs-attribute">subject</span>": <span class="hljs-value"><span class="hljs-string">"First Message Subject"</span></span>,
+    "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Reply message content"</span></span>,
+    "<span class="hljs-attribute">createdAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:35:06.451Z"</span></span>,
+    "<span class="hljs-attribute">readAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:37:06.451Z"</span></span>,
+    "<span class="hljs-attribute">isDeleted</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">isArchived</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">updatedAt</span>": <span class="hljs-value"><span class="hljs-string">"2017-11-22T20:36:07.108Z"</span>
+  </span>}
+]</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 23 Jan 2018</p><script>/* eslint-env browser */
+/* eslint quotes: [2, "single"] */
+'use strict';
+
+/*
+  Determine if a string ends with another string.
+*/
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+/*
+  Get a list of direct child elements by class name.
+*/
+function childrenByClass(element, name) {
+  var filtered = [];
+
+  for (var i = 0; i < element.children.length; i++) {
+    var child = element.children[i];
+    var classNames = child.className.split(' ');
+    if (classNames.indexOf(name) !== -1) {
+      filtered.push(child);
+    }
+  }
+
+  return filtered;
+}
+
+/*
+  Get an array [width, height] of the window.
+*/
+function getWindowDimensions() {
+  var w = window,
+      d = document,
+      e = d.documentElement,
+      g = d.body,
+      x = w.innerWidth || e.clientWidth || g.clientWidth,
+      y = w.innerHeight || e.clientHeight || g.clientHeight;
+
+  return [x, y];
+}
+
+/*
+  Collapse or show a request/response example.
+*/
+function toggleCollapseButton(event) {
+    var button = event.target.parentNode;
+    var content = button.parentNode.nextSibling;
+    var inner = content.children[0];
+
+    if (button.className.indexOf('collapse-button') === -1) {
+      // Clicked without hitting the right element?
+      return;
+    }
+
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        // Currently showing, so let's hide it
+        button.className = 'collapse-button';
+        content.style.maxHeight = '0px';
+    } else {
+        // Currently hidden, so let's show it
+        button.className = 'collapse-button show';
+        content.style.maxHeight = inner.offsetHeight + 12 + 'px';
+    }
+}
+
+function toggleTabButton(event) {
+    var i, index;
+    var button = event.target;
+
+    // Get index of the current button.
+    var buttons = childrenByClass(button.parentNode, 'tab-button');
+    for (i = 0; i < buttons.length; i++) {
+        if (buttons[i] === button) {
+            index = i;
+            button.className = 'tab-button active';
+        } else {
+            buttons[i].className = 'tab-button';
+        }
+    }
+
+    // Hide other tabs and show this one.
+    var tabs = childrenByClass(button.parentNode.parentNode, 'tab');
+    for (i = 0; i < tabs.length; i++) {
+        if (i === index) {
+            tabs[i].style.display = 'block';
+        } else {
+            tabs[i].style.display = 'none';
+        }
+    }
+}
+
+/*
+  Collapse or show a navigation menu. It will not be hidden unless it
+  is currently selected or `force` has been passed.
+*/
+function toggleCollapseNav(event, force) {
+    var heading = event.target.parentNode;
+    var content = heading.nextSibling;
+    var inner = content.children[0];
+
+    if (heading.className.indexOf('heading') === -1) {
+      // Clicked without hitting the right element?
+      return;
+    }
+
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+      // Currently showing, so let's hide it, but only if this nav item
+      // is already selected. This prevents newly selected items from
+      // collapsing in an annoying fashion.
+      if (force || window.location.hash && endsWith(event.target.href, window.location.hash)) {
+        content.style.maxHeight = '0px';
+      }
+    } else {
+      // Currently hidden, so let's show it
+      content.style.maxHeight = inner.offsetHeight + 12 + 'px';
+    }
+}
+
+/*
+  Refresh the page after a live update from the server. This only
+  works in live preview mode (using the `--server` parameter).
+*/
+function refresh(body) {
+    document.querySelector('body').className = 'preload';
+    document.body.innerHTML = body;
+
+    // Re-initialize the page
+    init();
+    autoCollapse();
+
+    document.querySelector('body').className = '';
+}
+
+/*
+  Determine which navigation items should be auto-collapsed to show as many
+  as possible on the screen, based on the current window height. This also
+  collapses them.
+*/
+function autoCollapse() {
+  var windowHeight = getWindowDimensions()[1];
+  var itemsHeight = 64; /* Account for some padding */
+  var itemsArray = Array.prototype.slice.call(
+    document.querySelectorAll('nav .resource-group .heading'));
+
+  // Get the total height of the navigation items
+  itemsArray.forEach(function (item) {
+    itemsHeight += item.parentNode.offsetHeight;
+  });
+
+  // Should we auto-collapse any nav items? Try to find the smallest item
+  // that can be collapsed to show all items on the screen. If not possible,
+  // then collapse the largest item and do it again. First, sort the items
+  // by height from smallest to largest.
+  var sortedItems = itemsArray.sort(function (a, b) {
+    return a.parentNode.offsetHeight - b.parentNode.offsetHeight;
+  });
+
+  while (sortedItems.length && itemsHeight > windowHeight) {
+    for (var i = 0; i < sortedItems.length; i++) {
+      // Will collapsing this item help?
+      var itemHeight = sortedItems[i].nextSibling.offsetHeight;
+      if ((itemsHeight - itemHeight <= windowHeight) || i === sortedItems.length - 1) {
+        // It will, so let's collapse it, remove its content height from
+        // our total and then remove it from our list of candidates
+        // that can be collapsed.
+        itemsHeight -= itemHeight;
+        toggleCollapseNav({target: sortedItems[i].children[0]}, true);
+        sortedItems.splice(i, 1);
+        break;
+      }
+    }
+  }
+}
+
+/*
+  Initialize the interactive functionality of the page.
+*/
+function init() {
+    var i, j;
+
+    // Make collapse buttons clickable
+    var buttons = document.querySelectorAll('.collapse-button');
+    for (i = 0; i < buttons.length; i++) {
+        buttons[i].onclick = toggleCollapseButton;
+
+        // Show by default? Then toggle now.
+        if (buttons[i].className.indexOf('show') !== -1) {
+            toggleCollapseButton({target: buttons[i].children[0]});
+        }
+    }
+
+    var responseCodes = document.querySelectorAll('.example-names');
+    for (i = 0; i < responseCodes.length; i++) {
+        var tabButtons = childrenByClass(responseCodes[i], 'tab-button');
+        for (j = 0; j < tabButtons.length; j++) {
+            tabButtons[j].onclick = toggleTabButton;
+
+            // Show by default?
+            if (j === 0) {
+                toggleTabButton({target: tabButtons[j]});
+            }
+        }
+    }
+
+    // Make nav items clickable to collapse/expand their content.
+    var navItems = document.querySelectorAll('nav .resource-group .heading');
+    for (i = 0; i < navItems.length; i++) {
+        navItems[i].onclick = toggleCollapseNav;
+
+        // Show all by default
+        toggleCollapseNav({target: navItems[i].children[0]});
+    }
+}
+
+// Initial call to set up buttons
+init();
+
+window.onload = function () {
+    autoCollapse();
+    // Remove the `preload` class to enable animations
+    document.querySelector('body').className = '';
+};
+</script></body></html>

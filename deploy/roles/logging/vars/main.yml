@@ -1,3 +1,0 @@
----
-logstash_host: logstash.amida.com
-service_name: amida_messaging_microservice

@@ -2,7 +2,7 @@
  * Message Schema
  */
 module.exports = (sequelize, DataTypes) => {
-    const Device = sequelize.define('Device', {
+    const Notification = sequelize.define('Notification', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -12,16 +12,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        token: {
+        payload: {
+            type: DataTypes.JSON,
+            allowNull: false,
+        },
+        status: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        isArchived: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-        },
+        
     });
 
-    return Device;
+    return Notification;
 };

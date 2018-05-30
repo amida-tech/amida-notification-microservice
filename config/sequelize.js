@@ -24,15 +24,14 @@ const sequelize = new Sequelize(config.postgres.db,
 
 const User = sequelize.import('../server/models/user.model');
 const Device = sequelize.import('../server/models/device.model');
+const Notification = sequelize.import('../server/models/notification.model');
 
-
-User.hasOne(Device)
-
+User.hasMany(Device);
+Device.hasMany(Notification);
 
 db.User = User;
 db.Device = Device;
-// db.UserMessage = UserMessage;
-// db.UserThread = UserThread;
+db.Notification = Notification;
 
 // assign the sequelize variables to the db object and returning the db.
 module.exports = _.extend({

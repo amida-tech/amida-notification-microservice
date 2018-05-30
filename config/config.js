@@ -23,6 +23,8 @@ const envVarsSchema = Joi.object({
         .description('Postgres password'),
     TEST_TOKEN: Joi.string().allow('')
         .description('Test auth token'),
+    MICROSERVICE_ACCESS_KEY: Joi.string().allow('')
+        .description('Microservice role access key'),
 }).unknown()
     .required();
 
@@ -36,6 +38,7 @@ const config = {
     port: envVars.PORT,
     jwtSecret: envVars.JWT_SECRET,
     testToken: envVars.TEST_TOKEN,
+    microserviceAccessKey: envVars.MICROSERVICE_ACCESS_KEY,
     postgres: {
         db: envVars.PG_DB,
         port: envVars.PG_PORT,

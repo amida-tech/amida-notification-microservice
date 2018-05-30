@@ -1,8 +1,11 @@
 import express from 'express';
+import httpStatus from 'http-status';
+import passport from 'passport';
+import config from '../../config/config';
+import APIError from '../helpers/APIError';
 
 // import messageRoutes from './message.route';
-import articleRoutes from './article.route';
-// import threadsRoutes from './threads.route';
+import usersRoutes from './users.route';
 import p from '../../package';
 
 const router = express.Router(); // eslint-disable-line new-cap
@@ -14,9 +17,21 @@ router.get('/health-check', (req, res) =>
   res.send('OK')
 );
 
-// mount message routes at /message
-// router.use(`${baseURL}/message`, messageRoutes);
-router.use(`${baseURL}/article`, articleRoutes);
-// router.use(`${baseURL}/threads`, threadsRoutes);
+router.use(passport.authenticate('jwt', { session: false }));
+
+var authorize = function (req, res, next) {
+  console.log("got here 1");
+  if (req.user.username !== config.microserviceAccessKey) {
+    const err = new APIError('Unauthorized User!', httpStatus.NOT_FOUND, true);
+    return next(err);
+  }
+  console.log("got here 2");
+  next();
+}
+
+router.use(authorize);
+
+// mount message routes at /users
+router.use(`${baseURL}/users`, usersRoutes);
 
 export default router;

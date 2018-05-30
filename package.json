@@ -1,8 +1,8 @@
 {
-  "name": "amida-messaging-microservice",
+  "name": "amida-notification-microservice",
   "version": "0.3.0",
-  "description": "Microservice for a lightweight messaging application",
-  "author": "Jacob Sachs <jacob@amida.com>",
+  "description": "Microservice for a lightweight notification application",
+  "author": "Nick Mcally <nick@amida.com>",
   "main": "index.js",
   "private": false,
   "engines": {
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "gulp serve",
-    "start:debug": "cross-env DEBUG=amida-messaging-microservice:* yarn start",
+    "start:debug": "cross-env DEBUG=amida-notification-microservice:* yarn start",
     "build": "gulp",
     "lint": "esw -c .eslintrc *.js server config --color",
     "lint:watch": "yarn lint -- --watch",

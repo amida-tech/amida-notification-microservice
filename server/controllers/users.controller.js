@@ -13,7 +13,7 @@ const Op = Sequelize.Op;
  * @returns {User}
  */
 function create(req, res, next) {
-    const { username } = req.user;
+    const { username } = req.body;
     User.findOrCreate({where: {username}})
     .spread((user, created) => {
       res.send({user})

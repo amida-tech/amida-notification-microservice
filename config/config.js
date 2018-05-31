@@ -25,6 +25,18 @@ const envVarsSchema = Joi.object({
         .description('Test auth token'),
     MICROSERVICE_ACCESS_KEY: Joi.string().allow('')
         .description('Microservice role access key'),
+    IOS_KEY_ID: Joi.string().allow('')
+        .description('ID for IOS Key'),
+    TEAM_ID: Joi.string().allow('')
+        .description('IOS Team ID'),
+    APN_ENV: Joi.string().allow('')
+        .description('IOS Push Notification Environment'),
+    PUSH_TOPIC: Joi.string().allow('')
+        .description('IOS Push Topic'),
+    FIRE_BASE_API_URL: Joi.string().allow('')
+        .description('Firebase API URL'),
+    FIRE_BASE_SERVER_KEY: Joi.string().allow('')
+        .description('Firebase Server Key')
 }).unknown()
     .required();
 
@@ -39,6 +51,12 @@ const config = {
     jwtSecret: envVars.JWT_SECRET,
     testToken: envVars.TEST_TOKEN,
     microserviceAccessKey: envVars.MICROSERVICE_ACCESS_KEY,
+    iosKeyId: envVars.IOS_KEY_ID,
+    teamId: envVars.TEAM_ID,
+    apnENV: envVars.APN_ENV,
+    pushTopic: envVars.PUSH_TOPIC,
+    firebaseAPIUrl: envVars.FIRE_BASE_API_URL,
+    firebaseServerKey: envVars.FIRE_BASE_SERVER_KEY,
     postgres: {
         db: envVars.PG_DB,
         port: envVars.PG_PORT,

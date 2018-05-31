@@ -20,6 +20,11 @@ function create(req, res, next) {
     });
 }
 
+function sendPushNotification(req, res, next) {
+    res.send(req.body);
+}
+
 export default {
-    create
+    create,
+    sendPushNotification
 };

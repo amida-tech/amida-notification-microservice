@@ -1,8 +1,6 @@
 import express from 'express';
 
-// import messageRoutes from './message.route';
 import notificationRoutes from './notification.route';
-// import threadsRoutes from './threads.route';
 import p from '../../package';
 
 const router = express.Router(); // eslint-disable-line new-cap
@@ -14,9 +12,7 @@ router.get('/health-check', (req, res) =>
   res.send('OK')
 );
 
-// mount message routes at /message
-// router.use(`${baseURL}/message`, messageRoutes);
-router.use(`${baseURL}/notriciation`, notificationRoutes);
-// router.use(`${baseURL}/threads`, threadsRoutes);
+
+router.use(`${baseURL}/notification`, notificationRoutes);
 
 export default router;

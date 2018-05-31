@@ -1,10 +1,10 @@
 import express from 'express';
 
-import usersCtrl from '../controllers/users.controller';
+import notificationCtrl from '../controllers/notification.controller';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.route('/')
-    .post(usersCtrl.create);
+    .post(notificationCtrl.create);
 
 export default router;

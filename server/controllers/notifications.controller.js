@@ -34,6 +34,14 @@ function sendPushNotifications(req, res, next) {
       const { username } = userData.username;
       const { deviceId } = userData.deviceId;
 
+
+    const { username } = userData;
+    const { data } = userData;
+    User.findOne({
+      where: {username},
+      include: [{ model: Device }]
+    }).then(receiver => {
+
       pushNotificationHelper.sendPushNotification(receiver, data);
     })
   })

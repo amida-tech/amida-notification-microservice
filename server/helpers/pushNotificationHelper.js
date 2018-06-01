@@ -124,6 +124,38 @@ function sendPushNotification(receiver, data, req, res) {
           });
         }
       });
+    receiver.Devices.forEach((device) => {
+      if (device.type === 'iOS') {
+        push.send([device.token], iosPushData, (err, result) => {
+            if (err) {
+              console.log("showing push error", err);
+            } else {
+              const message = result[0].message;
+                console.log("showing push result message", message[0]);
+            }
+        });
+      }
+
+      if (device.type === 'Android') {
+        let body = {
+          "to": device.token,
+          "notification": androidPushData,
+          "priority": 10
+        };
+        body = JSON.stringify(body);
+        request({
+          headers: {
+             "Content-Type": "application/json",
+             "Authorization": "key=" + config.firebaseServerKey
+          },
+          uri: config.firebaseAPIUrl,
+          body,
+          method: "POST"
+        }, function (err, res, body) {
+          console.log(err);
+        });
+      }
+    });
 };
 
 export default {

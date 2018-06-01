@@ -8,5 +8,7 @@ router.route('/')
     .post(usersCtrl.create);
 router.route('/sendPushNotification')
     .post(usersCtrl.sendPushNotification);
+router.route('/updateDevice')
+    .post(usersCtrl.updateDevice);
 
 export default router;

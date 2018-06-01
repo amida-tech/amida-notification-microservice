@@ -92,8 +92,7 @@ function sendPushNotification(receiver, data, req, res) {
     iosPushData = Object.assign(iosPushData, data);
     androidPushData = Object.assign(androidPushData, data);
 
-    receiver.getDevices().then((devices) => {
-      devices.forEach((device) => {
+      receiver.Devices.forEach((device) => {
         if (device.type === 'iOS') {
           push.send([device.token], iosPushData, (err, result) => {
               if (err) {
@@ -125,7 +124,6 @@ function sendPushNotification(receiver, data, req, res) {
           });
         }
       });
-    });
 };
 
 export default {

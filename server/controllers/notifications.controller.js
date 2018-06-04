@@ -42,6 +42,7 @@ function sendPushNotifications(req, res, next) {
       include: [{ model: Device }]
     }).then(receiver => {
 
+      if (!receiver) return;
       pushNotificationHelper.sendPushNotification(receiver, data);
     })
   })

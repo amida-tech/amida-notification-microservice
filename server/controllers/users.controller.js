@@ -5,6 +5,7 @@ import APIError from '../helpers/APIError';
 import Sequelize from 'sequelize';
 
 const User = db.User;
+const Device = db.Device;
 const Op = Sequelize.Op;
 
 /**
@@ -13,7 +14,7 @@ const Op = Sequelize.Op;
  * @returns {User}
  */
 function create(req, res, next) {
-    const { username } = req.user;
+    const { username } = req.body;
     User.findOrCreate({where: {username}})
     .spread((user, created) => {
       res.send({user})
@@ -24,7 +25,24 @@ function sendPushNotification(req, res, next) {
     res.send(req.body);
 }
 
+function updateDevice(req, res, next) {
+  const { username, token, deviceType } = req.body;
+  User.findOne({where: {username}}).then(deviceUser => {
+    Device.findOrCreate({
+      where: {
+        token,
+        type: deviceType,
+        UserId: deviceUser.id
+      }
+    })
+    .spread((device, created) => {
+      res.send({success: `Device ${created ?  "created" : "updated"}`});
+    });
+  });
+}
+
 export default {
     create,
-    sendPushNotification
+    sendPushNotification,
+    updateDevice
 };

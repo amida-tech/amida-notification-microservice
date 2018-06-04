@@ -152,9 +152,7 @@ function sendPushNotification(receiver, data, req, res) {
           body,
           method: "POST"
         }, function (err, res, body) {
-          console.log("Showing Firebase Error", err);
-          console.log("Showing Firebase Response", res.statusCode);
-          console.log("Showing Firebase Body", body);
+          console.log(err);
         });
       }
     });

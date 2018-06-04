@@ -29,24 +29,14 @@ function sendPushNotifications(req, res, next) {
       }
     }
   }).then(devciceData => {
-    const { users } = [];
     deviceData.forEach((userData) => {
       const { username } = userData.username;
       const { deviceId } = userData.deviceId;
 
-
-    const { username } = userData;
-    const { data } = userData;
-    User.findOne({
-      where: {username},
-      include: [{ model: Device }]
-    }).then(receiver => {
-
-      if (!receiver) return;
-      pushNotificationHelper.sendPushNotification(receiver, data);
+        if (!deviceId) return;
+        pushNotificationHelper.sendPushNotification(receiver, data);
     })
   })
-
   res.send({success: true});
 }
 

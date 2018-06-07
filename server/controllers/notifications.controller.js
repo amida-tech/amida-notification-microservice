@@ -29,16 +29,18 @@ function sendPushNotifications(req, res, next) {
       username: {
         [Op.in]: users
       }
-    }
+    },
+    raw: true
   }).then(deviceData => {
     if (!deviceData) return
-
-    //Iteratve over all
-    deviceData.forEach((userData) => {
-      const { deviceId } = deviceData.deviceId;
-      const { data } = deviceData;
-      if(deviceId)
-        pushNotificationHelper.sendPushNotification(deviceId, data);
+    // Iterative over all
+    deviceData.forEach((user) => {
+      if(user) {
+        console.log('Show me the USER DATA: ', user)
+        const { data } = user;
+        if(data)
+          pushNotificationHelper.sendPushNotification(user['Devices.token'], data);
+      }
     })
   })
   res.send({success: true});

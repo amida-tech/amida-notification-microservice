@@ -1,4 +1,56 @@
-# Amida Messaging Microservice
+# SUD Messaging API
+
+## Description
+This project supports:
+- Building the application through a `build.sh` script.
+- Dockerizing/Containerizing the application with `Dockerfile` and `docker-compose.yml`.
+- Executing tasks through Gulp with `gulpfile.babel.js`.
+- Performing tests on the application.
+
+## Technologies
+- node.js
+- ExpressJS
+
+## Commands Available
+- `yarn test` - This will execute the tests on the application.
+- `yarn install` - (From project root) This will install packages at the project level.
+
+## Build
+
+1. `./build.sh`
+
+## Unit Tests
+
+1. `yarn test`
+
+## Notes for Package Maintainers
+
+Note: Adding `%s` to your version update message will insert the version number.
+
+### Patch 0.0.X
+
+```
+npm version patch -m "Patch upgrade to %s"
+```
+
+### Minor 0.X.0
+
+```
+npm version minor -m "Minor upgrade to %s"
+```
+
+### Major X.0.0
+
+```
+npm version major -m "Major upgrade to %s"
+```
+
+Don't forget to commit to git!
+
+## References
+
+- [Project Jira](https://issues.mobilehealth.va.gov/projects/SUD)
+- [Project Wiki](https://wiki.mobilehealth.va.gov/display/SUD/Substance+Use+Disorder+Home)
 
 
 ## Design

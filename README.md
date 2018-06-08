@@ -1,4 +1,4 @@
-# SUD Messaging API
+# SUD Notifications API
 
 ## Description
 This project supports:

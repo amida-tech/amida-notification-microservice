@@ -18,18 +18,14 @@ function sendPushNotifications(req, res, next) {
 
   //Find all users specified above, left join on device table
   User.findAll({
-    include: [
-      { model: Device }
-    ],
+    include: [ Device ],
     where: {
       username: {
         [Op.in]: usernames
       }
-    },
-    raw: true
+    }
   }).then(users => {
     if (!users) return
-    // Iterative over all
     users.forEach((user) => {
       if(!user) return
         const userData = pushData.find((userData) =>{

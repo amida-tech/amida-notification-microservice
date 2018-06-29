@@ -93,7 +93,7 @@ function sendPushNotification(receiver, data, req, res) {
     androidPushData = Object.assign(androidPushData, data);
 
     receiver.Devices.forEach((device) => {
-      if (device.type === 'iOS') {
+      if (device.type === 'iOS' && config.sendAPN) {
         push.send([device.token], iosPushData, (err, result) => {
             if (err) {
               console.log("showing push error", err);

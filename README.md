@@ -90,6 +90,18 @@ gulp clean
 # Default task: Wipes out dist and coverage directory. Compiles using babel.
 gulp
 ```
+Setting Up For Push Notifications
+* Note that you can only send Apple push notifications if your host is configured with SSL termination. Without this, Apple may permanently invalidate the `key` you use to send the push notification. To enable sending Apple push notifications set the `SEND_APN` value in `.env` to true.
+- Also, if you are developing for the Amida team, most of the required keys and files specified below can be readily accessed in the Amida OnePassword Account.
+
+- iOS Notifications
+  - Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`. Add the corresponding `Key ID` to the `.env`'s `IOS_KEY_ID` value.
+  - Set the `TEAM_ID` value in the `.env` file. The is the ios developer teamID and can be found by logging into your Apple Developer console.
+  - If you are sending push notifications in development mode (not distribution or test flight), set the `APN_ENV` in `.env` to "development" otherwise set it to "production".
+  - Set the `PUSH_TOPIC` value in `.env` to the iOS AppId value. You can obtain this in the Apple developer console.
+
+- Android Notifications
+  - Set the `FIRE_BASE_SERVER_KEY` value in `.env`. This can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.
 
 ## Deployment
 

@@ -36,7 +36,8 @@ Note: Default values are in parenthesis.
 `JWT_SECRET` (`=0a6b944d-d2fb-46fc-a85e-0295c986cd9f`) Must match value of the JWT secret being used by your `amida-auth-microservice` instance.
 - See that repo for details.
 
-`MICROSERVICE_ACCESS_KEY` (Stored in the password vault) The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
+`MICROSERVICE_ACCESS_KEY` (`=oucuYaiN6pha3ahphiiT`) The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
+- The default value is for development only. In production, set this to a different value.
 
 ### Integration With Apple iOS Push Notifications:
 

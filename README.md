@@ -45,7 +45,7 @@ Note: iOS push notifications do not and cannot work in development.
 
 `IOS_KEY_ID` (Stored in the password vault) This microservice tells apple to use this key to encrypt the payload of push notifications that Apple sends to end-user devices.
 
-`TEAM_ID` (`=A6C383FQ61`) The ID of the Amida "team" in Apple Developer Console.
+`TEAM_ID` (Stored in the password vault) The ID of the Amida "team" in Apple Developer Console.
 
 `APN_ENV` (`=development`)
 

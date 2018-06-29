@@ -4,15 +4,15 @@
 
 Note: Default values are in parenthesis.
 
-### For This Node.js Server:
+### This Server:
 
 `NODE_ENV` (`=development`)
 - When in development, set to `development`
 
 `PORT` (`=4003`) The port this server will run on.
-- When in development, by default set to `4003`, because other Amida microservices run, by default, on ports `4000` through `4002`.
+- When in development, by default set to `4003`, because other Amida microservices run, by default, on other `400x` ports.
 
-### For This Microservice's Postgres Instance:
+### This Microservice's Postgres Instance:
 
 `PG_DB` (`=amida_notification_microservice`) Postgres database name.
 - Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Postgres instances--which is why the name begins with `amida_`.
@@ -20,25 +20,25 @@ Note: Default values are in parenthesis.
 `PG_PORT` (`=5432`) Port on the machine the postgres instance is running on.
 
 `PG_HOST` (`=localhost`) Hostname of machine the postgres instance is running on.
-- When doing docker, set to the name of the docker container running postgres. Setting to `amida_auth_microservice_db` is recommended.
+- When doing docker, set to the name of the docker container running postgres. Setting to `amida_notification_microservice_db` is recommended.
 
 `PG_USER` (`=amida_notification_microservice`) Postgres user that will perform operations on behalf of this microservice. Therefore, this user must have permissions to modify the database specified by `PG_DB`.
 - Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Postgres instances--which is why the name begins with `amida_`.
 
 `PG_PASSWD` (N/A) Password of postgres user `PG_USER`.
 
-### For Running the Automated Test Suite:
+### Running the Automated Test Suite:
 
 `TEST_TOKEN` (`=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIwIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiYWRtaW4iOnRydWV9.X_SzIXZ-oqEL67eB-fwFqFSumuFQVAqhgsmak1JLIWo`) This is the `amida-auth-microservice` JWT that is used by this repo's automated test suite when it makes requests.
 
-### For Integration With Amida Auth Microservice:
+### Integration With Amida Auth Microservice:
 
 `JWT_SECRET` (`=0a6b944d-d2fb-46fc-a85e-0295c986cd9f`) Must match value of the JWT secret being used by your `amida-auth-microservice` instance.
 - See that repo for details.
 
-`MICROSERVICE_ACCESS_KEY`  (Stored in the password vault) The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
+`MICROSERVICE_ACCESS_KEY` (Stored in the password vault) The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
 
-### For Integration With Apple iOS Push Notifications:
+### Integration With Apple iOS Push Notifications:
 
 Note: iOS push notifications do not and cannot work in development.
 
@@ -50,13 +50,13 @@ Note: iOS push notifications do not and cannot work in development.
 
 `PUSH_TOPIC` (Stored in the password vault) The Apple Developer Console name of this app.
 
-### For Integration With Google Android Push Notifications:
+### Integration With Google Android Push Notifications:
 
 Note: Unlike iOS push notifications, Android push notifications do work in development.
 
-`FIRE_BASE_API_URL` (`=https://fcm.googleapis.com/fcm/send`) Self-explanitory.
+`FIRE_BASE_API_URL` (`=https://fcm.googleapis.com/fcm/send`) Url of Google Android Firebase service.
 
-`FIRE_BASE_SERVER_KEY` (Stored in the password vault) Identifies to Google that it is Amida that is making this push notification reqeust.
+`FIRE_BASE_SERVER_KEY` (Stored in the password vault) Identifies to Google that a server belonging to Amida is making this push notification reqeust.
 
 ## Design
 

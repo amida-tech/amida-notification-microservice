@@ -33,8 +33,8 @@ function sendPushNotifications(req, res, next) {
         });
         pushNotificationHelper.sendPushNotification(user, userData);
     })
+    res.send({success: true});
   })
-  res.send({success: true});
 }
 
 export default {

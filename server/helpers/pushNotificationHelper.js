@@ -115,7 +115,7 @@ function sendPushNotification(receiver, data, req, res) {
       if (device.type === 'Android') {
         let body = {
           "to": device.token,
-          "notification": androidPushData,
+          "data": androidPushData,
           "priority": 10
         };
         body = JSON.stringify(body);

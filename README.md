@@ -52,6 +52,64 @@ Don't forget to commit to git!
 - [Project Jira](https://issues.mobilehealth.va.gov/projects/SUD)
 - [Project Wiki](https://wiki.mobilehealth.va.gov/display/SUD/Substance+Use+Disorder+Home)
 
+## Environment Variables (Grouped by Purpose)
+
+Note: Default values are in parenthesis.
+
+### This Server:
+
+`NODE_ENV` (`=development`)
+- When in development, set to `development`
+
+`PORT` (`=4003`) The port this server will run on.
+- When in development, by default set to `4003`, because other Amida microservices run, by default, on other `400x` ports.
+
+### This Microservice's Postgres Instance:
+
+`PG_DB` (`=amida_notification_microservice`) Postgres database name.
+- Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Postgres instances--which is why the name begins with `amida_`.
+
+`PG_PORT` (`=5432`) Port on the machine the postgres instance is running on.
+
+`PG_HOST` (`=localhost`) Hostname of machine the postgres instance is running on.
+- When doing docker, set to the name of the docker container running postgres. Setting to `amida_notification_microservice_db` is recommended.
+
+`PG_USER` (`=amida_notification_microservice`) Postgres user that will perform operations on behalf of this microservice. Therefore, this user must have permissions to modify the database specified by `PG_DB`.
+- Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Postgres instances--which is why the name begins with `amida_`.
+
+`PG_PASSWD` (N/A) Password of postgres user `PG_USER`.
+
+### Running the Automated Test Suite:
+
+`TEST_TOKEN` (`=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIwIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiYWRtaW4iOnRydWV9.X_SzIXZ-oqEL67eB-fwFqFSumuFQVAqhgsmak1JLIWo`) This is the `amida-auth-microservice` JWT that is used by this repo's automated test suite when it makes requests.
+
+### Integration With Amida Auth Microservice:
+
+`JWT_SECRET` (`=0a6b944d-d2fb-46fc-a85e-0295c986cd9f`) Must match value of the JWT secret being used by your `amida-auth-microservice` instance.
+- See that repo for details.
+
+`MICROSERVICE_ACCESS_KEY` (`=oucuYaiN6pha3ahphiiT`) The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
+- The default value is for development only. In production, set this to a different value.
+
+### Integration With Apple iOS Push Notifications:
+
+Note: iOS push notifications do not and cannot work in development.
+
+`IOS_KEY_ID` (Stored in the password vault) This microservice tells apple to use this key to encrypt the payload of push notifications that Apple sends to end-user devices.
+
+`TEAM_ID` (Stored in the password vault) The ID of the Amida "team" in Apple Developer Console.
+
+`APN_ENV` (`=development`)
+
+`PUSH_TOPIC` (Stored in the password vault) The Apple Developer Console name of this app.
+
+### Integration With Google Android Push Notifications:
+
+Note: Unlike iOS push notifications, Android push notifications do work in development.
+
+`FIRE_BASE_API_URL` (`=https://fcm.googleapis.com/fcm/send`) Url of Google Android Firebase service.
+
+`FIRE_BASE_SERVER_KEY` (Stored in the password vault) Identifies to Google that a server belonging to Amida is making this push notification reqeust.
 
 ## Design
 
@@ -142,6 +200,20 @@ gulp clean
 # Default task: Wipes out dist and coverage directory. Compiles using babel.
 gulp
 ```
+Setting Up For Push Notifications
+* Note that you can only send Apple push notifications if your host is configured with SSL termination. Without this, Apple may permanently invalidate the `key` you use to send the push notification. To enable sending Apple push notifications set the `SEND_APN` value in `.env` to true.
+- Also, if you are developing for the Amida team, most of the required keys and files specified below can be readily accessed in the Amida OnePassword Account.
+
+- If you haven't already, create a `microservice user` on the Auth Service with username matching your `MICROSERVICE_ACCESS_KEY` in `.env`.
+
+- iOS Notifications
+  - Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's Apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`. Add the corresponding `Key ID` to the `.env`'s `IOS_KEY_ID` value.
+  - Set the `TEAM_ID` value in the `.env` file. The is the ios developer teamID and can be found by logging into your Apple Developer console.
+  - If you are sending push notifications in development mode (not distribution or test flight), set the `APN_ENV` in `.env` to "development" otherwise set it to "production".
+  - Set the `PUSH_TOPIC` value in `.env` to the iOS AppId value. You can obtain this in the Apple developer console.
+
+- Android Notifications
+  - Set the `FIRE_BASE_SERVER_KEY` value in `.env`. This can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.
 
 ## Deployment
 

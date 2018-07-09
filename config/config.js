@@ -36,7 +36,9 @@ const envVarsSchema = Joi.object({
     FIRE_BASE_API_URL: Joi.string().allow('')
         .description('Firebase API URL'),
     FIRE_BASE_SERVER_KEY: Joi.string().allow('')
-        .description('Firebase Server Key')
+        .description('Firebase Server Key'),
+    SEND_APN: Joi.bool()
+            .default(false),
 }).unknown()
     .required();
 
@@ -57,6 +59,7 @@ const config = {
     pushTopic: envVars.PUSH_TOPIC,
     firebaseAPIUrl: envVars.FIRE_BASE_API_URL,
     firebaseServerKey: envVars.FIRE_BASE_SERVER_KEY,
+    sendAPN: envVars.SEND_APN,
     postgres: {
         db: envVars.PG_DB,
         port: envVars.PG_PORT,

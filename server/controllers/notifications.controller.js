@@ -14,18 +14,27 @@ const Op = Sequelize.Op;
 function sendPushNotifications(req, res, next) {
   const { pushData } = req.body;
 
-  pushData.forEach((userData) => {
-    const { username } = userData;
-    const { data } = userData;
-    User.findOne({
-      where: {username},
-      include: [{ model: Device }]
-    }).then(receiver => {
-      if (!receiver) return;
-      pushNotificationHelper.sendPushNotification(receiver, data);
+  const usernames = pushData.map(data => data.username);
+
+  //Find all users specified above, left join on device table
+  User.findAll({
+    include: [ Device ],
+    where: {
+      username: {
+        [Op.in]: usernames
+      }
+    }
+  }).then(users => {
+    if (!users) return
+    users.forEach((user) => {
+      if(!user) return
+        const userData = pushData.find((userData) =>{
+          return userData.username === user.username
+        });
+        pushNotificationHelper.sendPushNotification(user, userData);
     })
-  });
-  res.send({success: true});
+    res.send({success: true});
+  })
 }
 
 export default {

@@ -93,13 +93,21 @@ function sendPushNotification(receiver, data, req, res) {
     androidPushData = Object.assign(androidPushData, data);
 
     receiver.Devices.forEach((device) => {
-      if (device.type === 'iOS') {
+
+      if (device.type === 'iOS' && config.sendAPN) {
         push.send([device.token], iosPushData, (err, result) => {
             if (err) {
               console.log("showing push error", err);
             } else {
               const message = result[0].message;
-                console.log("showing push result message", message[0]);
+              console.log("showing push result message", message[0]);
+              if (message.error == null) {
+                device.createNotification({
+                  payload: data.data,
+                  type: data.notificationType,
+                  status: 'success'
+                })
+              }
             }
         });
       }
@@ -123,6 +131,14 @@ function sendPushNotification(receiver, data, req, res) {
           console.log("Showing Firebase Error", err);
           console.log("Showing Firebase Response", res.statusCode);
           console.log("Showing Firebase Body", body);
+          const { success } = body;
+          if (success == 1) {
+            device.createNotification({
+              payload: data.data,
+              type: data.notificationType,
+              status: 'success'
+            })
+          }
         });
       }
     });

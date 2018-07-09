@@ -21,6 +21,11 @@ const envVarsSchema = Joi.object({
         .description('Postgres username'),
     PG_PASSWD: Joi.string().allow('')
         .description('Postgres password'),
+    PG_SSL: Joi.bool()
+        .default(false)
+        .description('Enable SSL connection to PostgreSQL'),
+    PG_CERT_CA: Joi.string()
+        .description('SSL certificate CA'), // Certificate itself, not a filename
     TEST_TOKEN: Joi.string().allow('')
         .description('Test auth token'),
     MICROSERVICE_ACCESS_KEY: Joi.string().allow('')
@@ -66,6 +71,8 @@ const config = {
         host: envVars.PG_HOST,
         user: envVars.PG_USER,
         passwd: envVars.PG_PASSWD,
+        ssl: envVars.PG_SSL,
+        ssl_ca_cert: envVars.PG_CERT_CA,
     },
 };
 

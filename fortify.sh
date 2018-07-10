@@ -51,4 +51,4 @@ fi
 
 echo "=========================="
 echo "Generating reports $RESULT_FILE"
-ReportGenerator -user builduser -template Security_Report.xml -format pdf -f $RESULT_FILE.pdf -source $RESULT_FILE.fpr || true;
+ReportGenerator -format pdf -f $RESULT_FILE.pdf -source $RESULT_FILE.fpr || true;

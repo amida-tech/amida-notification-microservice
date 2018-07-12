@@ -16,8 +16,8 @@ RUN yarn
 # compile to ES5
 RUN yarn build
 
-# expose port 4001
-EXPOSE 4001
+# expose port 4003
+EXPOSE 4003
 
 # cmd to start service
 CMD [ "node", "dist/index.js" ]

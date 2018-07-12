@@ -79,6 +79,10 @@ Note: Default values are in parenthesis.
 
 `PG_PASSWD` (N/A) Password of postgres user `PG_USER`.
 
+`PG_SSL` (`=false`) Whether an ssl connection shall be used to connect to postgres.
+
+`PG_CERT_CA` If ssl is enabled with `PG_SSL` this can be set to a certificate to override the CAs trusted while initiating the ssl connection to postgres. Without this set, Mozilla's list of trusted CAs is used. Note that this variable should contain the certificate itself, not a filename.
+
 ### Running the Automated Test Suite:
 
 `TEST_TOKEN` (`=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIwIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiYWRtaW4iOnRydWV9.X_SzIXZ-oqEL67eB-fwFqFSumuFQVAqhgsmak1JLIWo`) This is the `amida-auth-microservice` JWT that is used by this repo's automated test suite when it makes requests.
@@ -217,6 +221,37 @@ Setting Up For Push Notifications
 
 ## Deployment
 
+### Docker
+
+Docker deployment requires two docker containers:
+- An instance of the official Postgres docker image (see: https://hub.docker.com/_/postgres/).
+- An instance of this service's docker image (see: https://hub.docker.com/r/amidatech/notification-service/).
+
+The Postgres container must be running _before_ the notification-service container is started because, upon initial run, the notification-service container defines the schema within the Postgres database.
+
+Also, the containers communicate via a docker network. Therefore,
+
+1. First, create the Docker network:
+
+```
+docker network create {DOCKER_NETWORK_NAME}
+```
+
+2. Start the postgres container:
+
+```
+docker run -d --name amida-notification-microservice-db --network {DOCKER_NETWORK_NAME} -e POSTGRES_DB=amida_notification_microservice -e POSTGRES_USER=amida_notification_microservice -e POSTGRES_PASSWORD={PASSWORD} postgres:9.6
+```
+
+3. Start the auth-service container:
+
+```
+docker run -d --name amida-notification-microservice --network {DOCKER_NETWORK_NAME} -p 4003:4003 -e NODE_ENV=production -e PG_HOST=amida-notification-microservice-db -e PG_DB=amida_notification_microservice -e PG_USER=amida_notification_microservice -e PG_PASSWD={PASSWORD} -e JWT_SECRET={JWT_SECRET} -e MICROSERVICE_ACCESS_KEY= {MICROSERVICE_ACCESS_KEY} amidatech/notification-service
+```
+Notes: 
+- If you are deploying this service in conjunction with other services or to connect to a specific front-end client it is vital that the JWT_SECRET environment variables match up between the different applications.
+- The `MICROSERVICE_ACCESS_KEY` as mentioned in the enviroment variables section must match the username of the `microservice user` that is created on the Amida-Auth-Service using the `createAccessUser.js` script inside the `Orange-Api` repository. 
+
 ### Manual deployment with `pm2`
 ```sh
 # compile to ES5
@@ -258,11 +293,6 @@ Be sure to have your postgres host running and replace the `pg_host` value in th
 
 Further details can be found in the `deploy` directory.
 
-### Docker deployment
-Docker Compose:
-```sh
-docker-compose up
-```
 
 ### Kubernetes Deployment
 See the [paper](https://paper.dropbox.com/doc/Amida-Microservices-Kubernetes-Deployment-Xsz32zX8nwT9qctitGNVc) write-up for instructions on how to deploy with Kubernetes. The `kubernetes.yml` file contains the deployment definition for the project.

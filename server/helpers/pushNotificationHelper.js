@@ -89,8 +89,8 @@ function sendPushNotification(receiver, data, req, res) {
         "show_in_foreground": true
     };
 
-    iosPushData = {...iosPushData, body: data};
-    androidPushData = {...androidPushData, body: data};
+    iosPushData = {...iosPushData, ...data, data};
+    androidPushData = {...androidPushData, ...data, data};
 
     receiver.Devices.forEach((device) => {
 

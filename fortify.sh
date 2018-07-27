@@ -22,10 +22,6 @@ echo "Copying default .env"
 cp .env.example .env
 
 echo "=========================="
-echo "Building..."
-yarn build
-
-echo "=========================="
 echo "Updating rulepacks"
 fortifyupdate
 
@@ -35,7 +31,7 @@ sourceanalyzer -clean
 
 echo "=========================="
 echo "Scanning"
-sourceanalyzer -scan -f $TEMP_FILE.fpr -Xmx8092M ./dist
+sourceanalyzer -scan -f $TEMP_FILE.fpr -Xmx8092M ./server ./config ./index.js ./index.html
 
 echo "=========================="
 echo "Merging"

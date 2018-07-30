@@ -103,7 +103,7 @@ function sendPushNotification(receiver, data, req, res) {
               console.log("showing push result message", message[0]);
               if (message.error == null) {
                 device.createNotification({
-                  payload: data.data,
+                  payload: data,
                   type: data.notificationType,
                   status: 'success'
                 })
@@ -134,7 +134,7 @@ function sendPushNotification(receiver, data, req, res) {
           const { success } = body;
           if (success == 1) {
             device.createNotification({
-              payload: data.data,
+              payload: data,
               type: data.notificationType,
               status: 'success'
             })

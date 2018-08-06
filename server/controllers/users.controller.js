@@ -36,7 +36,10 @@ function updateDevice(req, res, next) {
       }
     })
     .spread((device, created) => {
-      res.send({success: `Device ${created ?  "created" : "updated"}`});
+      res.send({
+        success: `Device ${created ?  "created" : "updated"}`,
+        device
+      });
     });
   });
 }

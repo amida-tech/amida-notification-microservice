@@ -28,21 +28,21 @@ const envVarsSchema = Joi.object({
         .description('SSL certificate CA. This string must be the certificate itself, not a filename.'),
     NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT: Joi.string().allow('')
         .description('Test auth token'),
-    AUTH_MICROSERVICE_SERVICE_USER_USERNAME: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME: Joi.string().allow('')
         .description('Microservice role access key'),
-    PUSH_NOTIFICATION_APN_KEY_ID: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_APN_KEY_ID: Joi.string().allow('')
         .description('ID for IOS Key'),
-    PUSH_NOTIFICATION_APN_TEAM_ID: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_APN_TEAM_ID: Joi.string().allow('')
         .description('IOS Team ID'),
-    PUSH_NOTIFICATION_APN_ENV: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_APN_ENV: Joi.string().allow('')
         .description('IOS Push Notification Environment'),
-    PUSH_NOTIFICATION_APN_TOPIC: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_APN_TOPIC: Joi.string().allow('')
         .description('IOS Push Topic'),
-    PUSH_NOTIFICATION_FCM_API_URL: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_FCM_API_URL: Joi.string().allow('')
         .description('Firebase API URL'),
-    PUSH_NOTIFICATION_FCM_SERVER_KEY: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_FCM_SERVER_KEY: Joi.string().allow('')
         .description('Firebase Server Key'),
-    PUSH_NOTIFICATION_APN_ENABLED: Joi.bool()
+    PUSH_NOTIFICATIONS_APN_ENABLED: Joi.bool()
             .default(false),
 }).unknown()
     .required();
@@ -57,14 +57,14 @@ const config = {
     port: envVars.NOTIFICATION_SERVICE_PORT,
     jwtSecret: envVars.JWT_SECRET,
     testToken: envVars.NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT,
-    authMicroserviceServiceUserUsername: envVars.AUTH_MICROSERVICE_SERVICE_USER_USERNAME,
-    apnKeyId: envVars.PUSH_NOTIFICATION_APN_KEY_ID,
-    apnTeamId: envVars.PUSH_NOTIFICATION_APN_TEAM_ID,
-    apnEnv: envVars.PUSH_NOTIFICATION_APN_ENV,
-    apnTopic: envVars.PUSH_NOTIFICATION_APN_TOPIC,
-    fcmApiUrl: envVars.PUSH_NOTIFICATION_FCM_API_URL,
-    fcmServerKey: envVars.PUSH_NOTIFICATION_FCM_SERVER_KEY,
-    apnEnabled: envVars.PUSH_NOTIFICATION_APN_ENABLED,
+    pushNotificationsServiceUserUsername: envVars.PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME,
+    apnKeyId: envVars.PUSH_NOTIFICATIONS_APN_KEY_ID,
+    apnTeamId: envVars.PUSH_NOTIFICATIONS_APN_TEAM_ID,
+    apnEnv: envVars.PUSH_NOTIFICATIONS_APN_ENV,
+    apnTopic: envVars.PUSH_NOTIFICATIONS_APN_TOPIC,
+    fcmApiUrl: envVars.PUSH_NOTIFICATIONS_FCM_API_URL,
+    fcmServerKey: envVars.PUSH_NOTIFICATIONS_FCM_SERVER_KEY,
+    apnEnabled: envVars.PUSH_NOTIFICATIONS_APN_ENABLED,
     postgres: {
         db: envVars.NOTIFICATION_SERVICE_PG_DB,
         port: envVars.NOTIFICATION_SERVICE_PG_PORT,

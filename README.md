@@ -40,28 +40,28 @@ Note: Default values are in parenthesis.
 `JWT_SECRET` (`=0a6b944d-d2fb-46fc-a85e-0295c986cd9f`) Must match value of the JWT secret being used by your `amida-auth-microservice` instance.
 - See that repo for details.
 
-`AUTH_MICROSERVICE_SERVICE_USER_USERNAME` (`=oucuYaiN6pha3ahphiiT`) The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
+`PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME` (`=oucuYaiN6pha3ahphiiT`) The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
 - The default value is for development only. In production, set this to a different value.
 
 ### Integration With Apple Push Notifications for iOS:
 
 Note: iOS push notifications do not and cannot work in development.
 
-`PUSH_NOTIFICATION_APN_KEY_ID` (Stored in the password vault) This microservice tells apple to use this key to encrypt the payload of push notifications that Apple sends to end-user devices.
+`PUSH_NOTIFICATIONS_APN_KEY_ID` (Stored in the password vault) This microservice tells apple to use this key to encrypt the payload of push notifications that Apple sends to end-user devices.
 
-`PUSH_NOTIFICATION_APN_TEAM_ID` (Stored in the password vault) The ID of the Amida "team" in Apple Developer Console.
+`PUSH_NOTIFICATIONS_APN_TEAM_ID` (Stored in the password vault) The ID of the Amida "team" in Apple Developer Console.
 
-`PUSH_NOTIFICATION_APN_ENV` (`=development`)
+`PUSH_NOTIFICATIONS_APN_ENV` (`=development`)
 
-`PUSH_NOTIFICATION_APN_TOPIC` (Stored in the password vault) The Apple Developer Console name of this app.
+`PUSH_NOTIFICATIONS_APN_TOPIC` (Stored in the password vault) The Apple Developer Console name of this app.
 
 ### Integration With Firebase Cloud Messaging for Android:
 
 Note: Unlike iOS push notifications, Android push notifications do work in development.
 
-`PUSH_NOTIFICATION_FCM_API_URL` (`=https://fcm.googleapis.com/fcm/send`) Url of Google Android Firebase service.
+`PUSH_NOTIFICATIONS_FCM_API_URL` (`=https://fcm.googleapis.com/fcm/send`) Url of Google Android Firebase service.
 
-`PUSH_NOTIFICATION_FCM_SERVER_KEY` (Stored in the password vault) Identifies to Google that a server belonging to Amida is making this push notification reqeust.
+`PUSH_NOTIFICATIONS_FCM_SERVER_KEY` (Stored in the password vault) Identifies to Google that a server belonging to Amida is making this push notification reqeust.
 
 ## Design
 
@@ -153,19 +153,19 @@ gulp clean
 gulp
 ```
 Setting Up For Push Notifications
-* Note that you can only send Apple push notifications if your host is configured with SSL termination. Without this, Apple may permanently invalidate the `key` you use to send the push notification. To enable sending Apple push notifications set the `PUSH_NOTIFICATION_APN_ENABLED` value in `.env` to true.
+* Note that you can only send Apple push notifications if your host is configured with SSL termination. Without this, Apple may permanently invalidate the `key` you use to send the push notification. To enable sending Apple push notifications set the `PUSH_NOTIFICATIONS_APN_ENABLED` value in `.env` to true.
 - Also, if you are developing for the Amida team, most of the required keys and files specified below can be readily accessed in the Amida OnePassword Account.
 
-- If you haven't already, create a `microservice user` on the Auth Service with username matching your `AUTH_MICROSERVICE_SERVICE_USER_USERNAME` in `.env`.
+- If you haven't already, create a `microservice user` on the Auth Service with username matching your `PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME` in `.env`.
 
 - iOS Notifications
-  - Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's Apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`. Add the corresponding `Key ID` to the `.env`'s `PUSH_NOTIFICATION_APN_KEY_ID` value.
-  - Set the `PUSH_NOTIFICATION_APN_TEAM_ID` value in the `.env` file. The is the ios developer teamID and can be found by logging into your Apple Developer console.
-  - If you are sending push notifications in development mode (not distribution or test flight), set the `PUSH_NOTIFICATION_APN_ENV` in `.env` to "development" otherwise set it to "production".
-  - Set the `PUSH_NOTIFICATION_APN_TOPIC` value in `.env` to the iOS AppId value. You can obtain this in the Apple developer console.
+  - Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's Apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`. Add the corresponding `Key ID` to the `.env`'s `PUSH_NOTIFICATIONS_APN_KEY_ID` value.
+  - Set the `PUSH_NOTIFICATIONS_APN_TEAM_ID` value in the `.env` file. The is the ios developer teamID and can be found by logging into your Apple Developer console.
+  - If you are sending push notifications in development mode (not distribution or test flight), set the `PUSH_NOTIFICATIONS_APN_ENV` in `.env` to "development" otherwise set it to "production".
+  - Set the `PUSH_NOTIFICATIONS_APN_TOPIC` value in `.env` to the iOS AppId value. You can obtain this in the Apple developer console.
 
 - Android Notifications
-  - Set the `PUSH_NOTIFICATION_FCM_SERVER_KEY` value in `.env`. This can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.
+  - Set the `PUSH_NOTIFICATIONS_FCM_SERVER_KEY` value in `.env`. This can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.
 
 ## Deployment
 
@@ -202,13 +202,13 @@ docker run -d -p 4003:4003 \
 -e NOTIFICATION_SERVICE_PG_USER=amida_notification_microservice \
 -e NOTIFICATION_SERVICE_PG_PASSWORD={NOTIFICATION_SERVICE_PG_PASSWORD} \
 -e JWT_SECRET={JWT_SECRET} \
--e AUTH_MICROSERVICE_SERVICE_USER_USERNAME={AUTH_MICROSERVICE_SERVICE_USER_USERNAME} \
+-e PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME={PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME} \
 amidatech/notification-service
 ```
 
 Notes: 
 - If you are deploying this service in conjunction with other services or to connect to a specific front-end client it is vital that the JWT_SECRET environment variables match up between the different applications.
-- The `AUTH_MICROSERVICE_SERVICE_USER_USERNAME` as mentioned in the enviroment variables section must match the username of the `microservice user` that is created on the Amida-Auth-Service using the `createAccessUser.js` script inside the `Orange-Api` repository. 
+- The `PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME` as mentioned in the enviroment variables section must match the username of the `microservice user` that is created on the Amida-Auth-Service using the `createAccessUser.js` script inside the `Orange-Api` repository. 
 
 ### Manual deployment with `pm2`
 ```sh

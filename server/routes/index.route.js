@@ -20,7 +20,7 @@ router.get('/health-check', (req, res) =>
 router.use(passport.authenticate('jwt', { session: false }));
 
 var authorize = function (req, res, next) {
-  if (req.user.username !== config.microserviceAccessKey) {
+  if (req.user.username !== config.authMicroserviceServiceUserUsername) {
     const err = new APIError('Unauthorized User!', httpStatus.NOT_FOUND, true);
     return next(err);
   }

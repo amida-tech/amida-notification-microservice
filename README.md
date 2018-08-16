@@ -207,10 +207,6 @@ See the [paper](https://paper.dropbox.com/doc/Amida-Microservices-Kubernetes-Dep
 
 Further details can be found in the `deploy` directory.
 
-## Kubernetes Deployment
-See the [paper](https://paper.dropbox.com/doc/Amida-Microservices-Kubernetes-Deployment-Xsz32zX8nwT9qctitGNVc) write-up for instructions on how to deploy with Kubernetes. The `kubernetes.yml` file contains the deployment definition for the project.
-
-
 # Environment Variables
 
 Note: Default values are in parenthesis.

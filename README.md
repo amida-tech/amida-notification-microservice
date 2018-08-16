@@ -1,6 +1,13 @@
 # Amida Messaging Microservice
 
-## Environment Variables (Grouped by Purpose)
+# Table of Contents
+
+  - [Design](#design)
+  - [Development](#development)
+  - [Deployment](#deployment)
+  - [Environment Variables](#Environment-Variables)
+
+# Environment Variables (Grouped by Purpose)
 
 Note: Default values are in parenthesis.
 
@@ -39,6 +46,8 @@ Note: Default values are in parenthesis.
 `PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME` (`=oucuYaiN6pha3ahphiiT`) The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
 - The default value is for development only. In production, set this to a different value.
 
+## Enablign Push Notifications ##
+
 ### Integration With Apple Push Notifications for iOS
 
 Note: iOS push notifications do not and cannot work in development.
@@ -61,16 +70,20 @@ Note: Unlike iOS push notifications, Android push notifications do work in devel
 
 `PUSH_NOTIFICATIONS_FCM_SERVER_KEY` (Stored in the password vault) Identifies to Google that a server belonging to Amida is making this push notification reqeust.
 
-## Design
+# Design
 
-### API Spec
+## API Spec
 The spec can be viewed at https://amida-tech.github.io/amida-messaging-microservice/.
 
 To update the spec, first edit the files in the `docs` directory. Then run `aglio -i docs/src/docs.md --theme flatly -o index.html`.
 
 Merge the resulting changes to the `gh-pages` branch of the repository.
 
-### Features
+## Logging
+
+Universal logging library [winston](https://www.npmjs.com/package/winston) is used for logging. It has support for multiple transports. A transport is essentially a storage device for your logs. Each instance of a winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file. We just log to the console for simplicity, but you can configure more transports as per your requirement.
+
+## Features
 
 | Feature                                | Summary                                                                                                                                                                                                                                                     |
 |----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -89,7 +102,9 @@ Merge the resulting changes to the `gh-pages` branch of the repository.
 - Uses [http-status](https://www.npmjs.com/package/http-status) to set http status code. It is recommended to use `httpStatus.INTERNAL_SERVER_ERROR` instead of directly using `500` when setting status code.
 - Has `.editorconfig` which helps developers define and maintain consistent coding styles between different editors and IDEs.
 
-## Developing locally
+# Development
+
+## Setup
 
 Install yarn:
 ```sh
@@ -106,6 +121,8 @@ Set environment vars:
 cp .env.example .env
 ```
 
+## Run
+
 Start server:
 ```sh
 # Start server
@@ -115,7 +132,7 @@ yarn start
 DEBUG=amida-messaging-microservice:* yarn start
 ```
 
-Tests:
+## Tests
 
 Create a JWT with the username value 'user0' and set `NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT={token}` in your .env file or an evironment variable. You can easily create a token using the amida-auth-microservice
 
@@ -133,7 +150,8 @@ yarn test:watch
 yarn test:check-coverage
 ```
 
-Lint:
+## Lint
+
 ```sh
 # Lint code with ESLint
 yarn lint
@@ -142,7 +160,8 @@ yarn lint
 yarn lint:watch
 ```
 
-Other gulp tasks:
+## Other gulp tasks
+
 ```sh
 # Wipe out dist and coverage directory
 gulp clean
@@ -150,6 +169,7 @@ gulp clean
 # Default task: Wipes out dist and coverage directory. Compiles using babel.
 gulp
 ```
+
 Setting Up For Push Notifications
 * Note that you can only send Apple push notifications if your host is configured with SSL termination. Without this, Apple may permanently invalidate the `key` you use to send the push notification. To enable sending Apple push notifications set the `PUSH_NOTIFICATIONS_APN_ENABLED` value in `.env` to true.
 - Also, if you are developing for the Amida team, most of the required keys and files specified below can be readily accessed in the Amida OnePassword Account.
@@ -165,9 +185,9 @@ Setting Up For Push Notifications
 - Android Notifications
   - Set the `PUSH_NOTIFICATIONS_FCM_SERVER_KEY` value in `.env`. This can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.
 
-## Deployment
+# Deployment
 
-### Docker
+## Deployment Via Docker
 
 Docker deployment requires two docker containers:
 - An instance of the official Postgres docker image (see: https://hub.docker.com/_/postgres/).
@@ -208,7 +228,7 @@ Notes:
 - If you are deploying this service in conjunction with other services or to connect to a specific front-end client it is vital that the JWT_SECRET environment variables match up between the different applications.
 - The `PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME` as mentioned in the enviroment variables section must match the username of the `microservice user` that is created on the Amida-Auth-Service using the `createAccessUser.js` script inside the `Orange-Api` repository. 
 
-### Manual deployment with `pm2`
+## Manual deployment with `pm2`
 ```sh
 # compile to ES5
 1. yarn build
@@ -223,7 +243,7 @@ Notes:
 4. pm2 start dist/index.js
 ```
 
-### Deployment to AWS with Packer and Terraform
+## Deployment to AWS with Packer and Terraform
 You will need to install [pakcer](https://www.packer.io/) and [terraform](https://www.terraform.io/) installed on your local machine.
 Be sure to have your postgres host running and replace the `pg_host` value in the command below with the postgres host address.
 1. First validate the AMI with a command similar to ```packer validate -var 'aws_access_key=myAWSAcessKey'
@@ -245,14 +265,7 @@ Be sure to have your postgres host running and replace the `pg_host` value in th
 6. run `terraform apply` to deploy
 7. To get SNS Alarm notifications be sure that you are subscribed to SNS topic arn:aws:sns:us-west-2:844297601570:ops_team_alerts and you have confirmed subscription
 
-
-
 Further details can be found in the `deploy` directory.
 
-
-### Kubernetes Deployment
+## Kubernetes Deployment
 See the [paper](https://paper.dropbox.com/doc/Amida-Microservices-Kubernetes-Deployment-Xsz32zX8nwT9qctitGNVc) write-up for instructions on how to deploy with Kubernetes. The `kubernetes.yml` file contains the deployment definition for the project.
-
-## Logging
-
-Universal logging library [winston](https://www.npmjs.com/package/winston) is used for logging. It has support for multiple transports. A transport is essentially a storage device for your logs. Each instance of a winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file. We just log to the console for simplicity, but you can configure more transports as per your requirement.

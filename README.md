@@ -39,6 +39,18 @@ Set environment vars:
 cp .env.example .env
 ```
 
+### Push Notifications
+
+Create the service user on the the Auth Service which will perform notification actions:
+
+Note: The `AUTH_MICROSERVICE_URL` below is relative to the machine running this command, not to any docker container.
+
+```sh
+npm run create-push-notificiations-service-user -- {AUTH_MICROSERVICE_URL} {PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME} {PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD}
+```
+
+Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`. Set the corresponding keyId to the value of `PUSH_NOTIFICATIONS_APN_KEY_ID` in your `.env` file.
+
 ## Run
 
 Start server:
@@ -52,7 +64,7 @@ DEBUG=amida-messaging-microservice:* yarn start
 
 ## Tests
 
-Create a JWT with the username value 'user0' and set `NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT={token}` in your .env file or an evironment variable. You can easily create a token using the amida-auth-microservice
+Create a JWT with the username value 'user0' and set `NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT={token}` in your .env file or an evironment variable. You can easily create a token using the `amida-auth-microservice`.
 
 ```sh
 # Run tests written in ES6
@@ -88,21 +100,6 @@ gulp clean
 gulp
 ```
 
-Setting Up For Push Notifications
-* Note that you can only send Apple push notifications if your host is configured with SSL termination. Without this, Apple may permanently invalidate the `key` you use to send the push notification. To enable sending Apple push notifications set the `PUSH_NOTIFICATIONS_APN_ENABLED` value in `.env` to true.
-- Also, if you are developing for the Amida team, most of the required keys and files specified below can be readily accessed in the Amida OnePassword Account.
-
-- If you haven't already, create a `microservice user` on the Auth Service with username matching your `PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME` in `.env`.
-
-- iOS Notifications
-  - Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's Apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`. Add the corresponding `Key ID` to the `.env`'s `PUSH_NOTIFICATIONS_APN_KEY_ID` value.
-  - Set the `PUSH_NOTIFICATIONS_APN_TEAM_ID` value in the `.env` file. The is the ios developer teamID and can be found by logging into your Apple Developer console.
-  - If you are sending push notifications in development mode (not distribution or test flight), set the `PUSH_NOTIFICATIONS_APN_ENV` in `.env` to "development" otherwise set it to "production".
-  - Set the `PUSH_NOTIFICATIONS_APN_TOPIC` value in `.env` to the iOS AppId value. You can obtain this in the Apple developer console.
-
-- Android Notifications
-  - Set the `PUSH_NOTIFICATIONS_FCM_SERVER_KEY` value in `.env`. This can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.
-
 # Deployment
 
 ## Deployment Via Docker
@@ -133,7 +130,9 @@ postgres:9.6
 
 3. Create a `.env` file for use by this service's docker container. A good starting point is `.env.production`.
 
-4. Start the notification-service container:
+4. Perform the steps under the [Development > Setup > PushNotifications](#Push-Notifications) section.
+
+5. Start the notification-service container:
 
 ```sh
 docker run -d \

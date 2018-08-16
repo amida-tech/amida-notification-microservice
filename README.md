@@ -7,78 +7,6 @@
   - [Deployment](#deployment)
   - [Environment Variables](#Environment-Variables)
 
-# Environment Variables (Grouped by Purpose)
-
-Note: Default values are in parenthesis.
-
-## Notification Microservice
-
-`NODE_ENV` (Required) [`development`]
-- When in development, set to `development`
-
-`NOTIFICATION_SERVICE_PORT` (Required) [`4003`] The port this server will run on.
-- When in development, by default set to `4003`, because other Amida microservices run, by default, on other `400x` ports.
-
-`NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT` (Required by test scripts) This is the `amida-auth-microservice` JWT that is used by this repo's automated test suite when it makes requests.
-
-`NOTIFICATION_SERVICE_PG_HOST` (Required) [`localhost`] Hostname of machine the postgres instance is running on.
-- When using docker, set to the name of the docker container running postgres. Setting to `amida-notification-microservice-db` is recommended.
-
-`NOTIFICATION_SERVICE_PG_PORT` [`5432`] Port on the machine the postgres instance is running on.
-
-`NOTIFICATION_SERVICE_PG_DB` Postgres database name.
-- Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Postgres instances--which is why the name begins with `amida_`.
-
-`NOTIFICATION_SERVICE_PG_USER` Postgres user that will perform operations on behalf of this microservice. Therefore, this user must have permissions to modify the database specified by `NOTIFICATION_SERVICE_PG_DB`.
-- Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Postgres instances--which is why the name begins with `amida_`.
-
-`NOTIFICATION_SERVICE_PG_PASSWORD` Password of postgres user `NOTIFICATION_SERVICE_PG_USER`.
-
-`NOTIFICATION_SERVICE_PG_SSL_ENABLED` [`false`] Whether an SSL connection shall be used to connect to postgres.
-
-`NOTIFICATION_SERVICE_PG_CA_CERT` If SSL is enabled with `NOTIFICATION_SERVICE_PG_SSL_ENABLED` this can be set to a certificate to override the CAs that are trusted while initiating the SSL connection to postgres. Without this set, Mozilla's list of trusted CAs is used. Note that this variable should contain the certificate itself, not a filename.
-
-## Integration With Amida Auth Microservice
-
-`JWT_SECRET` Must match value of the JWT secret being used by your `amida-auth-microservice` instance.
-- See that repo for details.
-
-`PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME` The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
-- `.env.example` sets this to `oucuYaiN6pha3ahphiiT`, which is for development only. In production, set this to a different value.
-
-## Enabling Push Notifications ##
-
-### Integration With Apple Push Notifications for iOS
-
-Note: iOS push notifications do not and cannot work in development.
-
-`PUSH_NOTIFICATIONS_APN_ENABLED` (Required) [`false`] Enable Apple Push Notifications.
-
-**WARNING**: You can only send Apple push notifications if your host is configured with SSL termination. Without this Apple may permanently invalidate the key you use to send the push notification.
-
-`PUSH_NOTIFICATIONS_APN_ENV` [`development`] Apple Push Notification environment.
-- Valid values are `development` and `production`.
-- When using Test Flight, set to `production.`
-
-`PUSH_NOTIFICATIONS_APN_TEAM_ID` The ID of the Amida "team" in Apple Developer Console.
-- The value is the prefix of iOS app ID.
-- Production value stored in Amida's password vault.
-
-`PUSH_NOTIFICATIONS_APN_KEY_ID` Tells apple to use this key to encrypt the payload of push notifications that Apple sends to end-user devices.
-- Value stored in Amida's password vault.
-
-`PUSH_NOTIFICATIONS_APN_TOPIC` [`com.amida.orangeIgnite`] The Apple Developer Console name of this app.
-
-### Integration With Firebase Cloud Messaging for Android
-
-Note: Unlike iOS push notifications, Android push notifications do work in development.
-
-`PUSH_NOTIFICATIONS_FCM_API_URL` Url of Google Android Firebase service.
-
-`PUSH_NOTIFICATIONS_FCM_SERVER_KEY` Identifies to Google that a server belonging to Amida is making this push notification request.
-- Value stored in Amida's password vault.
-- Alternatively, this can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.
-
 # Design
 
 ## API Spec
@@ -259,3 +187,98 @@ Further details can be found in the `deploy` directory.
 
 ## Kubernetes Deployment
 See the [paper](https://paper.dropbox.com/doc/Amida-Microservices-Kubernetes-Deployment-Xsz32zX8nwT9qctitGNVc) write-up for instructions on how to deploy with Kubernetes. The `kubernetes.yml` file contains the deployment definition for the project.
+-var 'aws_secret_key=myAWSSecretKey'
+-var 'build_env=development'
+-var 'logstash_host=logstash.amida.com'
+-var 'service_name=amida_messaging_microservice'
+-var 'ami_name=api-messaging-service-boilerplate'
+-var 'node_env=development'
+-var 'jwt_secret=My-JWT-Token'
+-var 'pg_host=amid-messages-packer-test.some_rand_string.us-west-2.rds.amazonaws.com'
+-var 'pg_db=amida_messages'
+-var 'pg_user=amida_messages'
+-var 'pg_passwd=amida-messages' template.json```
+2. If the validation from `1.` above succeeds, build the image by running the same command but replacing `validate` with `build`
+3. In the AWS console you can test the build before deployment. To do this, launch an EC2 instance with the built image and visit the health-check endpoint at <host_address>:4000/api/health-check. Be sure to launch the instance with security groups that allow http access on the app port (currently 4000) and access from Postgres port of the data base. You should see an "OK" response.
+4. Enter `aws_access_key` and `aws_secret_key` values in the vars.tf file
+5. run `terraform plan` to validate config
+6. run `terraform apply` to deploy
+7. To get SNS Alarm notifications be sure that you are subscribed to SNS topic arn:aws:sns:us-west-2:844297601570:ops_team_alerts and you have confirmed subscription
+
+Further details can be found in the `deploy` directory.
+
+## Kubernetes Deployment
+See the [paper](https://paper.dropbox.com/doc/Amida-Microservices-Kubernetes-Deployment-Xsz32zX8nwT9qctitGNVc) write-up for instructions on how to deploy with Kubernetes. The `kubernetes.yml` file contains the deployment definition for the project.
+
+
+# Environment Variables
+
+Note: Default values are in parenthesis.
+
+## Notification Microservice
+
+`NODE_ENV` (Required) [`development`]
+- When in development, set to `development`
+
+`NOTIFICATION_SERVICE_PORT` (Required) [`4003`] The port this server will run on.
+- When in development, by default set to `4003`, because other Amida microservices run, by default, on other `400x` ports.
+
+`NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT` (Required by test scripts) This is the `amida-auth-microservice` JWT that is used by this repo's automated test suite when it makes requests.
+
+`NOTIFICATION_SERVICE_PG_HOST` (Required) [`localhost`] Hostname of machine the postgres instance is running on.
+- When using docker, set to the name of the docker container running postgres. Setting to `amida-notification-microservice-db` is recommended.
+
+`NOTIFICATION_SERVICE_PG_PORT` [`5432`] Port on the machine the postgres instance is running on.
+
+`NOTIFICATION_SERVICE_PG_DB` Postgres database name.
+- Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Postgres instances--which is why the name begins with `amida_`.
+
+`NOTIFICATION_SERVICE_PG_USER` Postgres user that will perform operations on behalf of this microservice. Therefore, this user must have permissions to modify the database specified by `NOTIFICATION_SERVICE_PG_DB`.
+- Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Postgres instances--which is why the name begins with `amida_`.
+
+`NOTIFICATION_SERVICE_PG_PASSWORD` Password of postgres user `NOTIFICATION_SERVICE_PG_USER`.
+
+`NOTIFICATION_SERVICE_PG_SSL_ENABLED` [`false`] Whether an SSL connection shall be used to connect to postgres.
+
+`NOTIFICATION_SERVICE_PG_CA_CERT` If SSL is enabled with `NOTIFICATION_SERVICE_PG_SSL_ENABLED` this can be set to a certificate to override the CAs that are trusted while initiating the SSL connection to postgres. Without this set, Mozilla's list of trusted CAs is used. Note that this variable should contain the certificate itself, not a filename.
+
+## Integration With Amida Auth Microservice
+
+`JWT_SECRET` Must match value of the JWT secret being used by your `amida-auth-microservice` instance.
+- See that repo for details.
+
+`PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME` The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
+- `.env.example` sets this to `oucuYaiN6pha3ahphiiT`, which is for development only. In production, set this to a different value.
+
+## Enabling Push Notifications ##
+
+### Integration With Apple Push Notifications for iOS
+
+Note: iOS push notifications do not and cannot work in development.
+
+`PUSH_NOTIFICATIONS_APN_ENABLED` (Required) [`false`] Enable Apple Push Notifications.
+
+**WARNING**: You can only send Apple push notifications if your host is configured with SSL termination. Without this Apple may permanently invalidate the key you use to send the push notification.
+
+`PUSH_NOTIFICATIONS_APN_ENV` [`development`] Apple Push Notification environment.
+- Valid values are `development` and `production`.
+- When using Test Flight, set to `production.`
+
+`PUSH_NOTIFICATIONS_APN_TEAM_ID` The ID of the Amida "team" in Apple Developer Console.
+- The value is the prefix of iOS app ID.
+- Production value stored in Amida's password vault.
+
+`PUSH_NOTIFICATIONS_APN_KEY_ID` Tells apple to use this key to encrypt the payload of push notifications that Apple sends to end-user devices.
+- Value stored in Amida's password vault.
+
+`PUSH_NOTIFICATIONS_APN_TOPIC` [`com.amida.orangeIgnite`] The Apple Developer Console name of this app.
+
+### Integration With Firebase Cloud Messaging for Android
+
+Note: Unlike iOS push notifications, Android push notifications do work in development.
+
+`PUSH_NOTIFICATIONS_FCM_API_URL` Url of Google Android Firebase service.
+
+`PUSH_NOTIFICATIONS_FCM_SERVER_KEY` Identifies to Google that a server belonging to Amida is making this push notification request.
+- Value stored in Amida's password vault.
+- Alternatively, this can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.

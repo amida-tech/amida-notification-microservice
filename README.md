@@ -136,7 +136,7 @@ postgres:9.6
 4. Start the notification-service container:
 
 ```sh
-docker run -d -p 4003:4003 \
+docker run -d \
 --name amida-notification-microservice --network {DOCKER_NETWORK_NAME} \
 -v {ABSOLUTE_PATH_TO_YOUR_ENV_FILE}:/app/.env:ro \
 amidatech/notification-service

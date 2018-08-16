@@ -124,27 +124,23 @@ docker network create {DOCKER_NETWORK_NAME}
 2. Start the postgres container:
 
 ```sh
-docker run -d --name amida-notification-microservice-db --network {DOCKER_NETWORK_NAME} -e POSTGRES_DB=amida_notification_microservice -e POSTGRES_USER=amida_notification_microservice -e POSTGRES_PASSWORD={PASSWORD} postgres:9.6
+docker run -d --name {NOTIFICATION_SERVICE_PG_HOST} --network {DOCKER_NETWORK_NAME} \
+-e POSTGRES_DB={NOTIFICATION_SERVICE_PG_DB} \
+-e POSTGRES_USER={NOTIFICATION_SERVICE_PG_USER} \
+-e POSTGRES_PASSWORD={NOTIFICATION_SERVICE_PG_PASSWORD} \
+postgres:9.6
 ```
 
-3. Start the auth-service container:
+3. Create a `.env` file for use by this service's docker container. A good starting point is `.env.production`.
+
+4. Start the notification-service container:
 
 ```sh
 docker run -d -p 4003:4003 \
 --name amida-notification-microservice --network {DOCKER_NETWORK_NAME} \
--e NODE_ENV=production \
--e NOTIFICATION_SERVICE_PG_HOST=amida-notification-microservice-db \
--e NOTIFICATION_SERVICE_PG_DB=amida_notification_microservice \
--e NOTIFICATION_SERVICE_PG_USER=amida_notification_microservice \
--e NOTIFICATION_SERVICE_PG_PASSWORD={NOTIFICATION_SERVICE_PG_PASSWORD} \
--e JWT_SECRET={JWT_SECRET} \
--e PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME={PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME} \
+-v {ABSOLUTE_PATH_TO_YOUR_ENV_FILE}:/app/.env:ro \
 amidatech/notification-service
 ```
-
-Notes: 
-- If you are deploying this service in conjunction with other services or to connect to a specific front-end client it is vital that the JWT_SECRET environment variables match up between the different applications.
-- The `PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME` as mentioned in the enviroment variables section must match the username of the `microservice user` that is created on the Amida-Auth-Service using the `createAccessUser.js` script inside the `Orange-Api` repository. 
 
 ## Manual deployment with `pm2`
 ```sh

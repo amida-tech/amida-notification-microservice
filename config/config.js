@@ -15,8 +15,7 @@ const envVarsSchema = Joi.object({
         .description('Postgres database name'),
     NOTIFICATION_SERVICE_PG_PORT: Joi.number()
         .default(5432),
-    NOTIFICATION_SERVICE_PG_HOST: Joi.string()
-        .default('localhost'),
+    NOTIFICATION_SERVICE_PG_HOST: Joi.string(),
     NOTIFICATION_SERVICE_PG_USER: Joi.string().required()
         .description('Postgres username'),
     NOTIFICATION_SERVICE_PG_PASSWORD: Joi.string().allow('')
@@ -43,7 +42,7 @@ const envVarsSchema = Joi.object({
     PUSH_NOTIFICATIONS_FCM_SERVER_KEY: Joi.string().allow('')
         .description('Firebase Server Key'),
     PUSH_NOTIFICATIONS_APN_ENABLED: Joi.bool()
-            .default(false),
+        .default(false),
 }).unknown()
     .required();
 

@@ -42,7 +42,8 @@ const Notification = sequelize.import('../server/models/notification.model');
 
 User.hasMany(Device);
 Device.hasMany(Notification);
-Device.belongsTo(User)
+Notification.belongsTo(Device);
+Device.belongsTo(User);
 
 db.User = User;
 db.Device = Device;

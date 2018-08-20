@@ -55,7 +55,7 @@ const config = {
     env: envVars.NODE_ENV,
     port: envVars.NOTIFICATION_SERVICE_PORT,
     jwtSecret: envVars.JWT_SECRET,
-    testToken: envVars.NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT,
+    automatedTestJwt: envVars.NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT,
     pushNotificationsServiceUserUsername: envVars.PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME,
     apnKeyId: envVars.PUSH_NOTIFICATIONS_APN_KEY_ID,
     apnTeamId: envVars.PUSH_NOTIFICATIONS_APN_TEAM_ID,

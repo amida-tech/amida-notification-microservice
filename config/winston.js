@@ -1,15 +1,8 @@
 import winston from 'winston';
 
-const logger = new (winston.Logger)({
+const logger = winston.createLogger({
     transports: [
-        new (winston.transports.Console)({
-            json: true,
-            colorize: true,
-        }),
-        new winston.transports.File({
-            filename: 'combined.log',
-            level: 'info',
-        }),
+        new winston.transports.Console(),
     ],
 });
 

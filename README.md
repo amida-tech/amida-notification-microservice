@@ -106,6 +106,7 @@ yarn
 Set environment vars:
 ```sh
 cp .env.example .env
+cp .env .env.test
 ```
 
 Start server:
@@ -123,6 +124,7 @@ Create a JWT with the username value 'user0' and set `TEST_TOKEN={token}` in you
 
 ```sh
 # Run tests written in ES6
+# Make sure .env.test exists
 yarn test
 
 # Run test along with code coverage
@@ -196,9 +198,9 @@ docker run -d --name amida-notification-microservice-db --network {DOCKER_NETWOR
 ```
 docker run -d --name amida-notification-microservice --network {DOCKER_NETWORK_NAME} -p 4003:4003 -e NODE_ENV=production -e PG_HOST=amida-notification-microservice-db -e PG_DB=amida_notification_microservice -e PG_USER=amida_notification_microservice -e PG_PASSWD={PASSWORD} -e JWT_SECRET={JWT_SECRET} -e MICROSERVICE_ACCESS_KEY= {MICROSERVICE_ACCESS_KEY} amidatech/notification-service
 ```
-Notes: 
+Notes:
 - If you are deploying this service in conjunction with other services or to connect to a specific front-end client it is vital that the JWT_SECRET environment variables match up between the different applications.
-- The `MICROSERVICE_ACCESS_KEY` as mentioned in the enviroment variables section must match the username of the `microservice user` that is created on the Amida-Auth-Service using the `createAccessUser.js` script inside the `Orange-Api` repository. 
+- The `MICROSERVICE_ACCESS_KEY` as mentioned in the enviroment variables section must match the username of the `microservice user` that is created on the Amida-Auth-Service using the `createAccessUser.js` script inside the `Orange-Api` repository.
 
 ### Manual deployment with `pm2`
 ```sh

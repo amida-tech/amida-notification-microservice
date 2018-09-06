@@ -24,7 +24,7 @@
     "test:check-coverage": "yarn test:coverage && istanbul check-coverage",
     "report-coverage": "coveralls < ./coverage/lcov.info",
     "snyk-protect": "snyk protect",
-    "create-push-notificiations-service-user": "node tools/createPushNotificationsServiceUser.js"
+    "create-push-notifications-service-user": "node tools/createPushNotificationsServiceUser.js"
   },
   "dependencies": {
     "bluebird": "3.4.6",

@@ -15,15 +15,15 @@ spec:
       - name: amida-messages
         image: amidatech/messaging-service
         env:
-        - name: PG_DB
+        - name: NOTIFICATION_SERVICE_PG_DB
           value: amida_messages
-        - name: PG_PORT
+        - name: NOTIFICATION_SERVICE_PG_PORT
           value: '5432'
-        - name: PG_HOST
+        - name: NOTIFICATION_SERVICE_PG_HOST
           value: amida-messages.a_database_url.us-west-2.rds.amazonaws.com
-        - name: PG_USER
+        - name: NOTIFICATION_SERVICE_PG_USER
           value: amida_messages
-        - name: PG_PASSWD
+        - name: NOTIFICATION_SERVICE_PG_PASSWORD
           value: amida-messages
         - name: JWT_SECRET
           value: 0a6b944d-d2fb-46fc-a85e-0295c986cd9f

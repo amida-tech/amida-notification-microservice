@@ -13,10 +13,10 @@ function sendPushNotification(receiver, data, req, res) {
         apn: {
             token: {
                 key: "/app/iosKey.p8", // optionally: fs.readFileSync("./certs/key.p8")
-                keyId: config.iosKeyId,
-                teamId: config.teamId
+                keyId: config.apnKeyId,
+                teamId: config.apnTeamId
             },
-            production: config.apnENV === "production"
+            production: config.apnEnv === "production"
         },
         adm: {
             client_id: null,
@@ -77,7 +77,7 @@ function sendPushNotification(receiver, data, req, res) {
     let iosPushData = {
       title: "Message from Orange",
       body: "Hello",
-      topic: config.pushTopic
+      topic: config.apnTopic
     };
 
     let androidPushData = {
@@ -94,7 +94,7 @@ function sendPushNotification(receiver, data, req, res) {
 
     receiver.Devices.forEach((device) => {
 
-      if (device.type === 'iOS' && config.sendAPN) {
+      if (device.type === 'iOS' && config.apnEnabled) {
         push.send([device.token], iosPushData, (err, result) => {
             if (err) {
               console.log("showing push error", err);
@@ -122,9 +122,9 @@ function sendPushNotification(receiver, data, req, res) {
         request({
           headers: {
              "Content-Type": "application/json",
-             "Authorization": "key=" + config.firebaseServerKey
+             "Authorization": "key=" + config.fcmServerKey
           },
-          uri: config.firebaseAPIUrl,
+          uri: config.fcmApiUrl,
           body,
           method: "POST"
         }, function (err, res, body) {

@@ -13,7 +13,7 @@ const version = p.version.split('.').shift();
 const baseURL = (version > 0 ? `/v${version}` : '');
 
 const authorize = function (req, res, next) {
-    if (req.user.username !== config.microserviceAccessKey) {
+    if (req.user.username !== config.pushNotificationsServiceUserUsername) {
         const err = new APIError('Unauthorized User!', httpStatus.NOT_FOUND, true);
         return next(err);
     }

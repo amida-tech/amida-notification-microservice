@@ -10,10 +10,10 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
         apn: {
             token: {
                 key: '/app/iosKey.p8', // optionally: fs.readFileSync('./certs/key.p8')
-                keyId: config.iosKeyId,
-                teamId: config.teamId,
+                keyId: config.apnKeyId,
+                teamId: config.apnTeamId,
             },
-            production: config.apnENV === 'production',
+            production: config.apnEnv === 'production',
         },
         adm: {
             client_id: null,
@@ -75,7 +75,7 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
     let iosPushData = {
         title: 'Message from Orange',
         body: 'Hello',
-        topic: config.pushTopic,
+        topic: config.apnTopic,
     };
 
     let androidPushData = {
@@ -109,6 +109,24 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
             });
         }
 
+        if (device.type === 'iOS' && config.apnEnabled) {
+            push.send([device.token], iosPushData, (err, result) => {
+                if (err) {
+                    console.log('showing push error', err);
+                } else {
+                    const message = result[0].message;
+                    console.log('showing push result message', message[0]);
+                    if (message.error == null) {
+                        device.createNotification({
+                            payload: data,
+                            type: data.notificationType,
+                            status: 'success',
+                        });
+                    }
+                }
+            });
+        }
+
         if (device.type === 'Android') {
             let body = {
                 to: device.token,
@@ -119,9 +137,9 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
             request({
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `key=${config.firebaseServerKey}`,
+                    Authorization: `key=${config.fcmServerKey}`,
                 },
-                uri: config.firebaseAPIUrl,
+                uri: config.fcmApiUrl,
                 body,
                 method: 'POST',
             }, (err, res1, body1) => {

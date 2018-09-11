@@ -23,13 +23,13 @@ services:
 
     # Overwrite any env var defined in .env file (if required)
     environment:
-      - PG_DB=api
-      - PG_PORT=5432
-      - PG_HOST=postgres
-      - PG_USER=api
-      - PG_PASSWD=boilerplate
+      - NOTIFICATION_SERVICE_PG_DB=api
+      - NOTIFICATION_SERVICE_PG_PORT=5432
+      - NOTIFICATION_SERVICE_PG_HOST=postgres
+      - NOTIFICATION_SERVICE_PG_USER=api
+      - NOTIFICATION_SERVICE_PG_PASSWORD=boilerplate
       - DEBUG=amida-api-boilerplate:*
-      - PORT=4001
+      - NOTIFICATION_SERVICE_PORT=4001
 
     # Link to containers in another service.
     # Links also express dependency between services in the same way as depends_on,

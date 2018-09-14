@@ -8,7 +8,7 @@ const envVarsSchema = Joi.object({
         .allow(['development', 'production', 'test', 'provision'])
         .default('development'),
     NOTIFICATION_SERVICE_PORT: Joi.number()
-        .default(4001),
+        .default(4003),
     JWT_SECRET: Joi.string().required()
         .description('JWT Secret required to sign'),
     NOTIFICATION_SERVICE_PG_DB: Joi.string().required()

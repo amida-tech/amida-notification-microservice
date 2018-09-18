@@ -61,7 +61,8 @@
     "snyk": "^1.69.4",
     "supertest": "^3.0.0",
     "supertest-as-promised": "4.0.2",
-    "winston": "2.3.0"
+    "swagger-stats": "false0.95.6",
+    "winston": "3.0.0"
   },
   "devDependencies": {
     "babel-cli": "6.18.0",

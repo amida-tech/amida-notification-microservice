@@ -9,7 +9,6 @@ import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import helmet from 'helmet';
 import passport from 'passport';
-import actuator from 'express-actuator';
 import winstonInstance from './winston';
 import routes from '../server/routes/index.route';
 import config from './config';

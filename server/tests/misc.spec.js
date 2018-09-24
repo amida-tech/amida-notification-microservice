@@ -29,16 +29,10 @@ describe('## Misc', () => {
     });
 
     describe('# GET /actuator', () => {
-        it('/info should return app information', () => request(app)
-            .get('/actuator/info')
+        it('/stats should return app statistics', () => request(app)
+            .get('/swagger-stats/stats')
             .expect(httpStatus.OK)
-            .then(res => expect(res.body.build).to.exist)
-        );
-
-        it('/metrics should return app metrics', () => request(app)
-            .get('/actuator/metrics')
-            .expect(httpStatus.OK)
-            .then(res => expect(res.body.mem).to.exist)
+            .then(res => expect(res.body.all).to.exist)
         );
     });
 });

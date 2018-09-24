@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'test') {
 const envVarsSchema = Joi.object({
     NODE_ENV: Joi.string()
         .allow(['development', 'production', 'test', 'provision'])
-        .default('development'),
+        .default('production'),
     NOTIFICATION_SERVICE_PORT: Joi.number()
         .default(4003),
     JWT_SECRET: Joi.string().required()

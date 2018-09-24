@@ -1,5 +1,4 @@
 import express from 'express';
-import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compress from 'compression';
@@ -10,7 +9,6 @@ import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import helmet from 'helmet';
 import passport from 'passport';
-import actuator from 'express-actuator';
 import winstonInstance from './winston';
 import routes from '../server/routes/index.route';
 import config from './config';
@@ -18,10 +16,6 @@ import APIError from '../server/helpers/APIError';
 import passportConfig from './passport';
 
 const app = express();
-
-if (config.env === 'development') {
-    app.use(logger('dev'));
-}
 
 // parse body params and attache them to req.body
 app.use(bodyParser.json());
@@ -42,7 +36,7 @@ const swStats = require('swagger-stats');
 app.use(swStats.getMiddleware({}));
 
 // enable detailed API logging in dev env
-if (config.env === 'development') {
+if (config.env === 'development' || config.env === 'production') {
     expressWinston.requestWhitelist.push('body');
     expressWinston.responseWhitelist.push('body');
     app.use(expressWinston.logger({
@@ -56,9 +50,6 @@ if (config.env === 'development') {
 // set up Passport middleware
 passportConfig(passport);
 app.use(passport.initialize());
-
-// set up express actuator
-app.use(actuator('/actuator'));
 
 // mount all routes on /api path
 app.use('/api', routes);

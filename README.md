@@ -37,6 +37,7 @@ yarn
 Set environment vars:
 ```sh
 cp .env.example .env
+cp .env .env.test
 ```
 
 Create the database:
@@ -77,6 +78,7 @@ Create a JWT with the username value 'user0' and set `NOTIFICATION_SERVICE_AUTOM
 
 ```sh
 # Run tests written in ES6
+# Make sure .env.test exists
 yarn test
 
 # Run test along with code coverage

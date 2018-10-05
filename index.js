@@ -2,6 +2,7 @@ import config from './config/config';
 import app from './config/express';
 /* eslint-disable no-unused-vars */
 import db from './config/sequelize';
+import addUUID from './addUUID';
 
 const debug = require('debug')('amida-api-boilerplate:index');
 /* eslint-enable no-unused-vars */
@@ -21,6 +22,7 @@ function startServer() {
 
 db.sequelize
   .sync()
+  .then(addUUID)
   .then(startServer)
   .catch((err) => {
       if (err) debug('An error occured %j', err);

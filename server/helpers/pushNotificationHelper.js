@@ -153,8 +153,9 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
             const previewType = value.value;
 
             if (previewType === 'basic' || previewType === 'preview') {
-                data.title = prefMap[data.namespace][data.notificationType][previewType].title;
-                data.body = prefMap[data.namespace][data.notificationType][previewType].body;
+                const displayDetail = prefMap[data.namespace][data.notificationType][previewType];
+                data.title = displayDetail.title;
+                data.body = displayDetail.body;
             }
 
             deliverNotifications();

@@ -51,17 +51,11 @@ Therefore, in your Postgres instance, create that user and database now.
 
 ### Push Notifications
 
-Create the service user on the the Auth Service which will perform notification actions:
-
-Note: The `AUTH_MICROSERVICE_URL` below is relative to the machine running this command, not to any docker container.
-
-```sh
-npm run create-push-notificiations-service-user -- {AUTH_MICROSERVICE_URL} {PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME} {PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD}
-```
-
 Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`. Set the corresponding keyId to the value of `PUSH_NOTIFICATIONS_APN_KEY_ID` in your `.env` file.
 
 ## Run
+
+Before running this service please make sure that the amida-auth-microservice is running.
 
 Start server:
 ```sh
@@ -141,9 +135,11 @@ postgres:9.6
 
 3. Create a `.env` file for use by this service's docker container. A good starting point is `.env.production`.
 
-4. Perform the steps under the [Development > Setup > PushNotifications](#Push-Notifications) section.
+4. Start the amida-auth-microservice
 
-5. Start the notification-service container:
+5. Perform the steps under the [Development > Setup > PushNotifications](#Push-Notifications) section.
+
+6. Start the notification-service container:
 
 ```sh
 docker run -d \
@@ -273,6 +269,14 @@ Must match value of the JWT secret being used by your `amida-auth-microservice` 
 
 The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
 - `.env.example` sets this to `oucuYaiN6pha3ahphiiT`, which is for development only. In production, set this to a different value.
+
+##### `PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD`
+
+The password of the service user that authenticates against `amida-auth-microservice`
+
+##### `AUTH_MICROSERVICE_URL`
+
+Full URL that points to `amida-auth-microservice` for creation the Push Notifications Service User
 
 ## Enabling Push Notifications ##
 

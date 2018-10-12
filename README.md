@@ -149,6 +149,7 @@ postgres:9.6
 docker run -d \
 --name amida-notification-microservice --network {DOCKER_NETWORK_NAME} \
 -v {ABSOLUTE_PATH_TO_YOUR_ENV_FILE}:/app/.env:ro \
+-v {ABSOLUTE_PATH_TO_YOUR_iosKey.p8_FILE}:/app/iosKey.p8
 amidatech/notification-service
 ```
 

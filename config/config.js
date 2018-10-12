@@ -13,6 +13,8 @@ const envVarsSchema = Joi.object({
     NODE_ENV: Joi.string()
         .allow(['development', 'production', 'test', 'provision'])
         .default('production'),
+    LOG_LEVEL: Joi.string()
+        .default('info'),
     NOTIFICATION_SERVICE_PORT: Joi.number()
         .default(4003),
     JWT_SECRET: Joi.string().required()
@@ -66,6 +68,7 @@ if (error) {
 
 module.exports = {
     env: envVars.NODE_ENV,
+    logLevel: envVars.LOG_LEVEL,
     port: envVars.NOTIFICATION_SERVICE_PORT,
     jwtSecret: envVars.JWT_SECRET,
     authServiceAPI: envVars.AUTH_MICROSERVICE_URL,

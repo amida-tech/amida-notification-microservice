@@ -1,12 +1,13 @@
 import Sequelize from 'sequelize';
 import _ from 'lodash';
 import config from './config';
+import logger from './winston';
 
 let dbLogging;
 if (config.env === 'test') {
     dbLogging = false;
 } else {
-    dbLogging = console.log;
+    dbLogging = (msg) => logger.debug(msg);
 }
 
 const db = {};

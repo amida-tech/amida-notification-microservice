@@ -29,6 +29,7 @@
     "create-push-notifications-service-user": "node tools/createPushNotificationsServiceUser.js"
   },
   "dependencies": {
+    "aws-sdk": "^2.333.0",
     "bluebird": "3.4.6",
     "body-parser": "1.18.2",
     "chai": "^4.1.2",

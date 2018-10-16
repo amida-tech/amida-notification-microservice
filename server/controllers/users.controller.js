@@ -9,8 +9,8 @@ const Device = db.Device;
  * @returns {User}
  */
 function create(req, res, next) { // eslint-disable-line no-unused-vars
-    const { username } = req.body;
-    User.findOrCreate({ where: { username } })
+    const { username, uuid } = req.body;
+    User.findOrCreate({ where: { username, uuid } })
     .spread((user, created) => { // eslint-disable-line no-unused-vars
         res.send({ user });
     });

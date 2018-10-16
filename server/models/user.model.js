@@ -10,15 +10,19 @@ module.exports = (sequelize, DataTypes) => {
         },
         uuid: {
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            allowNull: false,
+            unique: true,
         },
         username: {
             type: DataTypes.STRING,
             allowNull: false,
         },
+    }, {
+        indexes: [
+            {
+                fields: ['uuid'],
+            },
+        ],
     });
-    // Class methods
 
     return User;
 };

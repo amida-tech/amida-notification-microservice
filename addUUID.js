@@ -58,7 +58,7 @@ module.exports = () => new Promise((resolve, reject) => {
                     users.forEach((user) => {
                         const authUser = authUsers.find(_authUser => _authUser.username === user.username);
                         if (!authUser) {
-                            user.update({ uuid: uuidv4() }).then(() => resolve('uuids updated'));
+                            // user.update({ uuid: uuidv4() }).then(() => resolve('uuids updated'));
                             console.log('User with username ', user.username, ' is missing from auth service');
                         } else {
                             user.update({ uuid: authUser.uuid }).then(() => resolve('uuids updated'));

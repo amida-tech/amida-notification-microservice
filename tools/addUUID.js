@@ -1,6 +1,6 @@
-import db from './config/sequelize';
+import db from '../config/sequelize';
 const User = db.User;
-import config from './config/config';
+import config from '../config/config';
 import request from 'request';
 import uuidv4 from 'uuid/v4';
 
@@ -12,7 +12,7 @@ const getRequest = (data, callback) => {
     request.get(data, callback);
 };
 
-module.exports = () => new Promise((resolve, reject) => {
+const updateUUID = () => new Promise((resolve, reject) => {
     User.findAll({ where: { uuid: null } }).then((users) => {
         if (users.length > 0) {
             makeRequest({
@@ -55,15 +55,17 @@ module.exports = () => new Promise((resolve, reject) => {
                         resolve('UUID migration pending on Auth Service');
                         return;
                     }
+                    const userUpdatePromises = [];
                     users.forEach((user) => {
                         const authUser = authUsers.find(_authUser => _authUser.username === user.username);
                         if (!authUser) {
-                            // user.update({ uuid: uuidv4() }).then(() => resolve('uuids updated'));
+                            // userUpdatePromises.push(user.update({ uuid: uuidv4() }));
                             console.log('User with username ', user.username, ' is missing from auth service');
                         } else {
-                            user.update({ uuid: authUser.uuid }).then(() => resolve('uuids updated'));
+                            userUpdatePromises.push(user.update({ uuid: authUser.uuid }));
                         }
                     });
+                    Promise.all(userUpdatePromises).then(() => resolve());
                 });
             });
         } else {
@@ -71,3 +73,5 @@ module.exports = () => new Promise((resolve, reject) => {
         }
     });
 });
+
+updateUUID().then(() => {process.exit(0)});

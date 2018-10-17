@@ -20,4 +20,4 @@ RUN yarn build
 EXPOSE 4003
 
 # cmd to start service
-CMD yarn migrate && node dist/index.js
+CMD yarn migrate && yarn update_uuid && node dist/index.js

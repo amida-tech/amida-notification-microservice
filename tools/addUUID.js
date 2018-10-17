@@ -74,4 +74,4 @@ const updateUUID = () => new Promise((resolve, reject) => {
     });
 });
 
-updateUUID().then(() => {process.exit(0)});
+updateUUID().then(() => {process.exit(0)}).catch(err => process.exit(1));

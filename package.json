@@ -66,7 +66,7 @@
     "snyk": "^1.69.4",
     "supertest": "^3.0.0",
     "supertest-as-promised": "4.0.2",
-    "swagger-stats": "false0.95.6",
+    "swagger-stats": "^0.95.6",
     "uuid": "3.3.2",
     "winston": "3.0.0"
   },

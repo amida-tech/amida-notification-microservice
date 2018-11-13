@@ -1,4 +1,4 @@
-import Joi from 'joi'; // require and configure dotenv, will load vars in .env in PROCESS.ENV
+const Joi = require('joi'); // require and configure dotenv, will load vars in .env in PROCESS.ENV
 // require and configure dotenv, will load vars in .env in PROCESS.ENV
 const dotenv = require('dotenv');
 
@@ -19,6 +19,10 @@ const envVarsSchema = Joi.object({
         .default(4003),
     JWT_SECRET: Joi.string().required()
         .description('JWT Secret required to sign'),
+    AUTH_MICROSERVICE_URL: Joi.string().allow('')
+    .description('Auth microservice endpoint'),
+    META_DATA_MICROSERVICE_URL: Joi.string().allow('')
+    .description('Metadata microservice endpoint'),
     NOTIFICATION_SERVICE_PG_DB: Joi.string().required()
         .description('Postgres database name'),
     NOTIFICATION_SERVICE_PG_PORT: Joi.number()
@@ -35,8 +39,11 @@ const envVarsSchema = Joi.object({
         .description('SSL certificate CA. This string must be the certificate itself, not a filename.'),
     NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT: Joi.string().allow('')
         .description('Test auth token'),
+    NOTIFICATION_SERVICE_METADATA_SERVICE_ENABLED: Joi.bool()
+        .default(false),
     PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME: Joi.string().allow('')
         .description('Microservice role access key'),
+    PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD: Joi.string(),
     PUSH_NOTIFICATIONS_APN_KEY_ID: Joi.string().allow('')
         .description('ID for IOS Key'),
     PUSH_NOTIFICATIONS_APN_TEAM_ID: Joi.string().allow('')
@@ -59,13 +66,17 @@ if (error) {
     throw new Error(`Config validation error: ${error.message}`);
 }
 
-const config = {
+module.exports = {
     env: envVars.NODE_ENV,
     logLevel: envVars.LOG_LEVEL,
     port: envVars.NOTIFICATION_SERVICE_PORT,
     jwtSecret: envVars.JWT_SECRET,
+    authServiceAPI: envVars.AUTH_MICROSERVICE_URL,
+    metaDataServiceAPI: envVars.META_DATA_MICROSERVICE_URL,
     automatedTestJwt: envVars.NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT,
+    metaDataServiceEnabled: envVars.NOTIFICATION_SERVICE_METADATA_SERVICE_ENABLED,
     pushNotificationsServiceUserUsername: envVars.PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME,
+    pushNotificationsServiceUserPassword: envVars.PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD,
     apnKeyId: envVars.PUSH_NOTIFICATIONS_APN_KEY_ID,
     apnTeamId: envVars.PUSH_NOTIFICATIONS_APN_TEAM_ID,
     apnEnv: envVars.PUSH_NOTIFICATIONS_APN_ENV,
@@ -83,5 +94,3 @@ const config = {
         sslCaCert: envVars.NOTIFICATION_SERVICE_PG_CA_CERT,
     },
 };
-
-export default config;

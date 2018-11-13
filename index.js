@@ -2,8 +2,9 @@ import config from './config/config';
 import app from './config/express';
 /* eslint-disable no-unused-vars */
 import db from './config/sequelize';
-import logger from './config/winston';
 
+/* eslint-enable no-unused-vars */
+import logger from './config/winston';
 // make bluebird default Promise
 Promise = require('bluebird'); // eslint-disable-line no-global-assign
 
@@ -16,7 +17,7 @@ function startServer() {
                 service: 'notification-service',
                 message: 'server started on port',
                 port: config.port,
-                node_env: config.env
+                node_env: config.env,
             }
         );
         });

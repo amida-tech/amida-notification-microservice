@@ -46,6 +46,19 @@ describe('Notifications API:', () => {
     });
 
     describe('Create User and Update Device Token', () => {
+        it('Should fail without Authorization header', () => request(app)
+            .post(`${baseURL}/users`)
+            .send(testUserObject)
+            .expect(httpStatus.UNAUTHORIZED)
+        );
+
+        it('Should fail with badtoken in Authorization header', () => request(app)
+            .post(`${baseURL}/users`)
+            .set('Authorization', 'Bearer badtoken')
+            .send(testUserObject)
+            .expect(httpStatus.UNAUTHORIZED)
+        );
+
         it('should should create and respond with a user', () => request(app)
             .post(`${baseURL}/users`)
             .set('Authorization', `Bearer ${auth}`)

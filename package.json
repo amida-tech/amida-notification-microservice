@@ -12,6 +12,7 @@
   },
   "scripts": {
     "start": "gulp serve",
+    "serve": "node dist/index.js",
     "migrate": "./node_modules/.bin/sequelize db:migrate",
     "migrate:undo": "./node_modules/.bin/sequelize db:migrate:undo",
     "update_uuid": "node dist/tools/addUUID.js",

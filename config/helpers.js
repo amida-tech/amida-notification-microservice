@@ -11,9 +11,12 @@ function ensureConnectionIsEncrypted(sequelize) {
     })
     .catch((err) => {
         if (err.message === 'self signed certificate in certificate chain') {
-            logger.error(`Sequelize is throwing error "${err.message}", which it does seemingly any time the certificate is invalid. Ensure your MESSAGING_SERVICE_PG_CA_CERT is set correctly. Aborting.`);
+            logger.error({
+                message: `Sequelize is throwing error "${err.message}", which it does seemingly any time the certificate is invalid. Ensure your MESSAGING_SERVICE_PG_CA_CERT is set correctly. Aborting.`,
+                err,
+            });
         } else {
-            logger.error(`Error attempting to verify the sequelize connection is SSL encrypted. Sequelize reports: "${err.message}". Aborting.`);
+            logger.error(`Error attempting to verify the sequelize connection is SSL encrypted. Sequelize reports: "${err.message}". Aborting.`, { err });
         }
         process.exit(1);
     });

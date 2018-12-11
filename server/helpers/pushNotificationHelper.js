@@ -146,7 +146,8 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
 
     if (config.metaDataServiceEnabled) {
         metaDataHelper.getPushPreferences(receiver, data.namespace).then((metadata) => {
-            const attribute = metadata.attributes.find(_attribute => _attribute.attribute === data.notificationType);
+            const attribute = metadata.attributes
+                .find(_attribute => _attribute.attribute === data.notificationType);
 
             const value = attribute.values.find(_value => _value.type === 'preview_type');
 

@@ -12,13 +12,13 @@ const router = express.Router(); // eslint-disable-line new-cap
 const version = p.version.split('.').shift();
 const baseURL = (version > 0 ? `/v${version}` : '');
 
-const authorize = function (req, res, next) {
+function authorize(req, res, next) {
     if (req.user.username !== config.pushNotificationsServiceUserUsername) {
         const err = new APIError('Unauthorized User!', httpStatus.NOT_FOUND, true);
         return next(err);
     }
     return next();
-};
+}
 
 /** GET /health-check - Check service health */
 router.get('/health-check', (req, res) => res.send('OK'));

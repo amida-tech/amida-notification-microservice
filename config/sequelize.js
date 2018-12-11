@@ -1,12 +1,14 @@
 import Sequelize from 'sequelize';
 import _ from 'lodash';
 import config from './config';
+import logger from './winston';
+import { ensureConnectionIsEncrypted } from './helpers';
 
 let dbLogging;
 if (config.env === 'test') {
     dbLogging = false;
 } else {
-    dbLogging = console.log;
+    dbLogging = msg => logger.debug(msg);
 }
 
 const db = {};
@@ -24,6 +26,7 @@ if (config.postgres.sslEnabled) {
         sequelizeOptions.dialectOptions = {
             ssl: {
                 ca: config.postgres.sslCaCert,
+                rejectUnauthorized: true,
             },
         };
     }
@@ -35,6 +38,10 @@ const sequelize = new Sequelize(
     config.postgres.password,
     sequelizeOptions
 );
+
+if (config.postgres.sslEnabled) {
+    ensureConnectionIsEncrypted(sequelize);
+}
 
 const User = sequelize.import('../server/models/user.model');
 const Device = sequelize.import('../server/models/device.model');

@@ -1,6 +1,8 @@
 const config = require('../../config/config.js');
 const PushNotifications = require('node-pushnotifications');
+const metaDataHelper = require('./metaDataHelper');
 const request = require('request');
+const prefMap = require('./preferenceMap');
 
 function sendPushNotification(receiver, data, req, res) {  // eslint-disable-line no-unused-vars
     const settings = {
@@ -87,76 +89,80 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
         show_in_foreground: true,
     };
 
-    iosPushData = { ...iosPushData, ...data, data };
-    androidPushData = { ...androidPushData, ...data, data };
+    const deliverNotifications = () => {
+        iosPushData = { ...iosPushData, ...data, data };
+        androidPushData = { ...androidPushData, ...data, data };
 
-    receiver.Devices.forEach((device) => {
-        if (device.type === 'iOS' && config.sendAPN) {
-            push.send([device.token], iosPushData, (err, result) => {
-                if (err) {
-                    console.log('showing push error', err);
-                } else {
-                    const message = result[0].message;
-                    console.log('showing push result message', message[0]);
-                    if (message.error == null) {
+        receiver.Devices.forEach((device) => {
+            if (device.type === 'iOS' && config.apnEnabled) {
+                push.send([device.token], iosPushData, (err, result) => {
+                    if (err) {
+                        console.log('showing push error', err);
+                    } else {
+                        const message = result[0].message;
+                        console.log('showing push result message', message[0]);
+                        if (message.error == null) {
+                            device.createNotification({
+                                payload: data,
+                                type: data.notificationType,
+                                status: 'success',
+                            });
+                        }
+                    }
+                });
+            }
+
+            if (device.type === 'Android') {
+                let body = {
+                    to: device.token,
+                    notification: androidPushData,
+                    priority: 10,
+                };
+                body = JSON.stringify(body);
+                request({
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `key=${config.fcmServerKey}`,
+                    },
+                    uri: config.fcmApiUrl,
+                    body,
+                    method: 'POST',
+                }, (err, res1, body1) => {
+                    console.log('Showing Firebase Error', err);
+                    console.log('Showing Firebase Response', res1.statusCode);
+                    console.log('Showing Firebase Body', body1);
+                    const { success } = body1;
+                    if (success === 1) {
                         device.createNotification({
                             payload: data,
                             type: data.notificationType,
                             status: 'success',
                         });
                     }
-                }
-            });
-        }
+                });
+            }
+        });
+    };
 
-        if (device.type === 'iOS' && config.apnEnabled) {
-            push.send([device.token], iosPushData, (err, result) => {
-                if (err) {
-                    console.log('showing push error', err);
-                } else {
-                    const message = result[0].message;
-                    console.log('showing push result message', message[0]);
-                    if (message.error == null) {
-                        device.createNotification({
-                            payload: data,
-                            type: data.notificationType,
-                            status: 'success',
-                        });
-                    }
-                }
-            });
-        }
+    if (config.metaDataServiceEnabled) {
+        metaDataHelper.getPushPreferences(receiver, data.namespace).then((metadata) => {
+            const attribute = metadata.attributes.find(_attribute => _attribute.attribute === data.notificationType);
 
-        if (device.type === 'Android') {
-            let body = {
-                to: device.token,
-                notification: androidPushData,
-                priority: 10,
-            };
-            body = JSON.stringify(body);
-            request({
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `key=${config.fcmServerKey}`,
-                },
-                uri: config.fcmApiUrl,
-                body,
-                method: 'POST',
-            }, (err, res1, body1) => {
-                console.log('Showing Firebase Error', err);
-                console.log('Showing Firebase Response', res1.statusCode);
-                console.log('Showing Firebase Body', body1);
-                const { success } = body1;
-                if (success === 1) {
-                    device.createNotification({
-                        payload: data,
-                        type: data.notificationType,
-                        status: 'success',
-                    });
-                }
-            });
-        }
-    });
+            const value = attribute.values.find(_value => _value.type === 'preview_type');
+
+            const previewType = value.value;
+
+            if (previewType === 'basic' || previewType === 'preview') {
+                const displayDetail = prefMap[data.namespace][data.notificationType][previewType];
+                data.title = displayDetail.title;
+                data.body = displayDetail.body;
+            }
+
+            deliverNotifications();
+        });
+    } else {
+        deliverNotifications();
+    }
 }
 
 export default {

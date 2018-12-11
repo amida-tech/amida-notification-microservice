@@ -2533,10 +2533,10 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-airbnb-base@7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-7.1.0.tgz#6d3d82d11a057bec2c08098a0723109ad3bbf3f4"
-  integrity sha1-bT2C0RoFe+wsCAmKByMQmtO78/Q=
+eslint-config-airbnb-base@^7.1.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-7.2.0.tgz#1a2ff77cc5d4abc2e1c5daebe4106fce95ff7c2a"
+  integrity sha1-Gi/3fMXUq8Lhxdrr5BBvzpX/fCo=
 
 eslint-import-resolver-node@^0.2.0:
   version "0.2.3"
@@ -2547,7 +2547,7 @@ eslint-import-resolver-node@^0.2.0:
     object-assign "^4.0.1"
     resolve "^1.1.6"
 
-eslint-plugin-import@1.16.0:
+eslint-plugin-import@^1.16.0:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-1.16.0.tgz#b2fa07ebcc53504d0f2a4477582ec8bff1871b9f"
   integrity sha1-svoH68xTUE0PKkR3WC7Iv/GHG58=
@@ -2569,7 +2569,7 @@ eslint-plugin-import@1.16.0:
     pkg-dir "^1.0.0"
     pkg-up "^1.0.0"
 
-eslint-watch@2.1.14:
+eslint-watch@^2.1.14:
   version "2.1.14"
   resolved "https://registry.yarnpkg.com/eslint-watch/-/eslint-watch-2.1.14.tgz#a9d200aefb158349f3631ec91a2ec484d152cbfe"
   integrity sha1-qdIArvsVg0nzYx7JGi7EhNFSy/4=

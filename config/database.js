@@ -1,4 +1,5 @@
-const postgres = require('./config.js').postgres;
+const postgres = require('./config').postgres;
+
 const config = {
     username: postgres.user,
     password: postgres.password,

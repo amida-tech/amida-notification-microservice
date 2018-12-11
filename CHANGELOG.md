@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+
+
+## [1.2.0] -- 2018-12-11
 ### Fixed
 - Winston express middleware stack error, such that api calls
   * No longer crash the server

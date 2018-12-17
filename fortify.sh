@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_NAME=SUD-notification-api
-PROJECT_VER=1.0
+PROJECT_VER=1.3
 
 RESULT_FILE=${PROJECT_NAME}-${PROJECT_VER}
 TEMP_FILE=${PROJECT_NAME}-${PROJECT_VER}-${BUILD_NUMBER}
@@ -22,6 +22,10 @@ echo "Copying default .env"
 cp .env.example .env
 
 echo "=========================="
+echo "Building..."
+yarn build
+
+echo "=========================="
 echo "Updating rulepacks"
 fortifyupdate
 
@@ -31,7 +35,7 @@ sourceanalyzer -clean
 
 echo "=========================="
 echo "Scanning"
-sourceanalyzer -scan -f $TEMP_FILE.fpr -Xmx8092M ./server ./config ./index.js ./index.html
+sourceanalyzer -scan -f $TEMP_FILE.fpr -Xmx8092M ./dist ./index.html
 
 echo "=========================="
 echo "Merging"

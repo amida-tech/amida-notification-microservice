@@ -1,49 +1,63 @@
-import Joi from 'joi';
+const Joi = require('joi'); // require and configure dotenv, will load vars in .env in PROCESS.ENV
 // require and configure dotenv, will load vars in .env in PROCESS.ENV
-require('dotenv').config();
+const dotenv = require('dotenv');
+
+if (process.env.NODE_ENV === 'test') {
+    dotenv.config({ path: '.env.test' });
+} else {
+    dotenv.config();
+}
 
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
     NODE_ENV: Joi.string()
         .allow(['development', 'production', 'test', 'provision'])
-        .default('development'),
-    PORT: Joi.number()
-        .default(4001),
+        .default('production'),
+    LOG_LEVEL: Joi.string()
+        .default('info'),
+    NOTIFICATION_SERVICE_PORT: Joi.number()
+        .default(4003),
     JWT_SECRET: Joi.string().required()
         .description('JWT Secret required to sign'),
-    PG_DB: Joi.string().required()
+    AUTH_MICROSERVICE_URL: Joi.string().allow('')
+    .description('Auth microservice endpoint'),
+    META_DATA_MICROSERVICE_URL: Joi.string().allow('')
+    .description('Metadata microservice endpoint'),
+    NOTIFICATION_SERVICE_PG_DB: Joi.string().required()
         .description('Postgres database name'),
-    PG_PORT: Joi.number()
+    NOTIFICATION_SERVICE_PG_PORT: Joi.number()
         .default(5432),
-    PG_HOST: Joi.string()
-        .default('localhost'),
-    PG_USER: Joi.string().required()
+    NOTIFICATION_SERVICE_PG_HOST: Joi.string(),
+    NOTIFICATION_SERVICE_PG_USER: Joi.string().required()
         .description('Postgres username'),
-    PG_PASSWD: Joi.string().allow('')
+    NOTIFICATION_SERVICE_PG_PASSWORD: Joi.string().allow('')
         .description('Postgres password'),
-    PG_SSL: Joi.bool()
+    NOTIFICATION_SERVICE_PG_SSL_ENABLED: Joi.bool()
         .default(false)
         .description('Enable SSL connection to PostgreSQL'),
-    PG_CERT_CA: Joi.string()
-        .description('SSL certificate CA'), // Certificate itself, not a filename
-    TEST_TOKEN: Joi.string().allow('')
+    NOTIFICATION_SERVICE_PG_CA_CERT: Joi.string()
+        .description('SSL certificate CA. This string must be the certificate itself, not a filename.'),
+    NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT: Joi.string().allow('')
         .description('Test auth token'),
-    MICROSERVICE_ACCESS_KEY: Joi.string().allow('')
+    NOTIFICATION_SERVICE_METADATA_SERVICE_ENABLED: Joi.bool()
+        .default(false),
+    PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME: Joi.string().allow('')
         .description('Microservice role access key'),
-    IOS_KEY_ID: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD: Joi.string(),
+    PUSH_NOTIFICATIONS_APN_KEY_ID: Joi.string().allow('')
         .description('ID for IOS Key'),
-    TEAM_ID: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_APN_TEAM_ID: Joi.string().allow('')
         .description('IOS Team ID'),
-    APN_ENV: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_APN_ENV: Joi.string().allow('')
         .description('IOS Push Notification Environment'),
-    PUSH_TOPIC: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_APN_TOPIC: Joi.string().allow('')
         .description('IOS Push Topic'),
-    FIRE_BASE_API_URL: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_FCM_API_URL: Joi.string().allow('')
         .description('Firebase API URL'),
-    FIRE_BASE_SERVER_KEY: Joi.string().allow('')
+    PUSH_NOTIFICATIONS_FCM_SERVER_KEY: Joi.string().allow('')
         .description('Firebase Server Key'),
-    SEND_APN: Joi.bool()
-            .default(false),
+    PUSH_NOTIFICATIONS_APN_ENABLED: Joi.bool()
+        .default(false),
 }).unknown()
     .required();
 
@@ -52,28 +66,31 @@ if (error) {
     throw new Error(`Config validation error: ${error.message}`);
 }
 
-const config = {
+module.exports = {
     env: envVars.NODE_ENV,
-    port: envVars.PORT,
+    logLevel: envVars.LOG_LEVEL,
+    port: envVars.NOTIFICATION_SERVICE_PORT,
     jwtSecret: envVars.JWT_SECRET,
-    testToken: envVars.TEST_TOKEN,
-    microserviceAccessKey: envVars.MICROSERVICE_ACCESS_KEY,
-    iosKeyId: envVars.IOS_KEY_ID,
-    teamId: envVars.TEAM_ID,
-    apnENV: envVars.APN_ENV,
-    pushTopic: envVars.PUSH_TOPIC,
-    firebaseAPIUrl: envVars.FIRE_BASE_API_URL,
-    firebaseServerKey: envVars.FIRE_BASE_SERVER_KEY,
-    sendAPN: envVars.SEND_APN,
+    authServiceAPI: envVars.AUTH_MICROSERVICE_URL,
+    metaDataServiceAPI: envVars.META_DATA_MICROSERVICE_URL,
+    automatedTestJwt: envVars.NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT,
+    metaDataServiceEnabled: envVars.NOTIFICATION_SERVICE_METADATA_SERVICE_ENABLED,
+    pushNotificationsServiceUserUsername: envVars.PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME,
+    pushNotificationsServiceUserPassword: envVars.PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD,
+    apnKeyId: envVars.PUSH_NOTIFICATIONS_APN_KEY_ID,
+    apnTeamId: envVars.PUSH_NOTIFICATIONS_APN_TEAM_ID,
+    apnEnv: envVars.PUSH_NOTIFICATIONS_APN_ENV,
+    apnTopic: envVars.PUSH_NOTIFICATIONS_APN_TOPIC,
+    fcmApiUrl: envVars.PUSH_NOTIFICATIONS_FCM_API_URL,
+    fcmServerKey: envVars.PUSH_NOTIFICATIONS_FCM_SERVER_KEY,
+    apnEnabled: envVars.PUSH_NOTIFICATIONS_APN_ENABLED,
     postgres: {
-        db: envVars.PG_DB,
-        port: envVars.PG_PORT,
-        host: envVars.PG_HOST,
-        user: envVars.PG_USER,
-        passwd: envVars.PG_PASSWD,
-        ssl: envVars.PG_SSL,
-        ssl_ca_cert: envVars.PG_CERT_CA,
+        db: envVars.NOTIFICATION_SERVICE_PG_DB,
+        port: envVars.NOTIFICATION_SERVICE_PG_PORT,
+        host: envVars.NOTIFICATION_SERVICE_PG_HOST,
+        user: envVars.NOTIFICATION_SERVICE_PG_USER,
+        password: envVars.NOTIFICATION_SERVICE_PG_PASSWORD,
+        sslEnabled: envVars.NOTIFICATION_SERVICE_PG_SSL_ENABLED,
+        sslCaCert: envVars.NOTIFICATION_SERVICE_PG_CA_CERT,
     },
 };
-
-export default config;

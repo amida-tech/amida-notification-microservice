@@ -1,12 +1,14 @@
 import Sequelize from 'sequelize';
 import _ from 'lodash';
 import config from './config';
+import logger from './winston';
+import { ensureConnectionIsEncrypted } from './helpers';
 
 let dbLogging;
 if (config.env === 'test') {
     dbLogging = false;
 } else {
-    dbLogging = console.log;
+    dbLogging = msg => logger.debug(msg);
 }
 
 const db = {};
@@ -18,12 +20,13 @@ const sequelizeOptions = {
     host: config.postgres.host,
     logging: dbLogging,
 };
-if (config.postgres.ssl) {
-    sequelizeOptions.ssl = config.postgres.ssl;
-    if (config.postgres.ssl_ca_cert) {
+if (config.postgres.sslEnabled) {
+    sequelizeOptions.ssl = config.postgres.sslEnabled;
+    if (config.postgres.sslCaCert) {
         sequelizeOptions.dialectOptions = {
             ssl: {
-                ca: config.postgres.ssl_ca_cert,
+                ca: config.postgres.sslCaCert,
+                rejectUnauthorized: true,
             },
         };
     }
@@ -32,9 +35,13 @@ if (config.postgres.ssl) {
 const sequelize = new Sequelize(
     config.postgres.db,
     config.postgres.user,
-    config.postgres.passwd,
+    config.postgres.password,
     sequelizeOptions
 );
+
+if (config.postgres.sslEnabled) {
+    ensureConnectionIsEncrypted(sequelize);
+}
 
 const User = sequelize.import('../server/models/user.model');
 const Device = sequelize.import('../server/models/device.model');
@@ -42,7 +49,8 @@ const Notification = sequelize.import('../server/models/notification.model');
 
 User.hasMany(Device);
 Device.hasMany(Notification);
-Device.belongsTo(User)
+Notification.belongsTo(Device);
+Device.belongsTo(User);
 
 db.User = User;
 db.Device = Device;

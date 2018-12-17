@@ -1,5 +1,4 @@
 import express from 'express';
-import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compress from 'compression';
@@ -10,7 +9,6 @@ import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import helmet from 'helmet';
 import passport from 'passport';
-import actuator from 'express-actuator';
 import winstonInstance from './winston';
 import routes from '../server/routes/index.route';
 import config from './config';
@@ -18,10 +16,6 @@ import APIError from '../server/helpers/APIError';
 import passportConfig from './passport';
 
 const app = express();
-
-if (config.env === 'development') {
-    app.use(logger('dev'));
-}
 
 // parse body params and attache them to req.body
 app.use(bodyParser.json());
@@ -37,10 +31,14 @@ app.use(helmet());
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());
 
+// eslint-disable-next-line import/newline-after-import
+const swStats = require('swagger-stats');
+app.use(swStats.getMiddleware({}));
+
 // enable detailed API logging in dev env
-if (config.env === 'development') {
-    expressWinston.requestWhitelist.push('body');
-    expressWinston.responseWhitelist.push('body');
+if (config.env === 'development' || config.env === 'production') {
+    expressWinston.requestWhitelist = ['url', 'method', 'httpVersion', 'originalUrl', 'query'];
+    expressWinston.responseWhitelist = ['statusCode', 'responseTime'];
     app.use(expressWinston.logger({
         winstonInstance,
         meta: true, // optional: log meta data about request (defaults to true)
@@ -52,9 +50,6 @@ if (config.env === 'development') {
 // set up Passport middleware
 passportConfig(passport);
 app.use(passport.initialize());
-
-// set up express actuator
-app.use(actuator('/actuator'));
 
 // mount all routes on /api path
 app.use('/api', routes);
@@ -79,13 +74,6 @@ app.use((req, res, next) => {
     return next(err);
 });
 
-// log error in winston transports except when executing test suite
-if (config.env !== 'test') {
-    app.use(expressWinston.errorLogger({
-        winstonInstance,
-    }));
-}
-
 // error handler, send stacktrace only during development
 app.use((err, req, res, next) => // eslint-disable-line no-unused-vars
     res.status(err.status).json({
@@ -93,5 +81,12 @@ app.use((err, req, res, next) => // eslint-disable-line no-unused-vars
         stack: config.env === 'development' ? err.stack : {},
     })
 );
+
+// log error in winston transports except when executing test suite
+if (config.env !== 'test') {
+    app.use(expressWinston.errorLogger({
+        winstonInstance,
+    }));
+}
 
 export default app;

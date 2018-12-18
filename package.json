@@ -1,6 +1,6 @@
 {
   "name": "amida-notification-microservice",
-  "version": "1.3.0-rc.1",
+  "version": "1.3.0",
   "description": "Microservice for a lightweight notification application",
   "author": "Nick Mcally <nick@amida.com>",
   "main": "index.js",

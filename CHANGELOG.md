@@ -3,6 +3,17 @@
 ## [Unreleased]
 
 
+## [1.3.0] -- 2018-12-12
+### Added
+- Consolidated logging with `npm:winston-json-formatter`.
+
+### Changed
+- DEVOPS-365 related Dockerfile improvements.
+
+### Security
+- Fixed some dependency vulnerabilities.
+
+
 ## [1.2.0] -- 2018-12-11
 ### Fixed
 - Winston express middleware stack error, such that api calls

@@ -39,8 +39,26 @@ function updateDevice(req, res, next) {  // eslint-disable-line no-unused-vars
     });
 }
 
+function revokeDevice(req, res, next) {  // eslint-disable-line no-unused-vars
+    const { username, token, deviceType } = req.body;
+    User.findOne({ where: { username } }).then((deviceUser) => {
+        Device.destroy({
+            where: {
+                token,
+                type: deviceType,
+                UserId: deviceUser.id,
+            },
+        }).then(() => {
+         res.send({
+             success: "Device Revoked!",
+         });
+        })
+    })
+}
+
 export default {
     create,
     sendPushNotification,
     updateDevice,
+    revokeDevice
 };

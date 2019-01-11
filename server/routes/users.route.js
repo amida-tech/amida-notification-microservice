@@ -11,6 +11,6 @@ router.route('/sendPushNotification')
 router.route('/updateDevice')
     .post(usersCtrl.updateDevice);
 router.route('/revoke-device')
-    .post(usersCtrl.revokeDevice);
+    .delete(usersCtrl.revokeDevice);
 
 export default router;

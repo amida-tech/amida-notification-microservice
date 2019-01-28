@@ -294,8 +294,8 @@ Enable Apple Push Notifications.
 
 Apple Push Notification environment.
 - Valid values are `development` and `production`.
-- When using Test Flight, set to `production.`
 - When you build the app with Xcode and from there run directly on your phone, set to `development`.
+- When using Test Flight or when using a real production app, set to `production.`
 
 ##### `PUSH_NOTIFICATIONS_APN_TEAM_ID`
 

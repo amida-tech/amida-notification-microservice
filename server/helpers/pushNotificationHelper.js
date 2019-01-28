@@ -104,13 +104,11 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
 
                         // TODO JCB: ask Elijah if we can remove these
                         // console.log('showing push result message', message[0]);
-                        if (message.error == null) {
-                            device.createNotification({
-                                payload: data,
-                                type: data.notificationType,
-                                status: 'success',
-                            });
-                        }
+                        device.createNotification({
+                            payload: data,
+                            type: data.notificationType,
+                            status: message.error == null ? 'success' : 'failure',
+                        });
                     }
                 });
             }
@@ -131,19 +129,19 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                     body,
                     method: 'POST',
                 }, (err, res1, body1) => {
-                    logger.error('Firebase Error', { err });
+                    if (err) {
+                        logger.error('Firebase Error', { err });
+                    }
 
                     // TODO JCB: ask Elijah if we can remove these
                     // console.log('Showing Firebase Response', res1.statusCode);
                     // console.log('Showing Firebase Body', body1);
-                    const { success } = body1;
-                    if (success === 1) {
-                        device.createNotification({
-                            payload: data,
-                            type: data.notificationType,
-                            status: 'success',
-                        });
-                    }
+                    const success = JSON.parse(body1).success;
+                    device.createNotification({
+                        payload: data,
+                        type: data.notificationType,
+                        status: success === 1 ? 'success' : 'failure',
+                    });
                 });
             }
         });

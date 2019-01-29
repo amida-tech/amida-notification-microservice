@@ -51,6 +51,8 @@ const envVarsSchema = Joi.object({
         .description('Firebase Server Key'),
     PUSH_NOTIFICATIONS_APN_ENABLED: Joi.bool()
         .default(false),
+    AWS_REGION: Joi.string()
+        .default('us-west-2'),
 }).unknown()
     .required();
 
@@ -73,6 +75,7 @@ const config = {
     fcmApiUrl: envVars.PUSH_NOTIFICATIONS_FCM_API_URL,
     fcmServerKey: envVars.PUSH_NOTIFICATIONS_FCM_SERVER_KEY,
     apnEnabled: envVars.PUSH_NOTIFICATIONS_APN_ENABLED,
+    awsRegion: envVars.AWS_REGION,
     postgres: {
         db: envVars.NOTIFICATION_SERVICE_PG_DB,
         port: envVars.NOTIFICATION_SERVICE_PG_PORT,

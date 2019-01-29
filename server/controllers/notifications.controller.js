@@ -3,14 +3,28 @@ import db from '../../config/sequelize';
 import pushNotificationHelper from '../helpers/pushNotificationHelper';
 import smsHelper from '../helpers/smsHelper';
 import emailHelper from '../helpers/emailHelper';
+import logger from '../../config/winston';
 
 const Device = db.Device;
 const User = db.User;
 const Op = Sequelize.Op;
 
-function send(req, res, next, protocol) {
+function send(req, res) {
+    const { data, protocol } = req.body;
 
-    const { data } = req.body;
+    if (data == null) {
+        res.status(404);
+        res.send({ error: 'Request should include data attribute' });
+        return;
+    } else if (protocol == null) {
+        res.status(404);
+        res.send({ error: 'Request should include protocol attribute' });
+        return;
+    } else if (Array.isArray(data)) {
+        res.status(404);
+        res.send({ error: 'Data attribute must be an array' });
+        return;
+    }
 
     const usernames = data.map(_data => _data.username);
 
@@ -24,47 +38,67 @@ function send(req, res, next, protocol) {
         },
     }).then((users) => {
         if (!users.length > 0) {
-          res.status(404);
-          res.send({error: "Users Not Found"});
-          return
+            res.status(404);
+            res.send({ error: 'Users Not Found' });
+            return;
         }
+        const errors = [];
         users.forEach((user) => {
+            let notificationError;
             if (!user) return;
             const userData = data.find(_userData => _userData.username === user.username);
             switch (protocol) {
             case 'push':
-                pushNotificationHelper.sendPushNotification(user, userData);
+                if (!userData.title || !userData.body) {
+                    notificationError = `Notification data for ${user.username} should contain a title and body`;
+                    errors.push(notificationError);
+                    logger.error({
+                        service: 'notification-service',
+                        message: notificationError,
+                    });
+                } else {
+                    pushNotificationHelper.sendPushNotification(user, userData);
+                }
                 break;
             case 'email':
-                emailHelper.sendEmail(user, userData);
+                if (!userData.email || !userData.body || !userData.subject) {
+                    notificationError = `Email message for ${user.username} should contain source, email, body and subject fields`;
+                    errors.push(notificationError);
+                    logger.error({
+                        service: 'notification-service',
+                        message: notificationError,
+                    });
+                } else {
+                    emailHelper.sendEmail(user, userData);
+                }
                 break;
             case 'sms':
-                smsHelper.sendSms(user, userData);
+                if (!userData.phone || !userData.message || !userData.subject || !userData.source) {
+                    notificationError = `SMS message for ${user.username} should contain phone, message and subject fields`;
+                    errors.push(notificationError);
+                    logger.error({
+                        service: 'notification-service',
+                        message: notificationError,
+                    });
+                } else {
+                    smsHelper.sendSms(user, userData);
+                }
                 break;
             default:
             }
         });
-        res.send({ success: true });
+        if (!errors.length) {
+            res.send({ message: 'One or more notifications could not be processed', errors });
+        } else {
+            res.send({ success: true });
+        }
     }).catch((err) => {
-      res.send({error: err})
+        logger.error({ ...err, service: 'notification-service' });
+        res.status(500);
+        res.send({ error: err });
     });
 }
 
-function sendPushNotifications(req, res, next) { // eslint-disable-line no-unused-vars
-    req.body.data = req.body.pushData;
-    send(req, res, next, 'push');
-}
-
-function sendEmail(req, res, next) { // eslint-disable-line no-unused-vars
-    send(req, res, next, 'email');
-}
-
-function sendSms(req, res, next) { // eslint-disable-line no-unused-vars
-    send(req, res, next, 'sms');
-}
-
 export default {
-    sendPushNotifications,
-    sendEmail,
-    sendSms,
+    send,
 };

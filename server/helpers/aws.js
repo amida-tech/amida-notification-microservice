@@ -1,13 +1,14 @@
-const config = require('../../config/config.js');
 import AWS from 'aws-sdk';
+import config from '../../config/config.js';
+
+
 AWS.config.update({
-    region: 'us-west-2',
+    region: config.awsRegion,
 });
 const sns = new AWS.SNS();
 const ses = new AWS.SES();
 
-
 export default {
     sns,
-    ses
+    ses,
 };

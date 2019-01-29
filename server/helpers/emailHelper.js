@@ -1,6 +1,8 @@
-const config = require('../../config/config.js');
 import AWS from './aws';
+import logger from '../../config/winston';
+
 const ses = AWS.ses;
+
 
 function sendEmail(receiver, data) {
   // eslint-disable-line no-unused-vars
@@ -15,19 +17,22 @@ function sendEmail(receiver, data) {
             Body: {
                 Html: {
                     Charset: 'UTF-8',
-                    Data: `${data.body}: <a class=\"ulink\" href=\"https://www.amidaorange.com\" target=\"_blank\">Amida Orange</a>.` || '<a class="ulink" href="https://www.amidaorange.com" target="_blank">Amida Orange</a>.',
+                    Data: `${data.body}`,
                 },
             },
             Subject: {
                 Charset: 'UTF-8',
-                Data: data.subject || 'Message from Orange',
+                Data: data.subject,
             },
         },
-        Source: 'orange@amida-services.com',
+        Source: data.source,
     };
-    ses.sendEmail(params, (err, data) => {
-        if (err) console.log(err, err.stack); // an error occurred
-        else console.log(data);           // successful response
+    ses.sendEmail(params, (err, response) => {
+        if (err) {
+            logger.error({ ...err, service: 'notification-service' });
+        } else {
+            logger.info({ ...response, service: 'notification-service' });
+        }
     });
 }
 

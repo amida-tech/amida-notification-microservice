@@ -1,5 +1,6 @@
-const config = require('../../config/config.js');
-import AWS from './aws'
+import AWS from './aws';
+import logger from '../../config/winston';
+
 const sns = AWS.sns;
 
 function sendSms(receiver, data) {
@@ -12,11 +13,11 @@ function sendSms(receiver, data) {
         Subject: data.subject,
     };
 
-    sns.publish(params, (err, data) => {
+    sns.publish(params, (err, response) => {
         if (err) {
-            console.log('Error sending a message', err);
+            logger.error({ ...err, service: 'notification-service' });
         } else {
-            console.log('Sent message:', data.MessageId);
+            logger.info({ ...response, service: 'notification-service' });
         }
     });
 }

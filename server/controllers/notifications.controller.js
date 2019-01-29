@@ -20,7 +20,7 @@ function send(req, res) {
         res.status(404);
         res.send({ error: 'Request should include protocol attribute' });
         return;
-    } else if (Array.isArray(data)) {
+    } else if (!Array.isArray(data)) {
         res.status(404);
         res.send({ error: 'Data attribute must be an array' });
         return;
@@ -61,7 +61,7 @@ function send(req, res) {
                 }
                 break;
             case 'email':
-                if (!userData.email || !userData.body || !userData.subject) {
+                if (!userData.email || !userData.body || !userData.subject || !userData.source) {
                     notificationError = `Email message for ${user.username} should contain source, email, body and subject fields`;
                     errors.push(notificationError);
                     logger.error({
@@ -73,7 +73,7 @@ function send(req, res) {
                 }
                 break;
             case 'sms':
-                if (!userData.phone || !userData.message || !userData.subject || !userData.source) {
+                if (!userData.phone || !userData.message || !userData.subject) {
                     notificationError = `SMS message for ${user.username} should contain phone, message and subject fields`;
                     errors.push(notificationError);
                     logger.error({
@@ -87,7 +87,7 @@ function send(req, res) {
             default:
             }
         });
-        if (!errors.length) {
+        if (errors.length) {
             res.send({ message: 'One or more notifications could not be processed', errors });
         } else {
             res.send({ success: true });

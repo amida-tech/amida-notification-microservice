@@ -38,21 +38,20 @@ function updateDevice(req, res, next) {  // eslint-disable-line no-unused-vars
                 token,
                 type: deviceType,
                 UserId: deviceUser.id,
-                disabled: null
+                disabled: null,
             }, {
                 where: {
                     token,
                     type: deviceType,
                     UserId: deviceUser.id,
                 },
-                paranoid: false
+                paranoid: false,
             })
             .then((created) => {
                 res.send({
                     message: `Device ${created ? 'created' : 'updated'}`,
                 });
-
-            })
+            });
         });
     });
 }

@@ -15,12 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         token: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: 'UserIdtoken'
+            unique: 'UserIdtoken',
         },
         UserId: {
             type: DataTypes.INTEGER,
-            unique: 'UserIdtoken'
-        }
+            unique: 'UserIdtoken',
+        },
     }, {
         deletedAt: 'disabled',
         paranoid: true,

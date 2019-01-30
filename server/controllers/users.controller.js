@@ -34,19 +34,25 @@ function updateDevice(req, res, next) {  // eslint-disable-line no-unused-vars
                 },
             },
         }).then(() => {
-            Device.findOrCreate({
+            Device.upsert({
+                token,
+                type: deviceType,
+                UserId: deviceUser.id,
+                disabled: null
+            }, {
                 where: {
                     token,
                     type: deviceType,
                     UserId: deviceUser.id,
                 },
+                paranoid: false
             })
-            .spread((device, created) => {
+            .then((created) => {
                 res.send({
-                    success: `Device ${created ? 'created' : 'updated'}`,
-                    device,
+                    message: `Device ${created ? 'created' : 'updated'}`,
                 });
-            });
+
+            })
         });
     });
 }

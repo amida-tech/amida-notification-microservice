@@ -12,7 +12,7 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
         },
         apn: {
             token: {
-                key: '/app/iosKey.p8', // optionally: fs.readFileSync('./certs/key.p8')
+                key: config.apnKeyPath,
                 keyId: config.apnKeyId,
                 teamId: config.apnTeamId,
             },

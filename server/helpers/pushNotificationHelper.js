@@ -136,7 +136,13 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                     // TODO JCB: ask Elijah if we can remove these
                     // console.log('Showing Firebase Response', res1.statusCode);
                     // console.log('Showing Firebase Body', body1);
-                    const success = JSON.parse(body1).success;
+                    let success;
+                    try {
+                        success = JSON.parse(body1).success;
+                    } catch (e) {
+                        success = 0;
+                    }
+
                     device.createNotification({
                         payload: data,
                         type: data.notificationType,

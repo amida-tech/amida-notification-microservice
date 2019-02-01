@@ -128,18 +128,16 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                     uri: config.fcmApiUrl,
                     body,
                     method: 'POST',
-                }, (err, res1, body1) => {
+                  }, (err, fcmRes, fcmResBody) => {
                     if (err) {
                         logger.error('Firebase Error', { err });
                     }
 
-                    // TODO JCB: ask Elijah if we can remove these
-                    // console.log('Showing Firebase Response', res1.statusCode);
-                    // console.log('Showing Firebase Body', body1);
                     let success;
                     try {
-                        success = JSON.parse(body1).success;
+                        success = JSON.parse(fcmResBody).success;
                     } catch (e) {
+                        logger.debug(`Failed to send push notification because JSON.prase(fcmResBody) failed. fcmResBody is: ${fcmResBody}`);
                         success = 0;
                     }
 

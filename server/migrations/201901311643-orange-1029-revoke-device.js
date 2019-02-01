@@ -1,17 +1,18 @@
-'use strict';
+const Sequelize = require('sequelize');
 
-var Sequelize = require('sequelize');
+const logger = require('../../config/winston');
 
-var info = {
-    'revision': 2,
-    'name': '201901311643-orange-1029-revoke-device',
-    'created': '2019-01-31T21:43:14.984Z',
-    'comment': ''
+const info = {
+    revision: 2,
+    name: '201901311643-orange-1029-revoke-device',
+    created: '2019-01-31T21:43:14.984Z',
+    comment: '',
 };
 
-var migrationCommands = [{
+const migrationCommands = [
+    {
         fn: 'removeColumn',
-        params: ['Devices', 'isArchived']
+        params: ['Devices', 'isArchived'],
     },
     {
         fn: 'addColumn',
@@ -19,42 +20,41 @@ var migrationCommands = [{
             'Devices',
             'disabled',
             {
-                'type': Sequelize.DATE,
-            }
-        ]
+                type: Sequelize.DATE,
+            },
+        ],
     },
     {
         fn: 'addConstraint',
         params: [
-          'Devices',
-          ['token', 'UserId'],
-          {
-              type: 'unique',
-              name: 'Devices_token_UserId_key'
-          }
-        ]
-    }
+            'Devices',
+            ['token', 'UserId'],
+            {
+                type: 'unique',
+                name: 'Devices_token_UserId_key',
+            },
+        ],
+    },
 ];
 
 module.exports = {
     pos: 0,
-    up: function(queryInterface, Sequelize)
-    {
-        var index = this.pos;
-        return new Promise(function(resolve, reject) {
+    up(queryInterface) {
+        let index = this.pos;
+        return new Promise((resolve, reject) => {
             function next() {
-                if (index < migrationCommands.length)
-                {
-                    let command = migrationCommands[index];
-                    console.log('[#'+index+'] execute: ' + command.fn);
-                    index++;
+                if (index < migrationCommands.length) {
+                    const command = migrationCommands[index];
+                    logger.info(`[Migration #${index}] execute: ${command.fn}`);
+                    index += 1;
+                    // eslint-disable-next-line prefer-spread, max-len
                     queryInterface[command.fn].apply(queryInterface, command.params).then(next, reject);
-                }
-                else
+                } else {
                     resolve();
+                }
             }
             next();
         });
     },
-    info: info
+    info,
 };

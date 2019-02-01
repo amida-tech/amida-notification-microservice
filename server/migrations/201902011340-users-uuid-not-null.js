@@ -1,13 +1,9 @@
-'use strict';
-
-var Sequelize = require('sequelize');
-
 module.exports = {
-    up: function(queryInterface, Sequelize) {
+    up(queryInterface, Sequelize) {
         return queryInterface.changeColumn('Users', 'uuid', {
-            "type": Sequelize.UUID,
-            "unique": true,
-            "allowNull": false
-        })
-    }
-}
+            type: Sequelize.UUID,
+            unique: true,
+            allowNull: false,
+        });
+    },
+};

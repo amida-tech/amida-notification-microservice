@@ -128,7 +128,7 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                     uri: config.fcmApiUrl,
                     body,
                     method: 'POST',
-                  }, (err, fcmRes, fcmResBody) => {
+                }, (err, fcmRes, fcmResBody) => {
                     if (err) {
                         logger.error('Firebase Error', { err });
                     }
@@ -162,7 +162,9 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
 
             if (previewType === 'basic' || previewType === 'preview') {
                 const displayDetail = prefMap[data.namespace][data.notificationType][previewType];
+                // eslint-disable-next-line no-param-reassign
                 data.title = displayDetail.title;
+                // eslint-disable-next-line no-param-reassign
                 data.body = displayDetail.body;
             }
 

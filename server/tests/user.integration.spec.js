@@ -34,7 +34,7 @@ const testPushData = {
             body: 'This is a test Push Notification',
         },
     }],
-    protocol: 'push'
+    protocol: 'push',
 };
 
 describe('Notifications API:', () => {

@@ -43,6 +43,7 @@ function send(req, res) {
             return;
         }
         const errors = [];
+        const notificationPromises = [];
         users.forEach((user) => {
             let notificationError;
             if (!user) return;
@@ -57,7 +58,7 @@ function send(req, res) {
                         message: notificationError,
                     });
                 } else {
-                    pushNotificationHelper.sendPushNotification(user, userData);
+                    notificationPromises.push(pushNotificationHelper.sendPushNotification(user, userData));
                 }
                 break;
             case 'email':
@@ -69,7 +70,7 @@ function send(req, res) {
                         message: notificationError,
                     });
                 } else {
-                    emailHelper.sendEmail(user, userData);
+                    notificationPromises.push(emailHelper.sendEmail(user, userData));
                 }
                 break;
             case 'sms':
@@ -81,17 +82,23 @@ function send(req, res) {
                         message: notificationError,
                     });
                 } else {
-                    smsHelper.sendSms(user, userData);
+                    notificationPromises.push(smsHelper.sendSms(user, userData));
                 }
                 break;
             default:
             }
         });
-        if (errors.length) {
-            res.send({ message: 'One or more notifications could not be processed', errors });
-        } else {
-            res.send({ success: true });
-        }
+        Promise.all(notificationPromises).then(() => {
+            if (errors.length) {
+                res.send({ message: 'One or more notifications could not be processed', errors });
+            } else {
+                res.send({ success: true });
+            }
+        }).catch((err) => {
+            logger.error({ message: err.message, service: 'notification-service' });
+            res.status(500);
+            res.send({ error: 'One or more notifications could not be delivered' });
+        });
     }).catch((err) => {
         logger.error({ message: err.message, service: 'notification-service' });
         res.status(500);

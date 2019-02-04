@@ -26,7 +26,7 @@ const deviceRequestData = {
 };
 
 const testPushData = {
-    pushData: [{
+    data: [{
         username: testUserObject.username,
         notificationType: 'New Message',
         data: {
@@ -34,6 +34,7 @@ const testPushData = {
             body: 'This is a test Push Notification',
         },
     }],
+    protocol: 'push'
 };
 
 describe('Notifications API:', () => {
@@ -94,7 +95,7 @@ describe('Notifications API:', () => {
         );
 
         it('should make a successful request to send a push notification', () => request(app)
-            .post(`${baseURL}/notifications/sendPushNotifications`)
+            .post(`${baseURL}/notifications/send`)
             .set('Authorization', `Bearer ${auth}`)
             .send(testPushData)
             .expect(httpStatus.OK)

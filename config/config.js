@@ -62,6 +62,8 @@ const envVarsSchema = Joi.object({
         .default('us-west-2'),
     AWS_SES_EMAIL_SOURCE: Joi.string()
         .default('notifications@amida-services.com'),
+    PUSH_NOTIFICATIONS_APN_KEY_PATH: Joi.string().allow('')
+        .description('IOS Push Notification key path'),
 }).unknown()
     .required();
 
@@ -88,8 +90,12 @@ module.exports = {
     fcmApiUrl: envVars.PUSH_NOTIFICATIONS_FCM_API_URL,
     fcmServerKey: envVars.PUSH_NOTIFICATIONS_FCM_SERVER_KEY,
     apnEnabled: envVars.PUSH_NOTIFICATIONS_APN_ENABLED,
+<<<<<<< HEAD
     awsRegion: envVars.AWS_REGION,
     sesEmailSource: envVars.AWS_SES_EMAIL_SOURCE,
+=======
+    apnKeyPath: envVars.PUSH_NOTIFICATIONS_APN_KEY_PATH,
+>>>>>>> feature/ORANGE-1029-revoke-device
     postgres: {
         db: envVars.NOTIFICATION_SERVICE_PG_DB,
         port: envVars.NOTIFICATION_SERVICE_PG_PORT,

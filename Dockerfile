@@ -1,23 +1,18 @@
-# take default image of node boron i.e  node 6.x
-FROM node:8.9.1
-RUN npm i -g yarn
+FROM node:8.14.0-alpine as builder
 
-# create app directory in container
-RUN mkdir -p /app
+WORKDIR /app/
+COPY . /app/
 
-# set /app directory as default working directory
-WORKDIR /app
-
-# only copy package.json initially so that `RUN yarn` layer is recreated only
-# if there are changes in package.json
-ADD . /app/
-RUN yarn
-
-# compile to ES5
+RUN yarn install --pure-lockfile
 RUN yarn build
+RUN yarn install --production --frozen-lockfile
 
-# expose port 4003
+FROM node:8.14.0-alpine
+
+WORKDIR /app/
+
+COPY --from=builder /app/ /app/
+
 EXPOSE 4003
 
-# cmd to start service
-CMD [ "node", "dist/index.js" ]
+CMD ["yarn", "serve"]

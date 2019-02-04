@@ -60,6 +60,8 @@ const envVarsSchema = Joi.object({
         .default(false),
     AWS_REGION: Joi.string()
         .default('us-west-2'),
+    AWS_SES_EMAIL_SOURCE: Joi.string()
+        .default('notifications@amida-services.com'),
 }).unknown()
     .required();
 
@@ -87,6 +89,7 @@ module.exports = {
     fcmServerKey: envVars.PUSH_NOTIFICATIONS_FCM_SERVER_KEY,
     apnEnabled: envVars.PUSH_NOTIFICATIONS_APN_ENABLED,
     awsRegion: envVars.AWS_REGION,
+    sesEmailSource: envVars.AWS_SES_EMAIL_SOURCE,
     postgres: {
         db: envVars.NOTIFICATION_SERVICE_PG_DB,
         port: envVars.NOTIFICATION_SERVICE_PG_PORT,

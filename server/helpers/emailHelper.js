@@ -1,5 +1,6 @@
 import AWS from './aws';
 import logger from '../../config/winston';
+import config from '../../config/config.js';
 
 const ses = AWS.ses;
 
@@ -9,8 +10,8 @@ function sendEmail(receiver, data) {
 
     const params = {
         Destination: {
-            BccAddresses: [],
-            CcAddresses: [],
+            BccAddresses: data.cccAddresses || [],
+            CcAddresses: data.ccAddresses || [],
             ToAddresses: [data.email],
         },
         Message: {
@@ -25,7 +26,7 @@ function sendEmail(receiver, data) {
                 Data: data.subject,
             },
         },
-        Source: data.source,
+        Source: config.sesEmailSource,
     };
     ses.sendEmail(params, (err, response) => {
         if (err) {

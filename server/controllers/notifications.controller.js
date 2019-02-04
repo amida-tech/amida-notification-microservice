@@ -61,7 +61,7 @@ function send(req, res) {
                 }
                 break;
             case 'email':
-                if (!userData.email || !userData.body || !userData.subject || !userData.source) {
+                if (!userData.email || !userData.body || !userData.subject) {
                     notificationError = `Email message for ${user.username} should contain source, email, body and subject fields`;
                     errors.push(notificationError);
                     logger.error({

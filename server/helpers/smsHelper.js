@@ -16,6 +16,11 @@ function sendSms(receiver, data) {
     sns.publish(params, (err, response) => {
         if (err) {
             logger.error({ message: err.message, service: 'notification-service' });
+        } else {
+            logger.info({
+                message: `SMS sent successfully with MessageId: ${response.MessageId}`,
+                service: 'notification-service',
+            });
         }
     });
 }

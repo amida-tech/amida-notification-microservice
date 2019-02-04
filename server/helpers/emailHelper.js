@@ -31,6 +31,11 @@ function sendEmail(receiver, data) {
     ses.sendEmail(params, (err, response) => {
         if (err) {
             logger.error({ message: err.message, service: 'notification-service' });
+        } else {
+            logger.info({
+                message: `Email sent successfully with MessageId: ${response.MessageId}`,
+                service: 'notification-service',
+            });
         }
     });
 }

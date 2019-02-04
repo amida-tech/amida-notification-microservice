@@ -29,9 +29,7 @@ function sendEmail(receiver, data) {
     };
     ses.sendEmail(params, (err, response) => {
         if (err) {
-            logger.error({ ...err, service: 'notification-service' });
-        } else {
-            logger.info({ ...response, service: 'notification-service' });
+            logger.error({ message: err.message, service: 'notification-service' });
         }
     });
 }

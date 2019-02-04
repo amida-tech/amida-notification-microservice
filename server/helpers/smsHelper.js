@@ -15,9 +15,7 @@ function sendSms(receiver, data) {
 
     sns.publish(params, (err, response) => {
         if (err) {
-            logger.error({ ...err, service: 'notification-service' });
-        } else {
-            logger.info({ ...response, service: 'notification-service' });
+            logger.error({ message: err.message, service: 'notification-service' });
         }
     });
 }

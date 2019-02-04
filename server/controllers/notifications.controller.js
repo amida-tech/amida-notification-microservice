@@ -93,9 +93,9 @@ function send(req, res) {
             res.send({ success: true });
         }
     }).catch((err) => {
-        logger.error({ ...err, service: 'notification-service' });
+        logger.error({ message: err.message, service: 'notification-service' });
         res.status(500);
-        res.send({ error: err });
+        res.send({ error: err.message });
     });
 }
 

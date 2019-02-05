@@ -325,3 +325,7 @@ Url of Google Android Firebase service.
 Identifies to Google that a server belonging to Amida is making this push notification request.
 - Value stored in Amida's password vault.
 - Alternatively, this can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.
+
+##### `PUSH_NOTIFICATIONS_APN_KEY_PATH`
+
+Path to mount APN key

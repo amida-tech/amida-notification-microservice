@@ -1,8 +1,10 @@
 import AWS from './aws';
 import logger from '../../config/winston';
 import config from '../../config/config.js';
+import db from '../../config/sequelize';
 
 const ses = AWS.ses;
+const Notification = db.Notification;
 
 
 function sendEmail(receiver, data) {
@@ -37,7 +39,12 @@ function sendEmail(receiver, data) {
                     message: `Email sent successfully with MessageId: ${response.MessageId}`,
                     service: 'notification-service',
                 });
-                resolve();
+                Notification.create({
+                    payload: data,
+                    type: data.notificationType,
+                    protocol: 'email',
+                    status: 'success',
+                }).then(() => resolve()).catch(notificationCreateError => reject(notificationCreateError));
             }
         });
     });

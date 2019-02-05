@@ -1,7 +1,9 @@
 import AWS from './aws';
 import logger from '../../config/winston';
+import db from '../../config/sequelize';
 
 const sns = AWS.sns;
+const Notification = db.Notification;
 
 function sendSms(receiver, data) {
   // eslint-disable-line no-unused-vars
@@ -22,7 +24,12 @@ function sendSms(receiver, data) {
                     message: `SMS sent successfully with MessageId: ${response.MessageId}`,
                     service: 'notification-service',
                 });
-                resolve();
+                Notification.create({
+                    payload: data,
+                    type: data.notificationType,
+                    protocol: 'sms',
+                    status: 'success',
+                }).then(() => resolve()).catch(notificationCreateError => reject(notificationCreateError));
             }
         });
     });

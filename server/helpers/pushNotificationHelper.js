@@ -60,6 +60,7 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                             device.createNotification({
                                 payload: data,
                                 type: data.notificationType,
+                                protocol: 'push',
                                 status: message.error == null ? 'success' : 'failure',
                             }).then(deviceNotificationPromises.push(Promise.resolve()));
                         }
@@ -102,6 +103,7 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                         device.createNotification({
                             payload: data,
                             type: data.notificationType,
+                            protocol: 'push',
                             status: success === 1 ? 'success' : 'failure',
                         }).then(deviceNotificationPromises.push(Promise.resolve()));
                     });

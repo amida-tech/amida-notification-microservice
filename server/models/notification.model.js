@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        protocol: {
+            type: DataTypes.STRING,
+        },
     });
 
     return Notification;

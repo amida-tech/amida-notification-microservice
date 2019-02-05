@@ -1,11 +1,9 @@
 /* eslint-env mocha */
-
+/* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
 import httpStatus from 'http-status';
 import chai, { expect } from 'chai';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import chaiDatetime from 'chai-datetime';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import chaiDateString from 'chai-date-string';
 import { setTimeout } from 'timers';
 

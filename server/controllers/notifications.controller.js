@@ -12,13 +12,15 @@ const Op = Sequelize.Op;
 function send(req, res) {
     const { data, protocol } = req.body;
 
+    const protocols = ['push', 'email', 'sms'];
+
     if (data == null) {
         res.status(404);
         res.send({ error: 'Request should include data attribute' });
         return;
-    } else if (protocol == null) {
+    } else if (protocol == null || !protocols.includes(protocol)) {
         res.status(404);
-        res.send({ error: 'Request should include protocol attribute' });
+        res.send({ error: 'Request must include a protocol attribute with value of email, sms or push' });
         return;
     } else if (!Array.isArray(data)) {
         res.status(404);

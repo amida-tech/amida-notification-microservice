@@ -52,7 +52,7 @@ node_modules
 .env.test
 
 # ios Key
-iosKey.p8
+*.p8
 
 # build dir
 build

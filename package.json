@@ -24,7 +24,7 @@
     "lint": "esw -c .eslintrc *.js server config --color",
     "lint:watch": "yarn lint --watch",
     "lint:fix": "yarn lint --fix",
-    "test": "gulp && yarn create_db && cross-env NODE_ENV=test ./node_modules/.bin/mocha --ui bdd --reporter spec --colors --compilers js:babel-core/register server/tests --recursive || yarn delete_db",
+    "test": "gulp && yarn create_db && cross-env NODE_ENV=test yarn migrate && cross-env NODE_ENV=test ./node_modules/.bin/mocha --ui bdd --reporter spec --colors --compilers js:babel-core/register server/tests --recursive || yarn delete_db",
     "test:watch": "yarn test --watch",
     "test:coverage": "cross-env NODE_ENV=test ./node_modules/.bin/istanbul cover _mocha -- --ui bdd --reporter spec --colors --compilers js:babel-core/register server/tests --recursive",
     "test:check-coverage": "yarn test:coverage && istanbul check-coverage",

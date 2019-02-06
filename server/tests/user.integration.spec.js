@@ -6,6 +6,7 @@ import chai, { expect } from 'chai';
 import chaiDatetime from 'chai-datetime';
 import chaiDateString from 'chai-date-string';
 import { setTimeout } from 'timers';
+import uuid from 'uuid/v1';
 
 import { User, Device } from '../../config/sequelize';
 import { app, auth, baseURL } from './common.integration.js';
@@ -15,6 +16,7 @@ chai.use(chaiDateString);
 
 const testUserObject = {
     username: 'notified@example.com',
+    uuid: uuid(),
 };
 
 const deviceRequestData = {

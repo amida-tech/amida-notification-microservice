@@ -9,156 +9,120 @@ const info = {
     comment: '',
 };
 
-const migrationCommands = [
-    {
-        fn: 'createTable',
-        params: [
-            'Users',
-            {
-                id: {
-                    type: Sequelize.INTEGER,
-                    primaryKey: true,
-                    autoIncrement: true,
-                },
-                uuid: {
-                    type: Sequelize.UUID,
-                    unique: true,
-                },
-                username: {
-                    type: Sequelize.STRING,
-                    allowNull: false,
-                },
-                createdAt: {
-                    type: Sequelize.DATE,
-                    allowNull: false,
-                },
-                updatedAt: {
-                    type: Sequelize.DATE,
-                    allowNull: false,
-                },
-            },
-            {},
-        ],
+const usersTableAttributes = {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
     },
-    {
-        fn: 'createTable',
-        params: [
-            'Devices',
-            {
-                id: {
-                    type: Sequelize.INTEGER,
-                    primaryKey: true,
-                    autoIncrement: true,
-                },
-                type: {
-                    type: Sequelize.STRING,
-                    allowNull: false,
-                },
-                token: {
-                    type: Sequelize.STRING,
-                    allowNull: false,
-                },
-                isArchived: {
-                    type: Sequelize.BOOLEAN,
-                    defaultValue: false,
-                    allowNull: false,
-                },
-                createdAt: {
-                    type: Sequelize.DATE,
-                    allowNull: false,
-                },
-                updatedAt: {
-                    type: Sequelize.DATE,
-                    allowNull: false,
-                },
-                UserId: {
-                    type: Sequelize.INTEGER,
-                    onUpdate: 'CASCADE',
-                    onDelete: 'SET NULL',
-                    references: {
-                        model: 'Users',
-                        key: 'id',
-                    },
-                    allowNull: true,
-                },
-            },
-            {},
-        ],
+    uuid: {
+        type: Sequelize.UUID,
+        unique: true,
     },
-    {
-        fn: 'createTable',
-        params: [
-            'Notifications',
-            {
-                id: {
-                    type: Sequelize.INTEGER,
-                    primaryKey: true,
-                    autoIncrement: true,
-                },
-                type: {
-                    type: Sequelize.STRING,
-                    allowNull: false,
-                },
-                payload: {
-                    type: Sequelize.JSON,
-                    allowNull: false,
-                },
-                status: {
-                    type: Sequelize.STRING,
-                    allowNull: false,
-                },
-                createdAt: {
-                    type: Sequelize.DATE,
-                    allowNull: false,
-                },
-                updatedAt: {
-                    type: Sequelize.DATE,
-                    allowNull: false,
-                },
-                DeviceId: {
-                    type: Sequelize.INTEGER,
-                    onUpdate: 'CASCADE',
-                    onDelete: 'SET NULL',
-                    references: {
-                        model: 'Devices',
-                        key: 'id',
-                    },
-                    allowNull: true,
-                },
-            },
-            {},
-        ],
+    username: {
+        type: Sequelize.STRING,
+        allowNull: false,
     },
-    {
-        // This manual query is required, rather than using sequelize's addIndex()
-        // because addIndex() does not support IF NOT EXISTS.
-        fn: 'query',
-        query: 'CREATE INDEX IF NOT EXISTS users_uuid ON public."Users" USING btree (uuid);',
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
     },
-];
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    },
+};
+
+const devicesTableAttributes = {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    token: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    isArchived: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    },
+    UserId: {
+        type: Sequelize.INTEGER,
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+        references: {
+            model: 'Users',
+            key: 'id',
+        },
+        allowNull: true,
+    },
+};
+
+const notificationsTableAttributes = {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    payload: {
+        type: Sequelize.JSON,
+        allowNull: false,
+    },
+    status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    },
+    DeviceId: {
+        type: Sequelize.INTEGER,
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+        references: {
+            model: 'Devices',
+            key: 'id',
+        },
+        allowNull: true,
+    },
+};
 
 module.exports = {
-    pos: 0,
-    up(queryInterface) {
-        let index = this.pos;
-        return new Promise((resolve, reject) => {
-            function next() {
-                if (index < migrationCommands.length) {
-                    const command = migrationCommands[index];
-                    logger.info(`[Migration #${index}] execute: ${command.fn}`);
-                    index += 1;
-                    if (command.fn === 'query') {
-                        queryInterface.sequelize.query(command.query).then(next, reject);
-                    } else {
-                        // eslint-disable-next-line prefer-spread, max-len
-                        queryInterface[command.fn].apply(queryInterface, command.params).then(next, reject);
-                    }
-                } else {
-                    resolve();
-                }
-            }
-            next();
-        });
+    up: async (queryInterface) => {
+        logger.info('1: Creating Users table...');
+        await queryInterface.createTable('Users', usersTableAttributes, {});
+
+        logger.info('2: Creating Devices table...');
+        await queryInterface.createTable('Devices', devicesTableAttributes, {});
+
+        logger.info('3: Creating Notifications table...');
+        await queryInterface.createTable('Notifications', notificationsTableAttributes, {});
+
+        logger.info('3: Creating index if not exists on Users.uuid...');
+        queryInterface.describeTable('Users');
     },
     info,
 };

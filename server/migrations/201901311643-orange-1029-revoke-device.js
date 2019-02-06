@@ -1,5 +1,3 @@
-const Sequelize = require('sequelize');
-
 const logger = require('../../config/winston');
 
 const info = {
@@ -9,51 +7,20 @@ const info = {
     comment: '',
 };
 
-const migrationCommands = [
-    {
-        fn: 'removeColumn',
-        params: ['Devices', 'isArchived'],
-    },
-    {
-        fn: 'addColumn',
-        params: [
-            'Devices',
-            'disabled',
-            {
-                type: Sequelize.DATE,
-            },
-        ],
-    },
-    {
-        fn: 'addConstraint',
-        params: [
-            'Devices',
-            ['token', 'UserId'],
-            {
-                type: 'unique',
-                name: 'Devices_token_UserId_key',
-            },
-        ],
-    },
-];
-
 module.exports = {
-    pos: 0,
-    up(queryInterface) {
-        let index = this.pos;
-        return new Promise((resolve, reject) => {
-            function next() {
-                if (index < migrationCommands.length) {
-                    const command = migrationCommands[index];
-                    logger.info(`[Migration #${index}] execute: ${command.fn}`);
-                    index += 1;
-                    // eslint-disable-next-line prefer-spread, max-len
-                    queryInterface[command.fn].apply(queryInterface, command.params).then(next, reject);
-                } else {
-                    resolve();
-                }
-            }
-            next();
+    up: async (queryInterface, Sequelize) => {
+        logger.info('1: Removing column `Devices.isArchived`...');
+        await queryInterface.removeColumn('Devices', 'isArchived');
+
+        logger.info('2: Adding paranoid delete column named `disabled`...');
+        await queryInterface.addColumn('Devices', 'disabled', {
+            type: Sequelize.DATE,
+        });
+
+        logger.info('3: Adding unique constraint to `Devices` columns `token` and `UserId`');
+        await queryInterface.addConstraint('Devices', ['token', 'UserId'], {
+            type: 'unique',
+            name: 'Devices_token_UserId_key',
         });
     },
     info,

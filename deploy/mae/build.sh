@@ -13,7 +13,7 @@ POSTGRES_LIB_URL=https://yum.postgresql.org/9.6/redhat/rhel-7-x86_64/$POSTGRES_L
 POSTGRES_DATA_DIR=$INSTALL_DIR/var/lib/pgsql/9.6/data
 POSTGRES_SOCK_DIR=$INSTALL_DIR/var/run/postgresql
 
-NODE_VERSION=8.12.0
+NODE_VERSION=8.14.0
 NODE_DIR_NAME=node-v$NODE_VERSION-linux-x64
 NODE_TAR_NAME=$NODE_DIR_NAME.tar.xz
 NODE_URL=https://nodejs.org/dist/v$NODE_VERSION/$NODE_TAR_NAME
@@ -37,7 +37,7 @@ tar -xf $NODE_TAR_NAME
 export PATH=$PWD/$NODE_DIR_NAME/bin:$PATH
 
 # Yarn
-npm --prefix . install yarn@1.9.4
+npm --prefix . install yarn@1.12
 export PATH=$PWD/node_modules/yarn/bin:$PATH
 
 cd -
@@ -48,4 +48,4 @@ pg_ctl -D $POSTGRES_DATA_DIR -o "-h 127.0.0.1 -k $PWD/$POSTGRES_SOCK_DIR" start
 
 yarn
 cp .env.example .env.test
-yarn test
+yarn jenkins

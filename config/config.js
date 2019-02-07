@@ -58,6 +58,8 @@ const envVarsSchema = Joi.object({
         .description('Firebase Server Key'),
     PUSH_NOTIFICATIONS_APN_ENABLED: Joi.bool()
         .default(false),
+    PUSH_NOTIFICATIONS_APN_KEY_PATH: Joi.string().allow('')
+        .description('IOS Push Notification key path'),
 }).unknown()
     .required();
 
@@ -84,6 +86,7 @@ module.exports = {
     fcmApiUrl: envVars.PUSH_NOTIFICATIONS_FCM_API_URL,
     fcmServerKey: envVars.PUSH_NOTIFICATIONS_FCM_SERVER_KEY,
     apnEnabled: envVars.PUSH_NOTIFICATIONS_APN_ENABLED,
+    apnKeyPath: envVars.PUSH_NOTIFICATIONS_APN_KEY_PATH,
     postgres: {
         db: envVars.NOTIFICATION_SERVICE_PG_DB,
         port: envVars.NOTIFICATION_SERVICE_PG_PORT,

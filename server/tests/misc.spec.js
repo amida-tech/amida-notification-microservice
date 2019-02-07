@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-
+/* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest-as-promised';
 import httpStatus from 'http-status';
 import chai, { expect } from 'chai';

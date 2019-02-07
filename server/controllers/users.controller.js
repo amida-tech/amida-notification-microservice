@@ -1,7 +1,9 @@
+import Sequelize from 'sequelize';
 import db from '../../config/sequelize';
 
 const User = db.User;
 const Device = db.Device;
+const Op = Sequelize.Op;
 
 /**
  * Start a new thread
@@ -23,17 +25,49 @@ function sendPushNotification(req, res, next) {  // eslint-disable-line no-unuse
 function updateDevice(req, res, next) {  // eslint-disable-line no-unused-vars
     const { username, token, deviceType } = req.body;
     User.findOne({ where: { username } }).then((deviceUser) => {
-        Device.findOrCreate({
+        Device.destroy({
+            where: {
+                token,
+                type: deviceType,
+                UserId: {
+                    [Op.ne]: deviceUser.id,
+                },
+            },
+        }).then(() => {
+            Device.upsert({
+                token,
+                type: deviceType,
+                UserId: deviceUser.id,
+                disabled: null,
+            }, {
+                where: {
+                    token,
+                    type: deviceType,
+                    UserId: deviceUser.id,
+                },
+                paranoid: false,
+            })
+            .then((created) => {
+                res.send({
+                    message: `Device ${created ? 'created' : 'updated'}`,
+                });
+            });
+        });
+    });
+}
+
+function revokeDevice(req, res, next) {  // eslint-disable-line no-unused-vars
+    const { username, token, deviceType } = req.body;
+    User.findOne({ where: { username } }).then((deviceUser) => {
+        Device.destroy({
             where: {
                 token,
                 type: deviceType,
                 UserId: deviceUser.id,
             },
-        })
-        .spread((device, created) => {
+        }).then(() => {
             res.send({
-                success: `Device ${created ? 'created' : 'updated'}`,
-                device,
+                success: 'Device Revoked!',
             });
         });
     });
@@ -43,4 +77,5 @@ export default {
     create,
     sendPushNotification,
     updateDevice,
+    revokeDevice,
 };

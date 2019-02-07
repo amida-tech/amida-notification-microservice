@@ -121,5 +121,9 @@ module.exports = {
         logger.info('3: Creating Notifications table...');
         await queryInterface.createTable('Notifications', notificationsTableAttributes, {});
     },
+    down: async (queryInterface) => {
+        logger.info('1: Dropping all tables');
+        await queryInterface.dropAllTables();
+    },
     info,
 };

@@ -23,5 +23,19 @@ module.exports = {
             name: 'Devices_token_UserId_key',
         });
     },
+    down: async (queryInterface, Sequelize) => {
+        logger.info('1: Adding column `Devices.isArchived`...');
+        await queryInterface.addColumn('Devices', 'isArchived', {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+        });
+
+        logger.info('2: Removing paranoid delete column named `disabled`...');
+        await queryInterface.removeColumn('Devices', 'disabled');
+
+        logger.info('3: Removing unique constraint to `Devices` columns `token` and `UserId`');
+        await queryInterface.removeConstraint('Devices', 'Devices_token_UserId_key');
+    },
     info,
 };

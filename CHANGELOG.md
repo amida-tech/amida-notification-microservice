@@ -5,7 +5,7 @@
 - Prepush githook for `yarn lint` and `yarn test` with `npm:husky`
 
 ### Changed
-- Use sequelize migrations instead of `db.sync()`
+- Use sequelize up/down migrations instead of `db.sync()`
 - `yarn test` command changed to _only_ run tests
   * `yarn jenkins` includes DB creation, migrations, etc.
 - Update `package.json:engines`

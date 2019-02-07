@@ -1,6 +1,15 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Prepush githook for `yarn lint` and `yarn test` with `npm:husky`
+
+### Changed
+- Use sequelize migrations instead of `db.sync()`
+- `yarn test` command changed to _only_ run tests
+  * `yarn jenkins` includes DB creation, migrations, etc.
+- Update `package.json:engines`
+- Update `docker-compose.yml` including postgres 9.4.11 --> 9.6
 
 
 ## [1.3.0] -- 2018-12-12

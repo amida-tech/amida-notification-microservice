@@ -120,9 +120,6 @@ module.exports = {
 
         logger.info('3: Creating Notifications table...');
         await queryInterface.createTable('Notifications', notificationsTableAttributes, {});
-
-        logger.info('3: Creating index if not exists on Users.uuid...');
-        queryInterface.describeTable('Users');
     },
     info,
 };

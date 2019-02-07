@@ -50,8 +50,6 @@ Migrate the database:
 yarn migrate
 ```
 
-### Push Notifications
-
 Create the service user on the the Auth Service which will perform notification actions:
 
 Note: The `AUTH_MICROSERVICE_URL` below is relative to the machine running this command, not to any docker container.
@@ -66,7 +64,9 @@ yarn build # transpiles ./tools/ --> ./dist/tools/
 yarn create_missing_users
 ```
 
-Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`. Set the corresponding keyId to the value of `PUSH_NOTIFICATIONS_APN_KEY_ID` in your `.env` file.
+Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`.
+- Set the corresponding keyId to the value of `PUSH_NOTIFICATIONS_APN_KEY_ID` in your `.env` file.
+- Set `PUSH_NOTIFICATIONS_APN_KEY_PATH` to the full path of your key file.
 
 ## Run
 
@@ -314,4 +314,6 @@ Identifies to Google that a server belonging to Amida is making this push notifi
 
 ##### `PUSH_NOTIFICATIONS_APN_KEY_PATH`
 
-Path to mount APN key
+Path to the location of the APN key key file.
+- When running locally, it will likely be `/path/to/your/notification/service/repo/iosKey.p8`
+- When running in docker, it will likely be set to `/app/iosKey.p8`

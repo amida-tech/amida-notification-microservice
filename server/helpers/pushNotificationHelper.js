@@ -12,7 +12,7 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
         },
         apn: {
             token: {
-                key: '/app/iosKey.p8', // optionally: fs.readFileSync('./certs/key.p8')
+                key: config.apnKeyPath,
                 keyId: config.apnKeyId,
                 teamId: config.apnTeamId,
             },
@@ -104,13 +104,11 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
 
                         // TODO JCB: ask Elijah if we can remove these
                         // console.log('showing push result message', message[0]);
-                        if (message.error == null) {
-                            device.createNotification({
-                                payload: data,
-                                type: data.notificationType,
-                                status: 'success',
-                            });
-                        }
+                        device.createNotification({
+                            payload: data,
+                            type: data.notificationType,
+                            status: message.error == null ? 'success' : 'failure',
+                        });
                     }
                 });
             }
@@ -130,20 +128,24 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                     uri: config.fcmApiUrl,
                     body,
                     method: 'POST',
-                }, (err, res1, body1) => {
-                    logger.error('Firebase Error', { err });
-
-                    // TODO JCB: ask Elijah if we can remove these
-                    // console.log('Showing Firebase Response', res1.statusCode);
-                    // console.log('Showing Firebase Body', body1);
-                    const { success } = body1;
-                    if (success === 1) {
-                        device.createNotification({
-                            payload: data,
-                            type: data.notificationType,
-                            status: 'success',
-                        });
+                }, (err, fcmRes, fcmResBody) => {
+                    if (err) {
+                        logger.error('Firebase Error', { err });
                     }
+
+                    let success;
+                    try {
+                        success = JSON.parse(fcmResBody).success;
+                    } catch (e) {
+                        logger.debug(`Failed to send push notification because JSON.prase(fcmResBody) failed. fcmResBody is: ${fcmResBody}`);
+                        success = 0;
+                    }
+
+                    device.createNotification({
+                        payload: data,
+                        type: data.notificationType,
+                        status: success === 1 ? 'success' : 'failure',
+                    });
                 });
             }
         });
@@ -160,7 +162,9 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
 
             if (previewType === 'basic' || previewType === 'preview') {
                 const displayDetail = prefMap[data.namespace][data.notificationType][previewType];
+                // eslint-disable-next-line no-param-reassign
                 data.title = displayDetail.title;
+                // eslint-disable-next-line no-param-reassign
                 data.body = displayDetail.body;
             }
 

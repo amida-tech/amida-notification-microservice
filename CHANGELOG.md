@@ -3,6 +3,24 @@
 ## [Unreleased]
 
 
+## [1.4.0] -- 2018-02-11
+### Added
+- Notifications are no longer sent to a signed out device
+  * ENV VAR `PUSH_NOTIFICATIONS_APN_KEY_PATH` (for iOS)
+- Prepush githook for `yarn lint` and `yarn test` with `npm:husky`
+
+### Changed
+- Use sequelize up/down migrations instead of `db.sync()`
+- `yarn test` command changed to _only_ run tests
+  * `yarn jenkins` includes DB creation, migrations, etc.
+- Linting updated to `ecmaVersion = 2017`
+- Update `package.json:engines`
+- Update `docker-compose.yml` including postgres 9.4.11 --> 9.6
+
+### Fixed
+- ENV VAR `NOTIFICATION_SERVICE_PG_PORT` now used by `config/database.js`
+
+
 ## [1.3.0] -- 2018-12-12
 ### Added
 - Consolidated logging with `npm:winston-json-formatter`.

@@ -1,4 +1,4 @@
-# Amida Messaging Microservice
+# Amida Notification Microservice
 
 # Table of Contents
 
@@ -10,7 +10,7 @@
 # Design
 
 ## API Spec
-The spec can be viewed at https://amida-tech.github.io/amida-messaging-microservice/.
+The spec can be viewed at https://amida-tech.github.io/amida-notification-microservice/
 
 To update the spec, first edit the files in the `docs` directory. Then run `aglio -i docs/src/docs.md --theme flatly -o index.html`.
 
@@ -41,35 +41,43 @@ cp .env .env.test
 ```
 
 Create the database:
+```sh
+yarn create_db
+```
 
-When you `yarn start` the first time (see the [Development > Run](#Run) section), a script will automatically create the database schema. However, this will only work if your postgres instance has:
-
-1. A database matching your `.env` file's `NOTIFICATION_SERVICE_PG_DB` name
-2. A user matching your `.env` file's `NOTIFICATION_SERVICE_PG_USER` name, which has sufficient permissions to modify your `NOTIFICATION_SERVICE_PG_DB`.
-
-Therefore, in your Postgres instance, create that user and database now.
-
-### Push Notifications
+Migrate the database:
+```sh
+yarn migrate
+```
 
 Create the service user on the the Auth Service which will perform notification actions:
 
 Note: The `AUTH_MICROSERVICE_URL` below is relative to the machine running this command, not to any docker container.
 
 ```sh
-npm run create-push-notificiations-service-user -- {AUTH_MICROSERVICE_URL} {PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME} {PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD}
+yarn create-push-notifications-service-user -- {AUTH_MICROSERVICE_URL} {PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME} {PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD}
 ```
 
-Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`. Set the corresponding keyId to the value of `PUSH_NOTIFICATIONS_APN_KEY_ID` in your `.env` file.
+Copy existing users on the Auth Service to the Notification Service:
+```
+yarn build # transpiles ./tools/ --> ./dist/tools/
+yarn create_missing_users
+```
+
+Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`.
+- Set the corresponding keyId to the value of `PUSH_NOTIFICATIONS_APN_KEY_ID` in your `.env` file.
+- Set `PUSH_NOTIFICATIONS_APN_KEY_PATH` to the full path of your key file.
 
 ## Run
 
 Start server:
 ```sh
-# Start server
 yarn start
+```
 
-# Selectively set DEBUG env var to get logs
-DEBUG=amida-messaging-microservice:* yarn start
+Alternatively, selectively set DEBUG env var to get logs
+```sh
+DEBUG=amida-notification-microservice:* yarn start
 ```
 
 ## Tests
@@ -77,8 +85,11 @@ DEBUG=amida-messaging-microservice:* yarn start
 Create a JWT with the username value 'user0' and set `NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT={token}` in your .env file or an evironment variable. You can easily create a token using the `amida-auth-microservice`.
 
 ```sh
-# Run tests written in ES6
 # Make sure .env.test exists
+# deletes db, creates db, runs migrations and then tests
+yarn jenkins
+
+# Only run the tests (assumes migrations have been run)
 yarn test
 
 # Run test along with code coverage
@@ -99,6 +110,9 @@ yarn lint
 
 # Run lint on any file change
 yarn lint:watch
+
+# Run lint and fix
+yarn lint:fix
 ```
 
 ## Other gulp tasks
@@ -153,45 +167,20 @@ docker run -d \
 amidatech/notification-service
 ```
 
-## Deployment to AWS with Packer and Terraform
-
-You will need to install [pakcer](https://www.packer.io/) and [terraform](https://www.terraform.io/) installed on your local machine.
-Be sure to have your postgres host running and replace the `pg_host` value in the command below with the postgres host address.
-1. First validate the AMI with a command similar to ```packer validate -var 'aws_access_key=myAWSAcessKey'
--var 'aws_secret_key=myAWSSecretKey'
--var 'build_env=development'
--var 'logstash_host=logstash.amida.com'
--var 'service_name=amida_messaging_microservice'
--var 'ami_name=api-messaging-service-boilerplate'
--var 'node_env=development'
--var 'jwt_secret=My-JWT-Token'
--var 'pg_host=amid-messages-packer-test.some_rand_string.us-west-2.rds.amazonaws.com'
--var 'pg_db=amida_messages'
--var 'pg_user=amida_messages'
--var 'pg_passwd=amida-messages' template.json```
-2. If the validation from `1.` above succeeds, build the image by running the same command but replacing `validate` with `build`
-3. In the AWS console you can test the build before deployment. To do this, launch an EC2 instance with the built image and visit the health-check endpoint at <host_address>:4000/api/health-check. Be sure to launch the instance with security groups that allow http access on the app port (currently 4000) and access from Postgres port of the data base. You should see an "OK" response.
-4. Enter `aws_access_key` and `aws_secret_key` values in the vars.tf file
-5. run `terraform plan` to validate config
-6. run `terraform apply` to deploy
-7. To get SNS Alarm notifications be sure that you are subscribed to SNS topic arn:aws:sns:us-west-2:844297601570:ops_team_alerts and you have confirmed subscription
-
-Further details can be found in the `deploy` directory.
-
 ## Kubernetes Deployment
 
 See the [paper](https://paper.dropbox.com/doc/Amida-Microservices-Kubernetes-Deployment-Xsz32zX8nwT9qctitGNVc) write-up for instructions on how to deploy with Kubernetes. The `kubernetes.yml` file contains the deployment definition for the project.
--var 'aws_secret_key=myAWSSecretKey'
+-var 'aws_secret_key=<My-AWSSecretKey>'
 -var 'build_env=development'
 -var 'logstash_host=logstash.amida.com'
--var 'service_name=amida_messaging_microservice'
--var 'ami_name=api-messaging-service-boilerplate'
+-var 'service_name=amida_notification_microservice'
+-var 'ami_name=api-notification-service-boilerplate'
 -var 'node_env=development'
--var 'jwt_secret=My-JWT-Token'
--var 'pg_host=amid-messages-packer-test.some_rand_string.us-west-2.rds.amazonaws.com'
--var 'pg_db=amida_messages'
--var 'pg_user=amida_messages'
--var 'pg_passwd=amida-messages' template.json```
+-var 'jwt_secret=<My-JWT-Token>'
+-var 'pg_host=<My-RDS-Host>'
+-var 'pg_db=amida_notification_microservice'
+-var 'pg_user=amida_notification'
+-var 'pg_passwd=<My-DB-Password>' template.json```
 2. If the validation from `1.` above succeeds, build the image by running the same command but replacing `validate` with `build`
 3. In the AWS console you can test the build before deployment. To do this, launch an EC2 instance with the built image and visit the health-check endpoint at <host_address>:4000/api/health-check. Be sure to launch the instance with security groups that allow http access on the app port (currently 4000) and access from Postgres port of the data base. You should see an "OK" response.
 4. Enter `aws_access_key` and `aws_secret_key` values in the vars.tf file
@@ -291,8 +280,8 @@ Enable Apple Push Notifications.
 
 Apple Push Notification environment.
 - Valid values are `development` and `production`.
-- When using Test Flight, set to `production.`
 - When you build the app with Xcode and from there run directly on your phone, set to `development`.
+- When using Test Flight or when using a real production app, set to `production.`
 
 ##### `PUSH_NOTIFICATIONS_APN_TEAM_ID`
 
@@ -322,3 +311,9 @@ Url of Google Android Firebase service.
 Identifies to Google that a server belonging to Amida is making this push notification request.
 - Value stored in Amida's password vault.
 - Alternatively, this can be obtained from the Team's Firebase console. Note that the `Server key` is different from `API key`. The later is configured on a device for receiving notifications.
+
+##### `PUSH_NOTIFICATIONS_APN_KEY_PATH`
+
+Path to the location of the APN key key file.
+- When running locally, it will likely be `/path/to/your/notification/service/repo/iosKey.p8`
+- When running in docker, it will likely be set to `/app/iosKey.p8`

@@ -1,13 +1,12 @@
 /* eslint-env mocha */
-
+/* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
 import httpStatus from 'http-status';
 import chai, { expect } from 'chai';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import chaiDatetime from 'chai-datetime';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import chaiDateString from 'chai-date-string';
 import { setTimeout } from 'timers';
+import uuid from 'uuid/v1';
 
 import { User, Device } from '../../config/sequelize';
 import { app, auth, baseURL } from './common.integration.js';
@@ -17,6 +16,7 @@ chai.use(chaiDateString);
 
 const testUserObject = {
     username: 'notified@example.com',
+    uuid: uuid(),
 };
 
 const deviceRequestData = {
@@ -46,6 +46,19 @@ describe('Notifications API:', () => {
     });
 
     describe('Create User and Update Device Token', () => {
+        it('Should fail without Authorization header', () => request(app)
+            .post(`${baseURL}/users`)
+            .send(testUserObject)
+            .expect(httpStatus.UNAUTHORIZED)
+        );
+
+        it('Should fail with badtoken in Authorization header', () => request(app)
+            .post(`${baseURL}/users`)
+            .set('Authorization', 'Bearer badtoken')
+            .send(testUserObject)
+            .expect(httpStatus.UNAUTHORIZED)
+        );
+
         it('should should create and respond with a user', () => request(app)
             .post(`${baseURL}/users`)
             .set('Authorization', `Bearer ${auth}`)

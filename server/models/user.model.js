@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         uuid: {
             type: DataTypes.UUID,
+            allowNull: false,
             unique: true,
         },
         username: {

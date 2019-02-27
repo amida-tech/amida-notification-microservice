@@ -33,10 +33,15 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
         const push = new PushNotifications(settings);
 
         let iosPushData = {
+            title: 'Message from Orange',
+            body: 'Hello',
             topic: config.apnTopic,
         };
 
         let androidPushData = {
+            title: 'Message from Orange',
+            body: 'Hello',
+          // 'icon': '@drawable/orange_icon',
             sound: 'default',
             priority: 'high',
             show_in_foreground: true,
@@ -45,7 +50,9 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
         const deliverNotifications = () => {
             iosPushData = { ...iosPushData, ...data, data };
             androidPushData = { ...androidPushData, ...data, data };
+
             const deviceNotificationPromises = [];
+
             receiver.Devices.forEach((device) => {
                 if (device.type === 'iOS' && config.apnEnabled) {
                     push.send([device.token], iosPushData, (err, result) => {
@@ -55,8 +62,8 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                         } else {
                             const message = result[0].message;
 
-                            // TODO JCB: ask Elijah if we can remove these
-                            // console.log('showing push result message', message[0]);
+                          // TODO JCB: ask Elijah if we can remove these
+                          // console.log('showing push result message', message[0]);
                             device.createNotification({
                                 payload: data,
                                 type: data.notificationType,
@@ -84,19 +91,16 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                         uri: config.fcmApiUrl,
                         body,
                         method: 'POST',
-                    }, (err, res1, body1) => {
+                    }, (err, fcmRes, fcmResBody) => {
                         if (err) {
                             logger.error('Firebase Error', { err });
-                            deviceNotificationPromises.push(Promise.reject(err));
                         }
 
-                        // TODO JCB: ask Elijah if we can remove these
-                        // console.log('Showing Firebase Response', res1.statusCode);
-                        // console.log('Showing Firebase Body', body1);
                         let success;
                         try {
-                            success = JSON.parse(body1).success;
+                            success = JSON.parse(fcmResBody).success;
                         } catch (e) {
+                            logger.debug(`Failed to send push notification because JSON.prase(fcmResBody) failed. fcmResBody is: ${fcmResBody}`);
                             success = 0;
                         }
 
@@ -109,6 +113,7 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
                     });
                 }
             });
+
             Promise.all(deviceNotificationPromises)
             .then(() => resolve())
             .catch(err => reject(err));
@@ -117,7 +122,7 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
         if (config.metaDataServiceEnabled) {
             metaDataHelper.getPushPreferences(receiver, data.namespace).then((metadata) => {
                 const attribute = metadata.attributes
-                    .find(_attribute => _attribute.attribute === data.notificationType);
+                  .find(_attribute => _attribute.attribute === data.notificationType);
 
                 const value = attribute.values.find(_value => _value.type === 'preview_type');
 
@@ -125,7 +130,9 @@ function sendPushNotification(receiver, data, req, res) {  // eslint-disable-lin
 
                 if (previewType === 'basic' || previewType === 'preview') {
                     const displayDetail = prefMap[data.namespace][data.notificationType][previewType];
+                  // eslint-disable-next-line no-param-reassign
                     data.title = displayDetail.title;
+                  // eslint-disable-next-line no-param-reassign
                     data.body = displayDetail.body;
                 }
 

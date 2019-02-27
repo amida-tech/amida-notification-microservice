@@ -3,6 +3,11 @@
 ## [Unreleased]
 
 
+## [1.4.1] -- 2018-02-26
+### Fixed
+- DB connection is now encrypted
+
+
 ## [1.4.0] -- 2018-02-11
 ### Added
 - Notifications are no longer sent to a signed out device

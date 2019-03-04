@@ -50,6 +50,8 @@ Migrate the database:
 yarn migrate
 ```
 
+### Create the Push Notifications Service User
+
 Create the service user on the the Auth Service which will perform notification actions:
 
 Note: The `AUTH_MICROSERVICE_URL` below is relative to the machine running this command, not to any docker container.
@@ -58,11 +60,16 @@ Note: The `AUTH_MICROSERVICE_URL` below is relative to the machine running this 
 yarn create-push-notifications-service-user -- {AUTH_MICROSERVICE_URL} {PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME} {PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD}
 ```
 
+### Copy Auth Service Users
+
 Copy existing users on the Auth Service to the Notification Service:
+
 ```
 yarn build # transpiles ./tools/ --> ./dist/tools/
 yarn create_missing_users
 ```
+
+### Setup Apple Push Notifications Key
 
 Obtain an Apple Developer Key and corresponding KeyId. You can download this file by logging into the team's apple developer console on `developer.apple.com`. Navigate to `Keys` on the left pane and create or download a key. Add this file to the root of the project and rename it to `iosKey.p8`.
 - Set the corresponding keyId to the value of `PUSH_NOTIFICATIONS_APN_KEY_ID` in your `.env` file.

@@ -95,6 +95,5 @@ module.exports = {
         password: envVars.NOTIFICATION_SERVICE_PG_PASSWORD,
         sslEnabled: envVars.NOTIFICATION_SERVICE_PG_SSL_ENABLED,
         sslCaCert: envVars.NOTIFICATION_SERVICE_PG_CA_CERT,
-        operatorsAliases: false,
     },
 };

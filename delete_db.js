@@ -1,5 +1,5 @@
-import pg from 'pg';
-import config from './config/config';
+var pg = require("pg");
+var config = require("./config/config");
 
 const conStringPri = `postgres://${config.postgres.user}:${config.postgres.password}@${config.postgres.host}:${config.postgres.port}/postgres`;
 

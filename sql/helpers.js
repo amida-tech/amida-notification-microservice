@@ -1,7 +1,7 @@
 // This file must not use anything that requires babel compilation because its
 // contents run without babel in some cases, such as when doing DB migrations.
 
-const logger = require('./winston');
+const logger = require('../config/winston');
 
 function ensureConnectionIsEncrypted(sequelize) {
     sequelize.query('select 1 as "dummy string"', {

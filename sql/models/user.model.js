@@ -1,0 +1,29 @@
+/**
+ * User Schema
+ */
+module.exports = (sequelize, DataTypes) => {
+    const User = sequelize.define('User', {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        uuid: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            unique: true,
+        },
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    }, {
+        indexes: [
+            {
+                fields: ['uuid'],
+            },
+        ],
+    });
+
+    return User;
+};

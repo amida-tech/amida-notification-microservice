@@ -53,6 +53,21 @@ const envVarsSchema = Joi.object({
         .default(false),
     PUSH_NOTIFICATIONS_APN_KEY_PATH: Joi.string().allow('')
         .description('IOS Push Notification key path'),
+    // deprecated postgres vars - delete after we no longer need to support migrating from postgres
+    NOTIFICATION_SERVICE_PG_DB: Joi.string()
+        .description('Postgres database name'),
+    NOTIFICATION_SERVICE_PG_PORT: Joi.number()
+        .default(5432),
+    NOTIFICATION_SERVICE_PG_HOST: Joi.string(),
+    NOTIFICATION_SERVICE_PG_USER: Joi.string()
+        .description('Postgres username'),
+    NOTIFICATION_SERVICE_PG_PASSWORD: Joi.string().allow('')
+        .description('Postgres password'),
+    NOTIFICATION_SERVICE_PG_SSL_ENABLED: Joi.bool()
+        .default(false)
+        .description('Enable SSL connection to PostgreSQL'),
+    NOTIFICATION_SERVICE_PG_CA_CERT: Joi.string()
+        .description('SSL certificate CA. This string must be the certificate itself, not a filename.'),
 }).unknown()
     .required();
 
@@ -84,5 +99,15 @@ module.exports = {
         connectionString: envVars.NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING,
         sslEnabled: envVars.NOTIFICATION_SERVICE_MONGO_SSL_ENABLED,
         sslCaCert: envVars.NOTIFICATION_SERVICE_MONGO_CA_CERT,
+    },
+    // deprecated postgres vars - delete after we no longer need to support migrating from postgres
+    postgres: {
+        db: envVars.NOTIFICATION_SERVICE_PG_DB,
+        port: envVars.NOTIFICATION_SERVICE_PG_PORT,
+        host: envVars.NOTIFICATION_SERVICE_PG_HOST,
+        user: envVars.NOTIFICATION_SERVICE_PG_USER,
+        password: envVars.NOTIFICATION_SERVICE_PG_PASSWORD,
+        sslEnabled: envVars.NOTIFICATION_SERVICE_PG_SSL_ENABLED,
+        sslCaCert: envVars.NOTIFICATION_SERVICE_PG_CA_CERT,
     },
 };

@@ -6,6 +6,7 @@ import config from './config';
 const options = {
     useNewUrlParser: true,
     useFindAndModify: false,
+    useCreateIndex: true,
 };
 
 if (config.sslEnabled) {

@@ -1,6 +1,6 @@
-import db from '../config/sequelize';
+import db from '../sequelize';
 const User = db.User;
-import config from '../config/config';
+import config from '../../config/config';
 import request from 'request';
 import uuidv4 from 'uuid/v4';
 

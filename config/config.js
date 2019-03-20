@@ -20,22 +20,15 @@ const envVarsSchema = Joi.object({
     JWT_SECRET: Joi.string().required()
         .description('JWT Secret required to sign'),
     AUTH_MICROSERVICE_URL: Joi.string().allow('')
-    .description('Auth microservice endpoint'),
+        .description('Auth microservice endpoint'),
     META_DATA_MICROSERVICE_URL: Joi.string().allow('')
-    .description('Metadata microservice endpoint'),
-    NOTIFICATION_SERVICE_PG_DB: Joi.string().required()
-        .description('Postgres database name'),
-    NOTIFICATION_SERVICE_PG_PORT: Joi.number()
-        .default(5432),
-    NOTIFICATION_SERVICE_PG_HOST: Joi.string(),
-    NOTIFICATION_SERVICE_PG_USER: Joi.string().required()
-        .description('Postgres username'),
-    NOTIFICATION_SERVICE_PG_PASSWORD: Joi.string().allow('')
-        .description('Postgres password'),
-    NOTIFICATION_SERVICE_PG_SSL_ENABLED: Joi.bool()
+        .description('Metadata microservice endpoint'),
+    NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING: Joi.string().required()
+        .description('Mongo connection string'),
+    NOTIFICATION_SERVICE_MONGO_SSL_ENABLED: Joi.bool()
         .default(false)
-        .description('Enable SSL connection to PostgreSQL'),
-    NOTIFICATION_SERVICE_PG_CA_CERT: Joi.string()
+        .description('Enable SSL connection to Mongo'),
+    NOTIFICATION_SERVICE_MONGO_CA_CERT: Joi.string()
         .description('SSL certificate CA. This string must be the certificate itself, not a filename.'),
     NOTIFICATION_SERVICE_AUTOMATED_TEST_JWT: Joi.string().allow('')
         .description('Test auth token'),
@@ -87,13 +80,9 @@ module.exports = {
     fcmServerKey: envVars.PUSH_NOTIFICATIONS_FCM_SERVER_KEY,
     apnEnabled: envVars.PUSH_NOTIFICATIONS_APN_ENABLED,
     apnKeyPath: envVars.PUSH_NOTIFICATIONS_APN_KEY_PATH,
-    postgres: {
-        db: envVars.NOTIFICATION_SERVICE_PG_DB,
-        port: envVars.NOTIFICATION_SERVICE_PG_PORT,
-        host: envVars.NOTIFICATION_SERVICE_PG_HOST,
-        user: envVars.NOTIFICATION_SERVICE_PG_USER,
-        password: envVars.NOTIFICATION_SERVICE_PG_PASSWORD,
-        sslEnabled: envVars.NOTIFICATION_SERVICE_PG_SSL_ENABLED,
-        sslCaCert: envVars.NOTIFICATION_SERVICE_PG_CA_CERT,
+    mongo: {
+        connectionString: envVars.NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING,
+        sslEnabled: envVars.NOTIFICATION_SERVICE_MONGO_SSL_ENABLED,
+        sslCaCert: envVars.NOTIFICATION_SERVICE_MONGO_CA_CERT,
     },
 };

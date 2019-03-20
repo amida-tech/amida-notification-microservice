@@ -1,10 +1,11 @@
 import express from 'express';
 
-import notificationsCtrl from '../controllers/notifications.controller';
+import passErrors from '../helpers/passErrors';
+import { sendPushNotifications } from '../controllers/notifications.controller';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.route('/sendPushNotifications')
-    .post(notificationsCtrl.sendPushNotifications);
+    .post(passErrors(sendPushNotifications));
 
 export default router;

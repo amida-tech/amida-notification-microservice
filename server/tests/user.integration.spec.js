@@ -7,9 +7,12 @@ import chaiDatetime from 'chai-datetime';
 import chaiDateString from 'chai-date-string';
 import { setTimeout } from 'timers';
 import uuid from 'uuid/v1';
+import mongoose from 'mongoose';
 
-import { User, Device } from '../../config/sequelize';
 import { app, auth, baseURL } from './common.integration.js';
+import { userModelName } from '../../server/models/user.model';
+
+const User = mongoose.model(userModelName);
 
 chai.use(chaiDatetime);
 chai.use(chaiDateString);
@@ -59,16 +62,18 @@ describe('Notifications API:', () => {
             .expect(httpStatus.UNAUTHORIZED)
         );
 
-        it('should should create and respond with a user', () => request(app)
+        it('should create and respond with a user', () => request(app)
             .post(`${baseURL}/users`)
             .set('Authorization', `Bearer ${auth}`)
             .send(testUserObject)
             .expect(httpStatus.OK)
-            .then((res) => {
-                User.findById(res.body.user.id)
-                  .then((user) => {
-                      expect(user.username).to.equal(testUserObject.username);
-                  });
+            // eslint-disable-next-line no-underscore-dangle
+            .then(res => User.findById(res.body.user._id))
+            .then((user) => {
+                // eslint-disable-next-line no-unused-expressions
+                expect(user).to.not.be.null;
+                expect(user.username).to.equal(testUserObject.username);
+                expect(user.uuid).to.equal(testUserObject.uuid);
             })
         );
 
@@ -77,20 +82,14 @@ describe('Notifications API:', () => {
             .set('Authorization', `Bearer ${auth}`)
             .send(deviceRequestData)
             .expect(httpStatus.OK)
-            .then(res => User.findOne({   // eslint-disable-line no-unused-vars
-                where: {
-                    username: testUserObject.username,
-                },
-                include: [{
-                    model: Device,
-                }],
+            .then(() => User.findOne({
+                username: testUserObject.username,
+            }))
+            .then((user) => {
+                // eslint-disable-next-line max-len
+                const device = user.devices.find(_device => _device.token === deviceRequestData.token);
+                expect(device).to.not.equal(null);
             })
-              .then((user) => {
-                  // eslint-disable-next-line max-len
-                  const device = user.Devices.find(_device => _device.token === deviceRequestData.token);
-                  expect(device).to.not.equal(null);
-              })
-            )
         );
 
         it('should make a successful request to send a push notification', () => request(app)
@@ -100,6 +99,22 @@ describe('Notifications API:', () => {
             .expect(httpStatus.OK)
             .then((res) => {
                 expect(res.body.success).to.not.equal(null);
+            })
+        );
+
+        it('should revoke a device for a user', () => request(app)
+            .delete(`${baseURL}/users/revoke-device`)
+            .set('Authorization', `Bearer ${auth}`)
+            .send(deviceRequestData)
+            .expect(httpStatus.OK)
+            .then(() => User.findOne({
+                username: testUserObject.username,
+            }))
+            .then((user) => {
+                // eslint-disable-next-line max-len
+                const device = user.devices.find(_device => _device.token === deviceRequestData.token);
+                expect(device).to.not.equal(null);
+                expect(device.status).to.equal('disabled');
             })
         );
     });

@@ -1,36 +1,26 @@
-import Sequelize from 'sequelize';
-import db from '../../config/sequelize';
-import pushNotificationHelper from '../helpers/pushNotificationHelper';
+/* eslint-disable import/prefer-default-export */
+import mongoose from 'mongoose';
+import { userModelName } from '../models/user.model';
+import { sendPushNotification } from '../helpers/pushNotificationHelper';
 
-const Device = db.Device;
-const User = db.User;
-const Op = Sequelize.Op;
+const User = mongoose.model(userModelName);
 
-
-function sendPushNotifications(req, res, next) { // eslint-disable-line no-unused-vars
+export async function sendPushNotifications(req, res) {
     const { pushData } = req.body;
 
     const usernames = pushData.map(data => data.username);
 
-    // Find all users specified above, left join on device table
-    User.findAll({
-        include: [Device],
-        where: {
-            username: {
-                [Op.in]: usernames,
-            },
+    const users = await User.find({
+        username: {
+            $in: usernames,
         },
-    }).then((users) => {
-        if (!users) return;
-        users.forEach((user) => {
-            if (!user) return;
-            const userData = pushData.find(_userData => _userData.username === user.username);
-            pushNotificationHelper.sendPushNotification(user, userData);
-        });
-        res.send({ success: true });
     });
-}
+    // TODO how are we doing errors?
+    if (!users) throw new Error('USERS_NOT_FOUND');
+    users.forEach((user) => {
+        const userData = pushData.find(_userData => _userData.username === user.username);
+        sendPushNotification(user, userData);
+    });
 
-export default {
-    sendPushNotifications,
-};
+    res.send({ success: true });
+}

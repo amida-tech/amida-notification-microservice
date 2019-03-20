@@ -2,8 +2,9 @@ import app from './config/express';
 import config from './config/config';
 import logger from './config/winston';
 
+require('./config/mongo');
 // make bluebird default Promise
-Promise = require('bluebird'); // eslint-disable-line no-global-assign
+// Promise = require('bluebird'); // eslint-disable-line no-global-assign
 
 // module.parent check is required to support mocha watch
 if (!module.parent) {

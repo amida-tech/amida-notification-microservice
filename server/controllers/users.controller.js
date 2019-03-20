@@ -1,81 +1,86 @@
-import Sequelize from 'sequelize';
-import db from '../../config/sequelize';
+import mongoose from 'mongoose';
+import { userModelName } from '../models/user.model';
 
-const User = db.User;
-const Device = db.Device;
-const Op = Sequelize.Op;
+const User = mongoose.model(userModelName);
 
 /**
- * Start a new thread
- * @property {string} req.body.username - Body of the message
+ * Create a User
+ * @property {string} req.body.username - Username
+ * @property {string} req.body.uuid - User UUID
  * @returns {User}
  */
-function create(req, res, next) { // eslint-disable-line no-unused-vars
+export async function create(req, res) {
     const { username, uuid } = req.body;
-    User.findOrCreate({ where: { username, uuid } })
-    .spread((user, created) => { // eslint-disable-line no-unused-vars
-        res.send({ user });
-    });
+
+    // This is the equivalent of findOrCreate
+    const user = await User.findOneAndUpdate(
+        { username, uuid },
+        { username, uuid },
+        { new: true, upsert: true }
+    );
+
+    res.send({ user });
 }
 
-function sendPushNotification(req, res, next) {  // eslint-disable-line no-unused-vars
-    res.send(req.body);
-}
-
-function updateDevice(req, res, next) {  // eslint-disable-line no-unused-vars
+export async function updateDevice(req, res) {
     const { username, token, deviceType } = req.body;
-    User.findOne({ where: { username } }).then((deviceUser) => {
-        Device.destroy({
-            where: {
+    // delete other instances of this token
+    const otherUsersWithThisToken = await User.find({
+        username: {
+            $ne: username,
+        },
+        devices: {
+            $elemMatch: {
                 token,
                 type: deviceType,
-                UserId: {
-                    [Op.ne]: deviceUser.id,
-                },
+                status: 'enabled',
             },
-        }).then(() => {
-            Device.upsert({
-                token,
-                type: deviceType,
-                UserId: deviceUser.id,
-                disabled: null,
-            }, {
-                where: {
-                    token,
-                    type: deviceType,
-                    UserId: deviceUser.id,
-                },
-                paranoid: false,
-            })
-            .then((created) => {
-                res.send({
-                    message: `Device ${created ? 'created' : 'updated'}`,
-                });
-            });
-        });
+        },
+    });
+    for (const user of otherUsersWithThisToken) {
+        for (let i = 0; i < user.devices.length; i += 1) {
+            if (user.devices[i].token === token && user.devices[i].type === deviceType) {
+                user.devices[i].status = 'disabled';
+            }
+        }
+        await user.save();
+    }
+
+    // get user and add this token to the user
+    const user = await User.findOne({ username });
+
+    // two cases
+    // 1. already have it -> make sure its enabled
+    // 2. don't have it yet -> insert it
+    const alreadyHasIt = user.devices.find(device => device.token === token &&
+                                                      device.type === deviceType);
+    let created = false;
+    if (alreadyHasIt) {
+        alreadyHasIt.status = 'enabled';
+    } else {
+        user.devices = user.devices.concat([{
+            token,
+            type: deviceType,
+            status: 'enabled',
+        }]);
+        created = true;
+    }
+    await user.save();
+    res.send({
+        message: `Device ${created ? 'created' : 'updated'}`,
     });
 }
 
-function revokeDevice(req, res, next) {  // eslint-disable-line no-unused-vars
+export async function revokeDevice(req, res) {
     const { username, token, deviceType } = req.body;
-    User.findOne({ where: { username } }).then((deviceUser) => {
-        Device.destroy({
-            where: {
-                token,
-                type: deviceType,
-                UserId: deviceUser.id,
-            },
-        }).then(() => {
-            res.send({
-                success: 'Device Revoked!',
-            });
-        });
+    const user = await User.findOne({ username });
+    for (let i = 0; i < user.devices.length; i += 1) {
+        if (user.devices[i].token === token && user.devices[i].type === deviceType) {
+            user.devices[i].status = 'disabled';
+        }
+    }
+    await user.save();
+    res.send({
+        success: 'Device Revoked!',
     });
 }
-
-export default {
-    create,
-    sendPushNotification,
-    updateDevice,
-    revokeDevice,
-};

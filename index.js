@@ -2,6 +2,8 @@ import app from './config/express';
 import config from './config/config';
 import logger from './config/winston';
 
+require('babel-polyfill');
+
 require('./config/mongo');
 // make bluebird default Promise
 // Promise = require('bluebird'); // eslint-disable-line no-global-assign

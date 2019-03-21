@@ -9,11 +9,10 @@ const options = {
     useCreateIndex: true,
 };
 
-if (config.sslEnabled) {
-    options.server = {};
-    options.server.ssl = config.mongo.sslEnabled;
+if (config.mongo.sslEnabled) {
+    options.ssl = config.mongo.sslEnabled;
     if (config.sslCaCert) {
-        options.server.sslCA = config.mongo.sslCaCert;
+        options.sslCA = config.mongo.sslCaCert;
     }
 }
 

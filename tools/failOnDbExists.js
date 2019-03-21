@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 import config from '../config/config';
+import mongoConn from '../config/mongo';
 
 (async () => {
     const databaseName = config.mongo.connectionString.split('/').slice(-1)[0];
-    await mongoose.connect(config.mongo.connectionString, { dbName: 'test', useNewUrlParser: true });
-    const databases = await (new mongoose.mongo.Admin(mongoose.connection.db)).listDatabases();
+    await mongoConn;
+    const databases = await (new mongoose.mongo.Admin(mongoConn.db)).listDatabases();
     const databaseExists = databases.databases.find(db => db.name === databaseName);
     if (databaseExists) {
         throw new Error('Database exists. Failing.');

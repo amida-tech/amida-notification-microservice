@@ -1,11 +1,9 @@
-import mongoose from 'mongoose';
-import config from '../config/config';
+import mongoConn from '../config/mongo';
 
 require('babel-polyfill');
 
 (async () => {
-    await mongoose.connect(config.mongo.connectionString, { useNewUrlParser: true });
-    await mongoose.connection.dropDatabase();
+    await mongoConn.dropDatabase();
 })()
 .then(process.exit)
 .catch((err) => {

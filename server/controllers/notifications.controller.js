@@ -1,9 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import mongoose from 'mongoose';
-import { userModelName } from '../models/user.model';
+import { User } from '../models/user.model';
 import { sendPushNotification } from '../helpers/pushNotificationHelper';
-
-const User = mongoose.model(userModelName);
 
 export async function sendPushNotifications(req, res) {
     const { pushData } = req.body;

@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
+import mongoConn from '../../config/mongo';
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
     uuid: {
         type: String,
         required: true,
@@ -11,7 +12,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    devices: [new mongoose.Schema({
+    devices: [new Schema({
         type: {
             type: String,
             enum: ['iOS', 'android'],
@@ -29,5 +30,6 @@ const UserSchema = new mongoose.Schema({
         },
     })],
 });
+
 export const userModelName = 'User';
-export const User = mongoose.model(userModelName, UserSchema);
+export const User = mongoConn.model(userModelName, UserSchema);

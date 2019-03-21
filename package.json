@@ -28,6 +28,7 @@
     "sql:migrate": "sequelize db:migrate",
     "sql:migrate:undo": "sequelize db:migrate:undo",
     "sql:update_uuid": "node dist/sql/tools/addUUID.js",
+    "sql:to_mongo": "node dist/sql/tools/toMongo.js",
     "start": "gulp serve",
     "start:debug": "cross-env DEBUG=amida-notification-microservice:* yarn start",
     "test": "cross-env NODE_ENV=test yarn mongo:fail_on_db_exists && cross-env NODE_ENV=test mocha --opts .mocharc",

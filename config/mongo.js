@@ -17,6 +17,5 @@ if (config.sslEnabled) {
     }
 }
 
-mongoose.connect(config.mongo.connectionString, options);
-
-require('../server/models/user.model');
+const connection = mongoose.createConnection(config.mongo.connectionString, options);
+export default connection;

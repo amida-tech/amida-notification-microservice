@@ -7,12 +7,9 @@ import chaiDatetime from 'chai-datetime';
 import chaiDateString from 'chai-date-string';
 import { setTimeout } from 'timers';
 import uuid from 'uuid/v1';
-import mongoose from 'mongoose';
 
 import { app, auth, baseURL } from './common.integration.js';
-import { userModelName } from '../../server/models/user.model';
-
-const User = mongoose.model(userModelName);
+import { User } from '../../server/models/user.model';
 
 chai.use(chaiDatetime);
 chai.use(chaiDateString);

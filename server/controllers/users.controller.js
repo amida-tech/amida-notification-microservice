@@ -1,7 +1,4 @@
-import mongoose from 'mongoose';
-import { userModelName } from '../models/user.model';
-
-const User = mongoose.model(userModelName);
+import { User } from '../models/user.model';
 
 /**
  * Create a User

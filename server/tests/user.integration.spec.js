@@ -193,6 +193,5 @@ describe('Notifications API:', () => {
                 expect(devices[0].type).to.equal(userADeviceB.deviceType);
             })
         );
-
     });
 });

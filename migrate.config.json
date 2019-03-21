@@ -1,0 +1,4 @@
+{
+  "defaultEnv": "mongo",
+  "mongo": { "ENV": "NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING" }
+}

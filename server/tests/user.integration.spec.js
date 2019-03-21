@@ -17,20 +17,31 @@ const User = mongoose.model(userModelName);
 chai.use(chaiDatetime);
 chai.use(chaiDateString);
 
-const testUserObject = {
-    username: 'notified@example.com',
+const userA = {
+    username: 'a@example.com',
     uuid: uuid(),
 };
 
-const deviceRequestData = {
-    username: testUserObject.username,
+const userB = {
+    username: 'b@example.com',
+    uuid: uuid(),
+};
+
+const userADeviceA = {
+    username: userA.username,
     token: '4b569d24',
     deviceType: 'iOS',
 };
 
+const userADeviceB = {
+    username: userA.username,
+    token: 'abcdefg',
+    deviceType: 'android',
+};
+
 const testPushData = {
     pushData: [{
-        username: testUserObject.username,
+        username: userA.username,
         notificationType: 'New Message',
         data: {
             title: 'New Message',
@@ -48,48 +59,89 @@ describe('Notifications API:', () => {
             .then(setTimeout(done, 1000));
     });
 
-    describe('Create User and Update Device Token', () => {
+    describe('Require authorization', () => {
         it('Should fail without Authorization header', () => request(app)
             .post(`${baseURL}/users`)
-            .send(testUserObject)
+            .send(userA)
             .expect(httpStatus.UNAUTHORIZED)
         );
 
         it('Should fail with badtoken in Authorization header', () => request(app)
             .post(`${baseURL}/users`)
             .set('Authorization', 'Bearer badtoken')
-            .send(testUserObject)
+            .send(userA)
             .expect(httpStatus.UNAUTHORIZED)
         );
+    });
 
+    describe('Create User and Update Device Token', () => {
         it('should create and respond with a user', () => request(app)
             .post(`${baseURL}/users`)
             .set('Authorization', `Bearer ${auth}`)
-            .send(testUserObject)
+            .send(userA)
             .expect(httpStatus.OK)
             // eslint-disable-next-line no-underscore-dangle
             .then(res => User.findById(res.body.user._id))
             .then((user) => {
                 // eslint-disable-next-line no-unused-expressions
                 expect(user).to.not.be.null;
-                expect(user.username).to.equal(testUserObject.username);
-                expect(user.uuid).to.equal(testUserObject.uuid);
+                expect(user.username).to.equal(userA.username);
+                expect(user.uuid).to.equal(userA.uuid);
+            })
+        );
+
+        it('should return success but not create a duplicate user', () => request(app)
+            .post(`${baseURL}/users`)
+            .set('Authorization', `Bearer ${auth}`)
+            .send(userA)
+            .expect(httpStatus.OK)
+            // eslint-disable-next-line no-underscore-dangle
+            .then(res => User.find({ username: res.body.user.username }))
+            .then((users) => {
+                // eslint-disable-next-line no-unused-expressions
+                expect(users).to.not.be.null;
+                expect(users.length).to.equal(1);
             })
         );
 
         it('should create a device for a user', () => request(app)
             .post(`${baseURL}/users/updateDevice`)
             .set('Authorization', `Bearer ${auth}`)
-            .send(deviceRequestData)
+            .send(userADeviceA)
             .expect(httpStatus.OK)
             .then(() => User.findOne({
-                username: testUserObject.username,
+                username: userA.username,
             }))
             .then((user) => {
                 // eslint-disable-next-line max-len
-                const device = user.devices.find(_device => _device.token === deviceRequestData.token);
+                const device = user.devices.find(_device => _device.token === userADeviceA.token);
                 expect(device).to.not.equal(null);
             })
+        );
+
+        it('should disable device on other user when added to a new user', () => request(app)
+            .post(`${baseURL}/users`)
+            .set('Authorization', `Bearer ${auth}`)
+            .send(userB)
+            .expect(httpStatus.OK)
+            .then(() => request(app)
+                .post(`${baseURL}/users/updateDevice`)
+                .set('Authorization', `Bearer ${auth}`)
+                .send({
+                    ...userADeviceA,
+                    username: userB.username,
+                })
+                .expect(httpStatus.OK)
+                .then(() => User.findOne({
+                    username: userA.username,
+                }))
+                .then((user) => {
+                    // eslint-disable-next-line max-len
+                    const device = user.devices.find(_device => _device.token === userADeviceA.token);
+                    expect(device).to.not.equal(null);
+                    expect(device.status).to.equal('disabled');
+                })
+            )
         );
 
         it('should make a successful request to send a push notification', () => request(app)
@@ -103,19 +155,44 @@ describe('Notifications API:', () => {
         );
 
         it('should revoke a device for a user', () => request(app)
-            .delete(`${baseURL}/users/revoke-device`)
+            .post(`${baseURL}/users/updateDevice`)
             .set('Authorization', `Bearer ${auth}`)
-            .send(deviceRequestData)
+            .send(userADeviceB)
+            .expect(httpStatus.OK)
+            .then(() => request(app)
+                .delete(`${baseURL}/users/revoke-device`)
+                .set('Authorization', `Bearer ${auth}`)
+                .send(userADeviceB)
+                .expect(httpStatus.OK)
+                .then(() => User.findOne({
+                    username: userA.username,
+                }))
+                .then((user) => {
+                    // eslint-disable-next-line max-len
+                    const device = user.devices.find(_device => _device.token === userADeviceA.token);
+                    expect(device).to.not.equal(null);
+                    expect(device.status).to.equal('disabled');
+                })
+            )
+        );
+
+        it('should reenable a previously revoked device rather than adding a new one', () => request(app)
+            .post(`${baseURL}/users/updateDevice`)
+            .set('Authorization', `Bearer ${auth}`)
+            .send(userADeviceB)
             .expect(httpStatus.OK)
             .then(() => User.findOne({
-                username: testUserObject.username,
+                username: userA.username,
             }))
             .then((user) => {
-                // eslint-disable-next-line max-len
-                const device = user.devices.find(_device => _device.token === deviceRequestData.token);
-                expect(device).to.not.equal(null);
-                expect(device.status).to.equal('disabled');
+                const devices = user.devices.filter(d => d.token === userADeviceB.token);
+                expect(devices).to.not.equal(null);
+                expect(devices.length).to.equal(1);
+                expect(devices[0].status).to.equal('enabled');
+                expect(devices[0].token).to.equal(userADeviceB.token);
+                expect(devices[0].type).to.equal(userADeviceB.deviceType);
             })
         );
+
     });
 });

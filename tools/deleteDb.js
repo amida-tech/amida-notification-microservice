@@ -1,6 +1,7 @@
 import mongoConn from '../config/mongo';
 
 (async () => {
+    await mongoConn;
     await mongoConn.dropDatabase();
 })()
 .then(process.exit)

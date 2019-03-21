@@ -1,7 +1,5 @@
 import mongoConn from '../config/mongo';
 
-require('babel-polyfill');
-
 (async () => {
     await mongoConn.dropDatabase();
 })()

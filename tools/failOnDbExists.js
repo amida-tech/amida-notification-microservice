@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 import config from '../config/config';
 
-require('babel-polyfill');
-
 (async () => {
     const databaseName = config.mongo.connectionString.split('/').slice(-1)[0];
     await mongoose.connect(config.mongo.connectionString, { dbName: 'test', useNewUrlParser: true });

@@ -4,8 +4,6 @@ import { User as MongoUser } from '../../server/models/user.model';
 const SqlUser = db.User;
 const SqlDevice = db.Device;
 
-require('babel-polyfill');
-
 (async () => {
     const LIMIT = 1000;
     let offset = 0;

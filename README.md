@@ -41,17 +41,6 @@ yarn
 Set environment vars:
 ```sh
 cp .env.example .env
-cp .env .env.test
-```
-
-Create the database:
-```sh
-yarn create_db
-```
-
-Migrate the database:
-```sh
-yarn migrate
 ```
 
 ### Create the Push Notifications Service User
@@ -61,7 +50,7 @@ Create the service user on the the Auth Service which will perform notification 
 Note: The `AUTH_MICROSERVICE_URL` below is relative to the machine running this command, not to any docker container.
 
 ```sh
-yarn create-push-notifications-service-user -- {AUTH_MICROSERVICE_URL} {PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME} {PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD}
+yarn create-push-notifications-service-user $AUTH_MICROSERVICE_URL $PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME $PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD
 ```
 
 ### Copy Auth Service Users
@@ -69,8 +58,7 @@ yarn create-push-notifications-service-user -- {AUTH_MICROSERVICE_URL} {PUSH_NOT
 Copy existing users on the Auth Service to the Notification Service:
 
 ```
-yarn build # transpiles ./tools/ --> ./dist/tools/
-yarn create_missing_users
+yarn mongo:create_missing_users
 ```
 
 ### Setup Apple Push Notifications Key
@@ -141,27 +129,26 @@ gulp
 ## Deployment Via Docker
 
 Docker deployment requires two docker containers:
-- An instance of the official Postgres docker image (see: https://hub.docker.com/_/postgres/).
-- An instance of this service's docker image (see: https://hub.docker.com/r/amidatech/notification-service/).
+- An instance of [the official Mongo docker image](https://docs.docker.com/samples/library/mongo/).
+- An instance of [this service's docker image](https://hub.docker.com/r/amidatech/notification-service/).
 
-The Postgres container must be running _before_ the notification-service container is started because, upon initial run, the notification-service container defines the schema within the Postgres database.
+The Mongo container must be running _before_ the notification-service container is started because the notification-service container connects to MongoDB on startup.
 
 Also, the containers communicate via a docker network. Therefore,
 
 1. First, create the Docker network:
 
 ```sh
-docker network create {DOCKER_NETWORK_NAME}
+docker network create $DOCKER_NETWORK_NAME
 ```
 
 2. Start the postgres container:
 
 ```sh
-docker run -d --name {NOTIFICATION_SERVICE_PG_HOST} --network {DOCKER_NETWORK_NAME} \
--e POSTGRES_DB={NOTIFICATION_SERVICE_PG_DB} \
--e POSTGRES_USER={NOTIFICATION_SERVICE_PG_USER} \
--e POSTGRES_PASSWORD={NOTIFICATION_SERVICE_PG_PASSWORD} \
-postgres:9.6
+docker run -d --name $NOTIFICATION_SERVICE_MONGO_HOST --network $DOCKER_NETWORK_NAME \
+    -e MONGO_INITDB_ROOT_USERNAME=$NOTIFICATION_SERVICE_MONGO_USER \
+    -e MONGO_INITDB_ROOT_PASSWORD=$NOTIFICATION_SERVICE_MONGO_PASSWORD \
+    mongo:4
 ```
 
 3. Create a `.env` file for use by this service's docker container. A good starting point is `.env.production`.
@@ -172,13 +159,13 @@ postgres:9.6
 
 ```sh
 docker run -d \
---name amida-notification-microservice --network {DOCKER_NETWORK_NAME} \
--v {ABSOLUTE_PATH_TO_YOUR_ENV_FILE}:/app/.env:ro \
--v {ABSOLUTE_PATH_TO_YOUR_iosKey.p8_FILE}:/app/iosKey.p8
-amidatech/notification-service
+--name amida-notification-microservice --network $DOCKER_NETWORK_NAME \
+    -v $ABSOLUTE_PATH_TO_YOUR_ENV_FILE:/app/.env:ro \
+    -v $ABSOLUTE_PATH_TO_YOUR_iosKey.p8_FILE:/app/iosKey.p8
+    amidatech/notification-service
 ```
 
-## Kubernetes Deployment
+## Kubernetes Deployment (TODO: update for Mongo)
 
 See the [paper](https://paper.dropbox.com/doc/Amida-Microservices-Kubernetes-Deployment-Xsz32zX8nwT9qctitGNVc) write-up for instructions on how to deploy with Kubernetes. The `kubernetes.yml` file contains the deployment definition for the project.
 -var 'aws_secret_key=<My-AWSSecretKey>'
@@ -232,6 +219,42 @@ The port this server will run on.
 
 This is the `amida-auth-microservice` JWT that is used by this repo's automated test suite when it makes requests.
 
+##### `NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING` (Required)
+
+Connection string that is passed to the mongo driver. This can take the generic format: `mongodb://username:password@host:port/dbname`. We recommend only specifying host, port and dbname in this string, which will look like `mongodb://host:port/dbname`. Specify the username and password using the `NOTIFICATION_SERVICE_MONGO_USER` and `NOTIFICATION_SERVICE_MONGO_USER` variables.
+- When using docker, set the host to the name of the docker container running mongo. Setting to `amida-notification-microservice-db` is recommended.
+
+##### `NOTIFICATION_SERVICE_MONGO_DB`
+
+MongoDB database name. This overrides the database name in `NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING`.
+- Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Mongo instances--which is why the name begins with `amida_`.
+
+##### `NOTIFICATION_SERVICE_MONGO_USER`
+
+Mongo user that will perform operations on behalf of this microservice. Therefore, this user must have permissions to modify the database specified by `NOTIFICATION_SERVICE_MONGO_DB` or `NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING`.
+This overrides the user specified in `NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING`.
+- Setting to `amida_notification_microservice` is recommended because 3rd parties could be running Amida services using their Postgres instances--which is why the name begins with `amida_`.
+
+##### `NOTIFICATION_SERVICE_MONGO_PASSWORD`
+
+Password of mongo user `NOTIFICATION_SERVICE_MONGO_USER`.
+This overrides the password specified in `NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING`.
+
+##### `NOTIFICATION_SERVICE_MONGO_AUTH_SOURCE`
+
+Mongo database that should be authenticated against.
+
+##### `NOTIFICATION_SERVICE_MONGO_SSL_ENABLED` [`false`]
+
+Whether an SSL connection shall be used to connect to mongo.
+
+##### `NOTIFICATION_SERVICE_MONGO_CA_CERT`
+
+If SSL is enabled with `NOTIFICATION_SERVICE_MONGO_SSL_ENABLED` this can be set to a certificate to override the CAs that are trusted while initiating the SSL connection to postgres. Without this set, Mozilla's list of trusted CAs is used. Note that this variable should contain the certificate itself, not a filename.
+
+### Old Variables for Postgres
+These variables are still used for any commands for managing legacy postgres based deployments, and for migrating Postgres deployments to MongoDB.
+These will be removed when support for migrating from Postgres to MongoDB is no longer deemed necessary.
 ##### `NOTIFICATION_SERVICE_PG_HOST` (Required)
 
 Hostname of machine the postgres instance is running on.

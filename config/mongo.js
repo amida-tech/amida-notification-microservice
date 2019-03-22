@@ -30,8 +30,5 @@ if (mongoConf.sslEnabled) {
     }
 }
 
-console.log(mongoConf);
-console.log(options);
-
 const connection = mongoose.createConnection(mongoConf.connectionString, options);
 export default connection;

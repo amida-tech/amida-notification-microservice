@@ -1,20 +1,37 @@
 import mongoose from 'mongoose';
 import config from './config';
-// TODO replace this for mongo
-// import { ensureConnectionIsEncrypted } from './helpers';
+
+const mongoConf = config.mongo;
 
 const options = {
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true,
 };
-
-if (config.mongo.sslEnabled) {
-    options.ssl = config.mongo.sslEnabled;
-    if (config.sslCaCert) {
-        options.sslCA = config.mongo.sslCaCert;
+if (mongoConf.db) {
+    options.dbName = mongoConf.db;
+}
+if (mongoConf.authSource) {
+    options.authSource = mongoConf.authSource;
+}
+if (mongoConf.user || mongoConf.password) {
+    options.auth = {};
+    if (mongoConf.user) {
+        options.auth.user = mongoConf.user;
+    }
+    if (mongoConf.password) {
+        options.auth.password = mongoConf.password;
+    }
+}
+if (mongoConf.sslEnabled) {
+    options.ssl = mongoConf.sslEnabled;
+    if (mongoConf.sslCaCert) {
+        options.sslCA = mongoConf.sslCaCert;
     }
 }
 
-const connection = mongoose.createConnection(config.mongo.connectionString, options);
+console.log(mongoConf);
+console.log(options);
+
+const connection = mongoose.createConnection(mongoConf.connectionString, options);
 export default connection;

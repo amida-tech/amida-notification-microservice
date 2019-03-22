@@ -3,7 +3,12 @@ import config from '../config/config';
 import mongoConn from '../config/mongo';
 
 (async () => {
-    const databaseName = config.mongo.connectionString.split('/').slice(-1)[0];
+    let databaseName;
+    if (config.mongo.db) {
+        databaseName = config.mongo.db;
+    } else {
+        databaseName = config.mongo.connectionString.split('/').slice(-1)[0];
+    }
     await mongoConn;
     const databases = await (new mongoose.mongo.Admin(mongoConn.db)).listDatabases();
     const databaseExists = databases.databases.find(db => db.name === databaseName);

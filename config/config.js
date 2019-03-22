@@ -25,6 +25,14 @@ const envVarsSchema = Joi.object({
         .description('Metadata microservice endpoint'),
     NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING: Joi.string().required()
         .description('Mongo connection string'),
+    NOTIFICATION_SERVICE_MONGO_DB: Joi.string()
+        .description('Overrides db in mongo connection string'),
+    NOTIFICATION_SERVICE_MONGO_USER: Joi.string()
+        .description('Overrides user in mongo connection string'),
+    NOTIFICATION_SERVICE_MONGO_PASSWORD: Joi.string()
+        .description('Overrides password in mongo connection string'),
+    NOTIFICATION_SERVICE_MONGO_AUTH_SOURCE: Joi.string()
+        .description('Mongo database to authenticate against'),
     NOTIFICATION_SERVICE_MONGO_SSL_ENABLED: Joi.bool()
         .default(false)
         .description('Enable SSL connection to Mongo'),
@@ -97,6 +105,10 @@ module.exports = {
     apnKeyPath: envVars.PUSH_NOTIFICATIONS_APN_KEY_PATH,
     mongo: {
         connectionString: envVars.NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING,
+        db: envVars.NOTIFICATION_SERVICE_MONGO_DB,
+        user: envVars.NOTIFICATION_SERVICE_MONGO_USER,
+        password: envVars.NOTIFICATION_SERVICE_MONGO_PASSWORD,
+        authSource: envVars.NOTIFICATION_SERVICE_MONGO_AUTH_SOURCE,
         sslEnabled: envVars.NOTIFICATION_SERVICE_MONGO_SSL_ENABLED,
         sslCaCert: envVars.NOTIFICATION_SERVICE_MONGO_CA_CERT,
     },

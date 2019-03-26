@@ -221,7 +221,7 @@ This is the `amida-auth-microservice` JWT that is used by this repo's automated 
 
 ##### `NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING` (Required)
 
-Connection string that is passed to the mongo driver. This can take the generic format: `mongodb://username:password@host:port/dbname`. We recommend only specifying host, port and dbname in this string, which will look like `mongodb://host:port/dbname`. Specify the username and password using the `NOTIFICATION_SERVICE_MONGO_USER` and `NOTIFICATION_SERVICE_MONGO_USER` variables.
+Connection string that is passed to the mongo driver. This can take the generic format: `mongodb://username:password@host:port/dbname`. We recommend only specifying host, port and dbname in this string, which will look like `mongodb://host:port/dbname`. Specify the username and password using the `NOTIFICATION_SERVICE_MONGO_USER` and `NOTIFICATION_SERVICE_MONGO_PASSWORD` variables.
 - When using docker, set the host to the name of the docker container running mongo. Setting to `amida-notification-microservice-db` is recommended.
 
 ##### `NOTIFICATION_SERVICE_MONGO_DB`

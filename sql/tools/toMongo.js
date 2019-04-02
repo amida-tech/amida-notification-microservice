@@ -1,8 +1,10 @@
 import db from '../sequelize';
 import { User as MongoUser } from '../../server/models/user.model';
+import { Notification as MongoNotification } from '../../server/models/notification.model';
 
 const SqlUser = db.User;
 const SqlDevice = db.Device;
+const SqlNotification = db.Notification;
 
 (async () => {
     const LIMIT = 1000;
@@ -27,6 +29,26 @@ const SqlDevice = db.Device;
         await MongoUser.insertMany(users);
         offset += users.length;
     } while (users.length >= LIMIT);
+
+    offset = 0;
+    let notifications = [];
+    do {
+        notifications = (await SqlNotification.findAll({
+            offset,
+            limit: LIMIT,
+            include: [{
+                model: SqlDevice,
+            }],
+        })).map(notification => ({
+            type: notification.type,
+            payload: notification.payload,
+            status: notification.status,
+            deviceType: notification.Device.type,
+            token: notification.Device.token,
+        }));
+        await MongoNotification.insertMany(notifications);
+        offset += users.length;
+    } while (notifications.length >= LIMIT);
 })()
 .then(process.exit)
 .catch((err) => {

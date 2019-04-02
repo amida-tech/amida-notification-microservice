@@ -103,5 +103,5 @@
       "add-module-exports"
     ]
   },
-  "snyk": false
+  "snyk": true
 }

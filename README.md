@@ -1,4 +1,5 @@
 # Amida Notification Microservice
+[![Known Vulnerabilities](https://snyk.io/test/github/amida-tech/amida-notification-microservice/badge.svg)](https://snyk.io/test/github/amida-tech/amida-notification-microservice)
 [![dependencies Status](https://david-dm.org/amida-tech/amida-notification-microservice/status.svg)](https://david-dm.org/amida-tech/amida-notification-microservice)
 [![devDependencies Status](https://david-dm.org/amida-tech/amida-notification-microservice/dev-status.svg)](https://david-dm.org/amida-tech/amida-notification-microservice?type=dev)
 [![Jenkins CI](https://jenkins.amida.com/buildStatus/icon?job=Notifications%20Microservice%20Unit%20Test/)](https://jenkins.amida.com/job/Notifications%20Microservice%20Unit%20Test/)

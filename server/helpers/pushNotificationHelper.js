@@ -4,6 +4,7 @@ const metaDataHelper = require('./metaDataHelper');
 const request = require('request');
 const prefMap = require('./preferenceMap');
 const logger = require('../../config/winston');
+const Notification = require('../models/notification.model').Notification;
 
 function sendPushNotification(receiver, data) {
     const settings = {
@@ -40,7 +41,6 @@ function sendPushNotification(receiver, data) {
     let androidPushData = {
         title: 'Message from Orange',
         body: 'Hello',
-        // 'icon': '@drawable/orange_icon',
         sound: 'default',
         priority: 'high',
         show_in_foreground: true,
@@ -58,12 +58,12 @@ function sendPushNotification(receiver, data) {
                     } else {
                         const message = result[0].message;
 
-                        // TODO JCB: ask Elijah if we can remove these
-                        // console.log('showing push result message', message[0]);
-                        device.createNotification({
-                            payload: data,
+                        Notification.create({
                             type: data.notificationType,
+                            payload: data,
                             status: message.error == null ? 'success' : 'failure',
+                            deviceType: device.type,
+                            token: device.token,
                         });
                     }
                 });
@@ -97,10 +97,12 @@ function sendPushNotification(receiver, data) {
                         success = 0;
                     }
 
-                    device.createNotification({
-                        payload: data,
+                    Notification.create({
                         type: data.notificationType,
+                        payload: data,
                         status: success === 1 ? 'success' : 'failure',
+                        deviceType: device.type,
+                        token: device.token,
                     });
                 });
             }

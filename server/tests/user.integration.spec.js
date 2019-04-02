@@ -33,7 +33,7 @@ const userADeviceA = {
 const userADeviceB = {
     username: userA.username,
     token: 'abcdefg',
-    deviceType: 'android',
+    deviceType: 'Android',
 };
 
 const testPushData = {

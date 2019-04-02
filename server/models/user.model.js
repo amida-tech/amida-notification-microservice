@@ -15,7 +15,7 @@ const UserSchema = new Schema({
     devices: [new Schema({
         type: {
             type: String,
-            enum: ['iOS', 'android'],
+            enum: ['iOS', 'Android'],
             required: true,
         },
         token: {

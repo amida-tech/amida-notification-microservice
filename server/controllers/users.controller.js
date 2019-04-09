@@ -21,8 +21,8 @@ export async function create(req, res) {
 
 export async function updateDevice(req, res) {
     const { username, token, deviceType } = req.body;
-    // delete other instances of this token
-    const otherUsersWithThisToken = await User.find({
+    // disable other instances of this token
+    await User.updateMany({
         username: {
             $ne: username,
         },
@@ -33,15 +33,17 @@ export async function updateDevice(req, res) {
                 status: 'enabled',
             },
         },
+    }, {
+        'devices.$[thisDevice].status': 'disabled',
+    }, {
+        multi: true,
+        arrayFilters: [
+            {
+                'thisDevice.token': token,
+                'thisDevice.type': deviceType,
+            },
+        ],
     });
-    for (const user of otherUsersWithThisToken) {
-        for (let i = 0; i < user.devices.length; i += 1) {
-            if (user.devices[i].token === token && user.devices[i].type === deviceType) {
-                user.devices[i].status = 'disabled';
-            }
-        }
-        await user.save();
-    }
 
     // get user and add this token to the user
     const user = await User.findOne({ username });

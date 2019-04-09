@@ -10,18 +10,17 @@ services:
     # Overwrite any env var defined in .env file (if required)
     environment:
     - DEBUG=amida-api-boilerplate:*
-    - NOTIFICATION_SERVICE_PG_DB=amida_notification_microservice
-    - NOTIFICATION_SERVICE_PG_HOST=postgres
-    - NOTIFICATION_SERVICE_PG_PASSWORD=admin
-    - NOTIFICATION_SERVICE_PG_PORT=5432
-    - NOTIFICATION_SERVICE_PG_USER=postgres
+    - NOTIFICATION_SERVICE_MONGO_CONNECTION_STRING=mongodb://mongo:27017/amida_notifications_microservice_docker_compose
+    - NOTIFICATION_SERVICE_MONGO_USER=user
+    - NOTIFICATION_SERVICE_MONGO_PASSWORD=pass
+    - NOTIFICATION_SERVICE_MONGO_AUTH_SOURCE=admin
     - NOTIFICATION_SERVICE_PORT=4003
 
     # Link to containers in another service.
     # Links also express dependency between services in the same way as depends_on,
     # so they determine the order of service startup.
     links:
-    - postgres
+    - mongo
 
     # Expose ports [HOST:CONTAINER}
     ports:
@@ -36,12 +35,10 @@ services:
       # over to the new volume upon volume initialization.
       # node_modules from this new volume will be used and not from your local dev env.
 
-  postgres:
-    image: postgres:9.6
+  mongo:
+    image: mongo:3.6
     ports:
-    - 5432:5432
+    - 27017:27017
     environment:
-    - POSTGRES_DB=${NOTIFICATION_SERVICE_PG_DB}
-    - POSTGRES_PASSWORD=${NOTIFICATION_SERVICE_PG_PASSWORD}
-    - POSTGRES_USER=${NOTIFICATION_SERVICE_PG_USER}
-
+    - MONGO_INITDB_ROOT_USERNAME=user
+    - MONGO_INITDB_ROOT_PASSWORD=pass

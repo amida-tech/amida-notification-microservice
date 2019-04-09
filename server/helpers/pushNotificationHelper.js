@@ -64,6 +64,8 @@ function sendPushNotification(receiver, data) {
                             status: message.error == null ? 'success' : 'failure',
                             deviceType: device.type,
                             token: device.token,
+                            // eslint-disable-next-line no-underscore-dangle
+                            userId: receiver._id,
                         });
                     }
                 });
@@ -103,6 +105,8 @@ function sendPushNotification(receiver, data) {
                         status: success === 1 ? 'success' : 'failure',
                         deviceType: device.type,
                         token: device.token,
+                        // eslint-disable-next-line no-underscore-dangle
+                        userId: receiver._id,
                     });
                 });
             }

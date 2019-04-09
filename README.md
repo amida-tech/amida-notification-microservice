@@ -250,7 +250,7 @@ Whether an SSL connection shall be used to connect to mongo.
 
 ##### `NOTIFICATION_SERVICE_MONGO_CA_CERT`
 
-If SSL is enabled with `NOTIFICATION_SERVICE_MONGO_SSL_ENABLED` this can be set to a certificate to override the CAs that are trusted while initiating the SSL connection to postgres. Without this set, Mozilla's list of trusted CAs is used. Note that this variable should contain the certificate itself, not a filename.
+If SSL is enabled with `NOTIFICATION_SERVICE_MONGO_SSL_ENABLED` this can be set to a certificate to override the CAs that are trusted while initiating the SSL connection to mongo. Note that this variable should contain the certificate itself, not a filename.
 
 ### Old Variables for Postgres
 These variables are still used for any commands for managing legacy postgres based deployments, and for migrating Postgres deployments to MongoDB.

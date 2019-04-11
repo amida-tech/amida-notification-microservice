@@ -25,8 +25,9 @@ if (mongoConf.user || mongoConf.password) {
 }
 if (mongoConf.sslEnabled) {
     options.ssl = mongoConf.sslEnabled;
+    options.sslValidate = mongoConf.sslEnabled;
     if (mongoConf.sslCaCert) {
-        options.sslCA = mongoConf.sslCaCert;
+        options.sslCA = Buffer.from(mongoConf.sslCaCert);
     }
 }
 

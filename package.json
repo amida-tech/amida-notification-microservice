@@ -19,7 +19,6 @@
     "lint:watch": "yarn lint --watch",
     "mongo:create-missing-users": "babel-node tools/createMissingUsers.js",
     "mongo:delete-db": "babel-node tools/deleteDb.js",
-    "mongo:fail-on-db-exists": "babel-node tools/failOnDbExists.js",
     "mongo:migrate:up": "db-migrate --config migrate.config.json up",
     "mongo:migrate:down": "db-migrate --config migrate.config.json down",
     "report-coverage": "coveralls < ./coverage/lcov.info",
@@ -34,7 +33,7 @@
     "sql:to-mongo": "babel-node sql/tools/toMongo.js",
     "start": "gulp serve",
     "start:debug": "cross-env DEBUG=amida-notification-microservice:* yarn start",
-    "test": "cross-env NODE_ENV=test yarn mongo:fail-on-db-exists && cross-env NODE_ENV=test mocha --opts .mocharc",
+    "test": "cross-env NODE_ENV=test yarn mongo:delete-db && cross-env NODE_ENV=test mocha --opts .mocharc",
     "test:check-coverage": "yarn test:coverage && istanbul check-coverage",
     "test:coverage": "cross-env NODE_ENV=test istanbul cover _mocha -- --opts .mocharc",
     "test:watch": "yarn test --watch"

@@ -13,7 +13,7 @@
   "scripts": {
     "build": "gulp",
     "create-push-notifications-service-user": "babel-node tools/createPushNotificationsServiceUser.js",
-    "jenkins": "cross-env NODE_ENV=test yarn mongo:delete-db && cross-env NODE_ENV=test yarn test",
+    "jenkins": "cross-env NODE_ENV=test yarn test",
     "lint": "esw -c .eslintrc *.js server config --color",
     "lint:fix": "yarn lint --fix",
     "lint:watch": "yarn lint --watch",

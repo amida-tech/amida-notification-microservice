@@ -50,7 +50,7 @@ Create the service user on the the Auth Service which will perform notification 
 Note: The `AUTH_MICROSERVICE_URL` below is relative to the machine running this command, not to any docker container.
 
 ```sh
-yarn create-push-notifications-service-user $AUTH_MICROSERVICE_URL $PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME $PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD
+yarn create-push-notifications-service-user {AUTH_MICROSERVICE_URL} {PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME} {PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD}
 ```
 
 ### Copy Auth Service Users
@@ -58,7 +58,7 @@ yarn create-push-notifications-service-user $AUTH_MICROSERVICE_URL $PUSH_NOTIFIC
 Copy existing users on the Auth Service to the Notification Service:
 
 ```
-yarn mongo:create_missing_users
+yarn mongo:create-missing-users
 ```
 
 ### Setup Apple Push Notifications Key
@@ -124,6 +124,14 @@ gulp clean
 gulp
 ```
 
+## Migrate from Postgres to Mongo
+
+Make sure your `.env` has all the necessary variables set for connecting to both postgres and mongo.
+
+```sh
+yarn sql:to-mongo
+```
+
 # Deployment
 
 ## Deployment Via Docker
@@ -139,15 +147,15 @@ Also, the containers communicate via a docker network. Therefore,
 1. First, create the Docker network:
 
 ```sh
-docker network create $DOCKER_NETWORK_NAME
+docker network create {DOCKER_NETWORK_NAME}
 ```
 
-2. Start the postgres container:
+2. Start the mongo container:
 
 ```sh
-docker run -d --name $NOTIFICATION_SERVICE_MONGO_HOST --network $DOCKER_NETWORK_NAME \
-    -e MONGO_INITDB_ROOT_USERNAME=$NOTIFICATION_SERVICE_MONGO_USER \
-    -e MONGO_INITDB_ROOT_PASSWORD=$NOTIFICATION_SERVICE_MONGO_PASSWORD \
+docker run -d --name {NOTIFICATION_SERVICE_MONGO_HOST} --network {DOCKER_NETWORK_NAME} \
+    -e MONGO_INITDB_ROOT_USERNAME={NOTIFICATION_SERVICE_MONGO_USER} \
+    -e MONGO_INITDB_ROOT_PASSWORD={NOTIFICATION_SERVICE_MONGO_PASSWORD} \
     mongo:4
 ```
 
@@ -159,9 +167,9 @@ docker run -d --name $NOTIFICATION_SERVICE_MONGO_HOST --network $DOCKER_NETWORK_
 
 ```sh
 docker run -d \
---name amida-notification-microservice --network $DOCKER_NETWORK_NAME \
-    -v $ABSOLUTE_PATH_TO_YOUR_ENV_FILE:/app/.env:ro \
-    -v $ABSOLUTE_PATH_TO_YOUR_iosKey.p8_FILE:/app/iosKey.p8
+--name amida-notification-microservice --network {DOCKER_NETWORK_NAME} \
+    -v {ABSOLUTE_PATH_TO_YOUR_ENV_FILE}:/app/.env:ro \
+    -v {ABSOLUTE_PATH_TO_YOUR_iosKey.p8_FILE}:/app/iosKey.p8
     amidatech/notification-service
 ```
 
@@ -246,11 +254,11 @@ Mongo database that should be authenticated against.
 
 ##### `NOTIFICATION_SERVICE_MONGO_SSL_ENABLED` [`false`]
 
-Whether an SSL connection shall be used to connect to mongo.
+Whether an SSL connection shall be required and the server certificate validated while connecting to mongo.
 
 ##### `NOTIFICATION_SERVICE_MONGO_CA_CERT`
 
-If SSL is enabled with `NOTIFICATION_SERVICE_MONGO_SSL_ENABLED` this can be set to a certificate to override the CAs that are trusted while initiating the SSL connection to mongo. Note that this variable should contain the certificate itself, not a filename.
+If SSL is enabled with `NOTIFICATION_SERVICE_MONGO_SSL_ENABLED` this *must* be set to the certificate authority pem file of the CA that will be trusted while validating the certificate of the mongo server. Note that this variable should contain the contents of the certificate itself, not a filename.
 
 ### Old Variables for Postgres
 These variables are still used for any commands for managing legacy postgres based deployments, and for migrating Postgres deployments to MongoDB.

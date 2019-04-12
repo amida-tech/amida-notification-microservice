@@ -6,10 +6,15 @@
 
 # Table of Contents
 
+  - [Versions](#versions)
   - [Design](#design)
   - [Development](#development)
   - [Deployment](#deployment)
   - [Environment Variables](#Environment-Variables)
+
+# Versions
+
+- MongoDB 3.6
 
 # Design
 
@@ -54,6 +59,8 @@ yarn create-push-notifications-service-user {AUTH_MICROSERVICE_URL} {PUSH_NOTIFI
 ```
 
 ### Copy Auth Service Users
+
+Note: Before running this command, be sure that in your `.env` file, your values for `AUTH_MICROSERVICE_URL`, `PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME`, and `PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD` are correct.
 
 Copy existing users on the Auth Service to the Notification Service:
 
@@ -152,11 +159,13 @@ docker network create {DOCKER_NETWORK_NAME}
 
 2. Start the mongo container:
 
+Note: The command below will create the user you specify via the `MONGO_INITDB_ROOT_...` environment variables in its `admin` database. Therefore, in this default case, you must set your `NOTIFICATION_SERVICE_MONGO_AUTH_SOURCE=admin`.
+
 ```sh
 docker run -d --name {NOTIFICATION_SERVICE_MONGO_HOST} --network {DOCKER_NETWORK_NAME} \
     -e MONGO_INITDB_ROOT_USERNAME={NOTIFICATION_SERVICE_MONGO_USER} \
     -e MONGO_INITDB_ROOT_PASSWORD={NOTIFICATION_SERVICE_MONGO_PASSWORD} \
-    mongo:4
+    mongo:3.6
 ```
 
 3. Create a `.env` file for use by this service's docker container. A good starting point is `.env.production`.

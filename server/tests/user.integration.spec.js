@@ -113,6 +113,7 @@ describe('Notifications API:', () => {
                 // eslint-disable-next-line max-len
                 const device = user.devices.find(_device => _device.token === userADeviceA.token);
                 expect(device).to.not.equal(null);
+                expect(device.type).to.equal('iOS');
             })
         );
 

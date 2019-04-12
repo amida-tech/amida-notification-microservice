@@ -29,6 +29,8 @@ const UserSchema = new Schema({
             default: 'enabled',
         },
     }],
+}, {
+    timestamps: true,
 });
 
 export const userModelName = 'User';

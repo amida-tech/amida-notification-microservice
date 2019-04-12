@@ -27,6 +27,8 @@ const NotificationSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
     },
+}, {
+    timestamps: true,
 });
 
 export const notificationModelName = 'Notification';

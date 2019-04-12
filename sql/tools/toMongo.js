@@ -17,6 +17,7 @@ const SqlNotification = db.Notification;
             limit: LIMIT,
             include: [{
                 model: SqlDevice,
+                paranoid: false,
             }],
         })).map(user => ({
             uuid: user.uuid,
@@ -45,6 +46,7 @@ const SqlNotification = db.Notification;
             limit: LIMIT,
             include: [{
                 model: SqlDevice,
+                paranoid: false,
             }],
         })).filter((notification) => {
             const doMigrate = notification.Device.token;

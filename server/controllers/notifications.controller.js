@@ -3,8 +3,9 @@ import httpStatus from 'http-status';
 import { User } from '../models/user.model';
 import { sendPushNotification } from '../helpers/pushNotificationHelper';
 import APIError from '../helpers/APIError';
+import passErrors from '../helpers/passErrors';
 
-export async function sendPushNotifications(req, res) {
+export const sendPushNotifications = passErrors(async (req, res) => {
     const { pushData } = req.body;
 
     const usernames = pushData.map(data => data.username);
@@ -26,4 +27,4 @@ export async function sendPushNotifications(req, res) {
     });
 
     res.send({ success: true });
-}
+});

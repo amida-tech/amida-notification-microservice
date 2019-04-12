@@ -1,4 +1,5 @@
 import { User } from '../models/user.model';
+import passErrors from '../helpers/passErrors';
 
 /**
  * Create a User
@@ -6,7 +7,7 @@ import { User } from '../models/user.model';
  * @property {string} req.body.uuid - User UUID
  * @returns {User}
  */
-export async function create(req, res) {
+export const create = passErrors(async (req, res) => {
     const { username, uuid } = req.body;
 
     // This is the equivalent of findOrCreate
@@ -17,9 +18,9 @@ export async function create(req, res) {
     );
 
     res.send({ user });
-}
+});
 
-export async function updateDevice(req, res) {
+export const updateDevice = passErrors(async (req, res) => {
     const { username, token, deviceType } = req.body;
     // disable other instances of this token
     await User.updateMany({
@@ -68,9 +69,9 @@ export async function updateDevice(req, res) {
     res.send({
         message: `Device ${created ? 'created' : 'updated'}`,
     });
-}
+});
 
-export async function revokeDevice(req, res) {
+export const revokeDevice = passErrors(async (req, res) => {
     const { username, token, deviceType } = req.body;
     const user = await User.findOne({ username });
     for (let i = 0; i < user.devices.length; i += 1) {
@@ -82,4 +83,4 @@ export async function revokeDevice(req, res) {
     res.send({
         success: 'Device Revoked!',
     });
-}
+});

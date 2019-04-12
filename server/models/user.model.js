@@ -12,7 +12,7 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
-    devices: [new Schema({
+    devices: [{
         type: {
             type: String,
             enum: ['iOS', 'Android'],
@@ -28,7 +28,7 @@ const UserSchema = new Schema({
             required: true,
             default: 'enabled',
         },
-    })],
+    }],
 });
 
 export const userModelName = 'User';

@@ -178,8 +178,8 @@ docker run -d --name {NOTIFICATION_SERVICE_MONGO_HOST} --network {DOCKER_NETWORK
 docker run -d \
 --name amida-notification-microservice --network {DOCKER_NETWORK_NAME} \
     -v {ABSOLUTE_PATH_TO_YOUR_ENV_FILE}:/app/.env:ro \
-    -v {ABSOLUTE_PATH_TO_YOUR_iosKey.p8_FILE}:/app/iosKey.p8
-    amidatech/notification-service
+    -v {ABSOLUTE_PATH_TO_YOUR_iosKey.p8_FILE}:/app/iosKey.p8 \
+    amidatech/notification-service:{TAG}
 ```
 
 ## Kubernetes Deployment (TODO: update for Mongo)

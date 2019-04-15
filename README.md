@@ -182,29 +182,6 @@ docker run -d \
     amidatech/notification-service:{TAG}
 ```
 
-## Kubernetes Deployment (TODO: update for Mongo)
-
-See the [paper](https://paper.dropbox.com/doc/Amida-Microservices-Kubernetes-Deployment-Xsz32zX8nwT9qctitGNVc) write-up for instructions on how to deploy with Kubernetes. The `kubernetes.yml` file contains the deployment definition for the project.
--var 'aws_secret_key=<My-AWSSecretKey>'
--var 'build_env=development'
--var 'logstash_host=logstash.amida.com'
--var 'service_name=amida_notification_microservice'
--var 'ami_name=api-notification-service-boilerplate'
--var 'node_env=development'
--var 'jwt_secret=<My-JWT-Token>'
--var 'pg_host=<My-RDS-Host>'
--var 'pg_db=amida_notification_microservice'
--var 'pg_user=amida_notification'
--var 'pg_passwd=<My-DB-Password>' template.json```
-2. If the validation from `1.` above succeeds, build the image by running the same command but replacing `validate` with `build`
-3. In the AWS console you can test the build before deployment. To do this, launch an EC2 instance with the built image and visit the health-check endpoint at <host_address>:4000/api/health-check. Be sure to launch the instance with security groups that allow http access on the app port (currently 4000) and access from Postgres port of the data base. You should see an "OK" response.
-4. Enter `aws_access_key` and `aws_secret_key` values in the vars.tf file
-5. run `terraform plan` to validate config
-6. run `terraform apply` to deploy
-7. To get SNS Alarm notifications be sure that you are subscribed to SNS topic arn:aws:sns:us-west-2:844297601570:ops_team_alerts and you have confirmed subscription
-
-Further details can be found in the `deploy` directory.
-
 # Environment Variables
 
 Environment variables are applied in this order, with the former overwritten by the latter:

@@ -22,6 +22,8 @@ const SqlNotification = db.Notification;
         })).map(user => ({
             uuid: user.uuid,
             username: user.username,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
             devices: user.Devices.filter((device) => {
                 const doMigrate = device.token;
                 if (!doMigrate) {
@@ -73,6 +75,8 @@ const SqlNotification = db.Notification;
                 token: notification.Device.token,
                 // eslint-disable-next-line no-underscore-dangle
                 userId: mongoUser._id,
+                createdAt: notification.createdAt,
+                updatedAt: notification.updatedAt,
             }]);
         }, Promise.resolve([]));
         await MongoNotification.insertMany(notifications);

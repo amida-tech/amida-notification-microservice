@@ -9021,7 +9021,7 @@ windows-release@^3.1.0:
   dependencies:
     execa "^0.10.0"
 
-winston-json-formatter@0.10.0:
+winston-json-formatter@~0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/winston-json-formatter/-/winston-json-formatter-0.10.0.tgz#4e777023e4416e16740734e1b7b50c5e72dfd4fd"
   integrity sha512-4K9rFgawAOBsKbC5D5QvxiZccbuBR+xvPY+PAm6rTDtfaA5bwUjpFKW0YRexcrFlJzV/6ExtfUBgYpDXAm4NSA==

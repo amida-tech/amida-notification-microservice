@@ -62,7 +62,7 @@
     "sequelize-cli": "^4.1.1",
     "swagger-stats": "^0.95.6",
     "uuid": "3.3.2",
-    "winston": "3.0.0",
+    "winston": "^3.1.0",
     "winston-json-formatter": "0.10.0"
   },
   "devDependencies": {

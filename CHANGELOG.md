@@ -3,6 +3,11 @@
 ## [Unreleased]
 
 
+## [1.4.2] -- 2019-05-14
+### Fixed
+- Patch for CVE-2019-5021 in `Dockerfile`. `node:8.16.0-alpine` uses a patched version of `alpine`.
+
+
 ## [1.4.1] -- 2018-02-26
 ### Fixed
 - DB connection is now encrypted
@@ -13,6 +18,8 @@
 - Notifications are no longer sent to a signed out device
   * ENV VAR `PUSH_NOTIFICATIONS_APN_KEY_PATH` (for iOS)
 - Prepush githook for `yarn lint` and `yarn test` with `npm:husky`
+- Environment variable `PUSH_NOTIFICATIONS_APN_KEY_PATH`
+- https://jira.amida.com/browse/ORANGE-1029, including paranoid delete on Devices table.
 
 ### Changed
 - Use sequelize up/down migrations instead of `db.sync()`

@@ -3,6 +3,11 @@
 ## [Unreleased]
 
 
+## [1.4.2] -- 2019-05-14
+### Fixed
+- Patch for CVE-2019-5021 in `Dockerfile`. `node:8.16.0-alpine` uses a patched version of `alpine`.
+
+
 ## [1.4.1] -- 2018-02-26
 ### Fixed
 - DB connection is now encrypted

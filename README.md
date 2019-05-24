@@ -258,11 +258,25 @@ Password of postgres user `NOTIFICATION_SERVICE_PG_USER`.
 
 ##### `NOTIFICATION_SERVICE_PG_SSL_ENABLED` [`false`]
 
-Whether an SSL connection shall be used to connect to postgres.
+Whether an SSL connection shall be used to connect to postgres. If `true`, then `NOTIFICATION_SERVICE_PG_CA_CERT` (probably) must be set to a valid value (see nuance about override in description of this variable below).
 
 ##### `NOTIFICATION_SERVICE_PG_CA_CERT`
 
-If SSL is enabled with `NOTIFICATION_SERVICE_PG_SSL_ENABLED` this can be set to a certificate to override the CAs that are trusted while initiating the SSL connection to postgres. Without this set, Mozilla's list of trusted CAs is used. Note that this variable should contain the certificate itself, not a filename.
+If SSL is enabled with `NOTIFICATION_SERVICE_PG_SSL_ENABLED` this can be set to a certificate to override the CAs that are trusted while initiating the SSL connection to postgres. Without this set, Mozilla's list of trusted CAs is used.
+
+Note that this variable should contain the certificate itself, not a filename.
+
+Example usage with AWS RDS
+
+```
+# Download CA cert bundle for AWS RDS
+wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
+```
+
+```
+# Start the server with the AWS RDS cert bundle
+NOTIFICATION_SERVICE_PG_CA_CERT=$(cat rds-combined-ca-bundle.pem) yarn start
+```
 
 ## Integration With Amida Auth Microservice
 

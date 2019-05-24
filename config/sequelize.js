@@ -20,15 +20,16 @@ const sequelizeOptions = {
     host: config.postgres.host,
     logging: dbLogging,
 };
+
 if (config.postgres.sslEnabled) {
     sequelizeOptions.ssl = config.postgres.sslEnabled;
+    sequelizeOptions.dialectOptions = {
+        ssl: {
+            rejectUnauthorized: true,
+        },
+    };
     if (config.postgres.sslCaCert) {
-        sequelizeOptions.dialectOptions = {
-            ssl: {
-                ca: config.postgres.sslCaCert,
-                rejectUnauthorized: true,
-            },
-        };
+        sequelizeOptions.dialectOptions.ssl.ca = config.postgres.sslCaCert;
     }
 }
 

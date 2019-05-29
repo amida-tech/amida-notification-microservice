@@ -1,5 +1,8 @@
+import httpStatus from 'http-status';
+
 import { User } from '../models/user.model';
 import passErrors from '../helpers/passErrors';
+import APIError from '../helpers/APIError';
 
 /**
  * Create a User
@@ -20,7 +23,7 @@ export const create = passErrors(async (req, res) => {
     res.send({ user });
 });
 
-export const updateDevice = passErrors(async (req, res) => {
+export const updateDevice = passErrors(async (req, res, next) => {
     const { username, token, deviceType } = req.body;
     // disable other instances of this token
     await User.updateMany({
@@ -49,6 +52,10 @@ export const updateDevice = passErrors(async (req, res) => {
     // get user and add this token to the user
     const user = await User.findOne({ username });
 
+    if (!user) {
+        return next(new APIError('User not found', httpStatus.NOT_FOUND, true));
+    }
+
     // two cases
     // 1. already have it -> make sure its enabled
     // 2. don't have it yet -> insert it
@@ -66,7 +73,7 @@ export const updateDevice = passErrors(async (req, res) => {
         created = true;
     }
     await user.save();
-    res.send({
+    return res.send({
         message: `Device ${created ? 'created' : 'updated'}`,
     });
 });

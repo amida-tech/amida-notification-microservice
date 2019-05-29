@@ -68,7 +68,7 @@ if (error) {
     throw new Error(`Config validation error: ${error.message}`);
 }
 
-module.exports = {
+const config = {
     env: envVars.NODE_ENV,
     logLevel: envVars.LOG_LEVEL,
     port: envVars.NOTIFICATION_SERVICE_PORT,
@@ -97,3 +97,5 @@ module.exports = {
         sslCaCert: envVars.NOTIFICATION_SERVICE_PG_CA_CERT,
     },
 };
+
+module.exports = config;

@@ -1,5 +1,7 @@
+import httpStatus from 'http-status';
 import Sequelize from 'sequelize';
 import db from '../../config/sequelize';
+import APIError from '../helpers/APIError';
 
 const User = db.User;
 const Device = db.Device;
@@ -22,9 +24,15 @@ function sendPushNotification(req, res, next) {  // eslint-disable-line no-unuse
     res.send(req.body);
 }
 
-function updateDevice(req, res, next) {  // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+function updateDevice(req, res, next) {
     const { username, token, deviceType } = req.body;
+    // eslint-disable-next-line consistent-return
     User.findOne({ where: { username } }).then((deviceUser) => {
+        if (!deviceUser) {
+            return next(new APIError('User not found', httpStatus.NOT_FOUND, true));
+        }
+
         Device.destroy({
             where: {
                 token,

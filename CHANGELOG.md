@@ -1,8 +1,10 @@
 # Changelog
 
 ## [Unreleased]
-### Changed
+### Fixed
 - PG connection will now fail (and this service will abort) if `NOTIFICATION_SERVICE_PG_SSL_ENABLED=true` but `NOTIFICATION_SERVICE_PG_CA_CERT` is not set to a valid value.
+- updateDevice handles incorrect username
+
 
 ## [1.4.2] -- 2019-05-14
 ### Fixed

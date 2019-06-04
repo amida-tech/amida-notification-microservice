@@ -165,7 +165,7 @@ docker run -d --name {NOTIFICATION_SERVICE_PG_HOST} --network {DOCKER_NETWORK_NA
 postgres:9.6
 ```
 
-3. Create a `.env` file for use by this service's docker container. A good starting point is `.env.production`.
+3. Create a `.env` file for use by this service's docker container. A good starting point is `.env.example`.
 
 4. Perform the steps under the [Development > Setup > PushNotifications](#Push-Notifications) section.
 
@@ -288,7 +288,10 @@ Must match value of the JWT secret being used by your `amida-auth-microservice` 
 ##### `PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME`
 
 The username of the service user that authenticates against `amida-auth-microservice` and performs requests against the `amida-notification-microservice` API.
-- `.env.example` sets this to `oucuYaiN6pha3ahphiiT`, which is for development only. In production, set this to a different value.
+
+##### `PUSH_NOTIFICATIONS_SERVICE_USER_PASSWORD`
+
+The password of the user specified by `PUSH_NOTIFICATIONS_SERVICE_USER_USERNAME`.
 
 ## Enabling Push Notifications ##
 

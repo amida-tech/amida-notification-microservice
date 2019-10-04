@@ -31,7 +31,8 @@
     "test:check-coverage": "yarn test:coverage && nyc check-coverage",
     "test:coverage": "cross-env NODE_ENV=test nyc mocha --opts .mocharc",
     "test:watch": "yarn test --watch",
-    "update_uuid": "node dist/tools/addUUID.js"
+    "update_uuid": "node dist/tools/addUUID.js",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "bluebird": "3.4.6",
@@ -63,7 +64,8 @@
     "swagger-stats": "^0.95.6",
     "uuid": "3.3.2",
     "winston": "^3.1.0",
-    "winston-json-formatter": "~0.10.0"
+    "winston-json-formatter": "~0.10.0",
+    "snyk": "^1.230.5"
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
@@ -90,7 +92,6 @@
     "husky": "1.2.1",
     "mocha": "3.2.0",
     "run-sequence": "^1.1.5",
-    "snyk": "^1.69.4",
     "supertest": "^3.0.0",
     "supertest-as-promised": "4.0.2"
   },
